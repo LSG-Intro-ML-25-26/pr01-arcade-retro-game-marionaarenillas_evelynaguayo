@@ -4,6 +4,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "nena-front"
     },
+    "image2": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAAAvIiIiDwAAAC8iIiIPAAD///////8P8CIiIiIiIvIvIiIiIiIi8i8i/y8iIv8PL/KZ+SIiDwAv8pn5IiL/Dy/ymfkiIi/y8P+R+SIiIvIA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_vermell"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",

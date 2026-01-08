@@ -1,4 +1,4 @@
-// Auto-generated code. Do not edit.
+// Código generado automáticamente. No editar.
 namespace myImages {
 
     helpers._registerFactory("image", function(name: string) {
@@ -21,6 +21,25 @@ f f f c 3 c c c c 3 c f f f
 . 4 4 f 6 6 6 6 6 6 f 4 4 . 
 . . . . f f f f f f . . . . 
 . . . . f f . . f f . . . . 
+`;
+            case "image2":
+            case "jugador_vermell":return img`
+. . . . . . f f f f f . . . . . 
+. . . . . f 2 2 2 2 2 f . . . . 
+. . . . f 2 2 2 2 2 2 f . . . . 
+. . . . f 2 2 2 f f f f f . . . 
+. . f f f 2 2 f 9 9 9 1 1 f . . 
+. f 2 2 f 2 2 f 9 9 9 9 9 f . . 
+. f 2 2 f 2 2 f 9 9 9 9 9 f . . 
+. f 2 2 f 2 2 2 f f f f f . . . 
+. f 2 2 f 2 2 2 2 2 2 2 f . . . 
+. f 2 2 f 2 2 2 2 2 2 2 f . . . 
+. f 2 2 f 2 2 2 2 2 2 2 f . . . 
+. f 2 2 f 2 2 2 2 2 2 2 f . . . 
+. . f f f 2 2 f f f f 2 f . . . 
+. . . . f 2 2 f . f 2 2 f . . . 
+. . . . f 2 2 f . f 2 2 f . . . 
+. . . . . f f . . . f f . . . . 
 `;
         }
         return null;
@@ -252,4 +271,4 @@ f f f c 3 c c c c c c f . .
     })
 
 }
-// Auto-generated code. Do not edit.
+// Código generado automáticamente. No editar.
