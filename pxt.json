@@ -2,7 +2,13 @@
     "name": "MakeCode-Arcade-Template",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "arcade-mini-menu": "github:riknoll/arcade-mini-menu#v0.0.1",
+        "animation": "*",
+        "light": "*",
+        "color-coded-tilemap": "*",
+        "sprite-scaling": "*",
+        "arcade-sprite-data": "github:microsoft/arcade-sprite-data#v0.2.1"
     },
     "files": [
         "main.blocks",
