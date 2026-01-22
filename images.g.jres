@@ -9,6 +9,16 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "jugador_vermell"
     },
+    "image4": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAABvZmZmDwAAAG9mZmYPAAD///////8P8GZmZmZmZvZvZmZmZmZm9m9m/29mZv8Pb/aZ+WZmDwBv9pn5Zmb/D2/2mflmZm/28P+R+WZmZvYA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_kira"
+    },
+    "image3": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAACvqqqqDwAAAK+qqqoPAAD///////8P8Kqqqqqqqvqvqqqqqqqq+q+q/6+qqv8Pr/qZ+aqqDwCv+pn5qqr/D6/6mfmqqq/68P+R+aqqqvoA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_randoom"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",

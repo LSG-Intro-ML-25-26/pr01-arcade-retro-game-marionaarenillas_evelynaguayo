@@ -14,16 +14,19 @@ def start_gameplay():
     sprites.destroy_all_sprites_of_kind(SpriteKind.player)
     if selected_character == 0:
         player_sprite = sprites.create(assets.image("""
-            ander_idle
-            """), SpriteKind.player)
+                jugador_vermell
+                """),
+            SpriteKind.player)
     elif selected_character == 1:
         player_sprite = sprites.create(assets.image("""
-            kira_idle
-            """), SpriteKind.player)
+                jugador_kira
+                """),
+            SpriteKind.player)
     else:
         player_sprite = sprites.create(assets.image("""
-            random_idle
-            """), SpriteKind.player)
+                jugador_randoom
+                """),
+            SpriteKind.player)
     player_sprite.set_position(80, 60)
     player_sprite.set_stay_in_screen(True)
     controller.move_sprite(player_sprite, 100, 100)
@@ -51,34 +54,32 @@ def show_main_menu():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed(selection, selectedIndex):
+    def on_button_pressed(selection2, selectedIndex2):
         main_menu.close()
-        if selectedIndex == 0:
+        if selectedIndex2 == 0:
             show_character_select()
-        elif selectedIndex == 1:
+        elif selectedIndex2 == 1:
             game.splash("VERSUS", "Proximamente!")
             show_main_menu()
-        elif selectedIndex == 2:
-            game.splash("CYBER-NEON", "Creado por New")
+        elif selectedIndex2 == 2:
+            game.splash("THE END", "Creadoras: Evelyn, Mariona")
             show_main_menu()
     main_menu.on_button_pressed(controller.A, on_button_pressed)
     
 def show_character_select():
-    global game_state, ander_preview, kira_preview, random_preview, char_menu
+    global game_state, char_menu
     game_state = GAME_STATE_CHAR_SELECT
     sprites.destroy_all_sprites_of_kind(SpriteKind.player)
-    ander_preview = sprites.create(assets.image("""jugador_vermell"""), SpriteKind.player)
-    ander_preview.set_position(40, 50)
-    kira_preview = sprites.create(assets.image("""jugador_vermell"""), SpriteKind.player)
-    kira_preview.set_position(80, 50)
-    random_preview = sprites.create(assets.image("""jugador_vermell"""), SpriteKind.player)
-    random_preview.set_position(120, 50)
-    char_menu = miniMenu.create_menu(miniMenu.create_menu_item("ANDER"),
-        miniMenu.create_menu_item("KIRA"),
-        miniMenu.create_menu_item("RANDOM"))
-    char_menu.set_position(80, 100)
-    char_menu.set_menu_style_property(miniMenu.MenuStyleProperty.WIDTH, 100)
-    char_menu.set_menu_style_property(miniMenu.MenuStyleProperty.HEIGHT, 30)
+    char_menu = miniMenu.create_menu(miniMenu.create_menu_item("ANDER", assets.image("""
+            jugador_vermell
+            """)),
+        miniMenu.create_menu_item("KIRA", assets.image("""
+            jugador_kira
+            """)),
+        miniMenu.create_menu_item("RANDOM", assets.image("""
+            jugador_randoom
+            """)))
+    char_menu.set_position(80, 64)
     char_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
         miniMenu.StyleProperty.BACKGROUND,
         15)
@@ -92,12 +93,12 @@ def show_character_select():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed2(selection2, selectedIndex2):
-        global selected_character
-        selected_character = selectedIndex2
+    def on_button_pressed2(selection22, selectedIndex22):
+        global selected_character, mapaJoc
+        selected_character = selectedIndex22
         char_menu.close()
         sprites.destroy_all_sprites_of_kind(SpriteKind.player)
-        show_name_input()
+        mapaJoc = True
     char_menu.on_button_pressed(controller.A, on_button_pressed2)
     
 def show_name_input():
@@ -129,19 +130,16 @@ def show_name_input():
         names = ["HUNTER", "CYBER", "NEON", "GLITCH", "SHADOW"]
         player_name = names[selectedIndex3]
         name_menu.close()
-        start_gameplay()
     name_menu.on_button_pressed(controller.A, on_button_pressed3)
     
 names: List[str] = []
 name_menu: miniMenu.MenuSprite = None
 char_menu: miniMenu.MenuSprite = None
-random_preview: Sprite = None
-kira_preview: Sprite = None
-ander_preview: Sprite = None
 main_menu: miniMenu.MenuSprite = None
 player_sprite: Sprite = None
 selected_character = 0
 score = 0
+mapaJoc = False
 game_time = 0
 player_name = ""
 GAME_STATE_MENU = 0
@@ -155,6 +153,22 @@ GAME_STATE_PLAYING = 3
 game_state = GAME_STATE_MENU
 player_name = "HUNTER"
 game_time = 180
+mapaJoc = False
 scene.set_background_color(15)
+effects.star_field.start_screen_effect()
 game.splash("CYBER-NEON", "VIRUS HUNT")
 show_main_menu()
+
+def on_forever():
+    if mapaJoc == True:
+        tiles.set_current_tilemap(tilemap("""
+            mapa0
+            """))
+        controller.move_sprite(player_sprite, 100, 100)
+        scene.camera_follow_sprite(player_sprite)
+        tiles.place_on_random_tile(player_sprite, assets.tile("""
+            stage
+            """))
+        start_gameplay()
+    pause(100)
+forever(on_forever)

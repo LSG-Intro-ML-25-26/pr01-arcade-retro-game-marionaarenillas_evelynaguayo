@@ -41,6 +41,44 @@ f f f c 3 c c c c 3 c f f f
 . . . . f 2 2 f . f 2 2 f . . . 
 . . . . . f f . . . f f . . . . 
 `;
+            case "image4":
+            case "jugador_kira":return img`
+. . . . . . f f f f f . . . . . 
+. . . . . f 6 6 6 6 6 f . . . . 
+. . . . f 6 6 6 6 6 6 f . . . . 
+. . . . f 6 6 6 f f f f f . . . 
+. . f f f 6 6 f 9 9 9 1 1 f . . 
+. f 6 6 f 6 6 f 9 9 9 9 9 f . . 
+. f 6 6 f 6 6 f 9 9 9 9 9 f . . 
+. f 6 6 f 6 6 6 f f f f f . . . 
+. f 6 6 f 6 6 6 6 6 6 6 f . . . 
+. f 6 6 f 6 6 6 6 6 6 6 f . . . 
+. f 6 6 f 6 6 6 6 6 6 6 f . . . 
+. f 6 6 f 6 6 6 6 6 6 6 f . . . 
+. . f f f 6 6 f f f f 6 f . . . 
+. . . . f 6 6 f . f 6 6 f . . . 
+. . . . f 6 6 f . f 6 6 f . . . 
+. . . . . f f . . . f f . . . . 
+`;
+            case "image3":
+            case "jugador_randoom":return img`
+. . . . . . f f f f f . . . . . 
+. . . . . f a a a a a f . . . . 
+. . . . f a a a a a a f . . . . 
+. . . . f a a a f f f f f . . . 
+. . f f f a a f 9 9 9 1 1 f . . 
+. f a a f a a f 9 9 9 9 9 f . . 
+. f a a f a a f 9 9 9 9 9 f . . 
+. f a a f a a a f f f f f . . . 
+. f a a f a a a a a a a f . . . 
+. f a a f a a a a a a a f . . . 
+. f a a f a a a a a a a f . . . 
+. f a a f a a a a a a a f . . . 
+. . f f f a a f f f f a f . . . 
+. . . . f a a f . f a a f . . . 
+. . . . f a a f . f a a f . . . 
+. . . . . f f . . . f f . . . . 
+`;
         }
         return null;
     })
