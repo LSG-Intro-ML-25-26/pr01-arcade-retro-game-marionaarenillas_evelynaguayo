@@ -18,9 +18,7 @@ function start_gameplay () {
     } else {
         player_sprite = sprites.create(assets.image`jugador_randoom`, SpriteKind.Player)
     }
-    player_sprite.setPosition(80, 60)
     player_sprite.setStayInScreen(true)
-    controller.moveSprite(player_sprite, 100, 100)
     info.setScore(0)
     info.startCountdown(180)
 }
@@ -127,11 +125,12 @@ game.splash("CYBER-NEON", "VIRUS HUNT")
 show_main_menu()
 forever(function () {
     if (mapaJoc == true) {
-        tiles.setCurrentTilemap(tilemap`mapa0`)
+        mapaJoc = false
+        start_gameplay()
+        tiles.setCurrentTilemap(tilemap`mapa`)
+        tiles.placeOnRandomTile(player_sprite, assets.tile`stage`)
         controller.moveSprite(player_sprite, 100, 100)
         scene.cameraFollowSprite(player_sprite)
-        tiles.placeOnRandomTile(player_sprite, assets.tile`stage`)
-        start_gameplay()
     }
     pause(100)
 })

@@ -27,9 +27,7 @@ def start_gameplay():
                 jugador_randoom
                 """),
             SpriteKind.player)
-    player_sprite.set_position(80, 60)
     player_sprite.set_stay_in_screen(True)
-    controller.move_sprite(player_sprite, 100, 100)
     info.set_score(0)
     info.start_countdown(180)
 def show_main_menu():
@@ -161,14 +159,14 @@ show_main_menu()
 
 def on_forever():
     if mapaJoc == True:
+        start_gameplay()
         tiles.set_current_tilemap(tilemap("""
-            mapa0
+            mapa
             """))
-        controller.move_sprite(player_sprite, 100, 100)
-        scene.camera_follow_sprite(player_sprite)
         tiles.place_on_random_tile(player_sprite, assets.tile("""
             stage
             """))
-        start_gameplay()
+        controller.move_sprite(player_sprite, 100, 100)
+        scene.camera_follow_sprite(player_sprite)
     pause(100)
 forever(on_forever)
