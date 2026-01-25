@@ -79,6 +79,25 @@ f f f c 3 c c c c 3 c f f f
 . . . . f a a f . f a a f . . . 
 . . . . . f f . . . f f . . . . 
 `;
+            case "image5":
+            case "moneda":return img`
+. . . . b b b b b . . . . . 
+. . . . b b b b b . . . . . 
+. . . b 5 5 5 5 5 b . . . . 
+. . . b 5 5 5 5 5 b . . . . 
+. b b 5 d d 3 d d 5 b b . . 
+. b b 5 d d 3 d d 5 b b . . 
+. b b 5 1 1 5 3 3 5 b b . . 
+. b b 5 1 1 5 3 3 5 b b . . 
+. c c d 1 1 5 3 3 5 c c . . 
+. c c d 1 1 5 3 3 5 c c . . 
+. c c d d d 1 d d 5 c c . . 
+. c c d d d 1 d d 5 c c . . 
+. . . f d d d d d f . . . . 
+. . . f d d d d d f . . . . 
+. . . . f f f f f . . . . . 
+. . . . . . . . . . . . . . 
+`;
         }
         return null;
     })

@@ -19,6 +19,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "jugador_randoom"
     },
+    "image5": {
+        "data": "hwQOABAAAAAAAAAAAAAAAAAAu7vMzAAAAAC7u8zMAAAAu1VV3d3/ALtV3RER3d0Pu1XdERHd3Q+7VTNVVRHdD7tV3TMz3d0Pu1XdMzPd3Q8Au1VVVVX/AAAAu7vMzAAAAAC7u8zMAAAAAAAAAAAAAAAAAAAAAAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "moneda"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",

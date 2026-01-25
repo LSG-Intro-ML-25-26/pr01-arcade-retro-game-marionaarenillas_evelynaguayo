@@ -1,3 +1,12 @@
+namespace SpriteKind {
+    export const moneda = SpriteKind.create()
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function (player2, coin) {
+    score += 10
+    info.changeScoreBy(10)
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
+    sprites.destroy(coin, effects.spray, 200)
+})
 info.onCountdownEnd(function () {
     if (score >= 500) {
         game.splash("VICTORIA!", "Score: " + ("" + score))
@@ -97,6 +106,7 @@ function show_name_input () {
         name_menu.close()
     })
 }
+let moneda2: Sprite = null
 let names: string[] = []
 let name_menu: miniMenu.MenuSprite = null
 let char_menu: miniMenu.MenuSprite = null
@@ -123,6 +133,12 @@ scene.setBackgroundColor(15)
 effects.starField.startScreenEffect()
 game.splash("CYBER-NEON", "VIRUS HUNT")
 show_main_menu()
+game.onUpdateInterval(5000, function () {
+    if (game_state == GAME_STATE_PLAYING) {
+        moneda2 = sprites.create(assets.image`moneda`, SpriteKind.moneda)
+        tiles.placeOnRandomTile(moneda2, sprites.dungeon.darkGroundCenter)
+    }
+})
 forever(function () {
     if (mapaJoc == true) {
         mapaJoc = false

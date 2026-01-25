@@ -1,3 +1,7 @@
+@namespace
+class SpriteKind:
+    moneda = SpriteKind.create()
+
 def on_countdown_end():
     if score >= 500:
         game.splash("VICTORIA!", "Score: " + ("" + str(score)))
@@ -30,6 +34,7 @@ def start_gameplay():
     player_sprite.set_stay_in_screen(True)
     info.set_score(0)
     info.start_countdown(180)
+
 def show_main_menu():
     global game_state, main_menu
     game_state = GAME_STATE_MENU
@@ -51,7 +56,7 @@ def show_main_menu():
     main_menu.set_style_property(miniMenu.StyleKind.SELECTED,
         miniMenu.StyleProperty.FOREGROUND,
         1)
-    
+
     def on_button_pressed(selection2, selectedIndex2):
         main_menu.close()
         if selectedIndex2 == 0:
@@ -63,7 +68,7 @@ def show_main_menu():
             game.splash("THE END", "Creadoras: Evelyn, Mariona")
             show_main_menu()
     main_menu.on_button_pressed(controller.A, on_button_pressed)
-    
+
 def show_character_select():
     global game_state, char_menu
     game_state = GAME_STATE_CHAR_SELECT
@@ -90,7 +95,7 @@ def show_character_select():
     char_menu.set_style_property(miniMenu.StyleKind.SELECTED,
         miniMenu.StyleProperty.FOREGROUND,
         1)
-    
+
     def on_button_pressed2(selection22, selectedIndex22):
         global selected_character, mapaJoc
         selected_character = selectedIndex22
@@ -98,7 +103,7 @@ def show_character_select():
         sprites.destroy_all_sprites_of_kind(SpriteKind.player)
         mapaJoc = True
     char_menu.on_button_pressed(controller.A, on_button_pressed2)
-    
+
 def show_name_input():
     global game_state, name_menu
     game_state = GAME_STATE_NAME_INPUT
@@ -122,14 +127,24 @@ def show_name_input():
     name_menu.set_style_property(miniMenu.StyleKind.SELECTED,
         miniMenu.StyleProperty.FOREGROUND,
         1)
-    
+
     def on_button_pressed3(selection3, selectedIndex3):
         global names, player_name
         names = ["HUNTER", "CYBER", "NEON", "GLITCH", "SHADOW"]
         player_name = names[selectedIndex3]
         name_menu.close()
     name_menu.on_button_pressed(controller.A, on_button_pressed3)
-    
+
+def on_player_overlap_moneda(player, coin):
+    global score
+    score += 10                    
+    info.change_score_by(10)
+    music.play(music.melody_playable(music.ba_ding),
+        music.PlaybackMode.IN_BACKGROUND)
+    sprites.destroy(coin, effects.spray, 200)
+sprites.on_overlap(SpriteKind.player, SpriteKind.moneda, on_player_overlap_moneda)
+
+moneda: Sprite = None
 names: List[str] = []
 name_menu: miniMenu.MenuSprite = None
 char_menu: miniMenu.MenuSprite = None
@@ -157,8 +172,19 @@ effects.star_field.start_screen_effect()
 game.splash("CYBER-NEON", "VIRUS HUNT")
 show_main_menu()
 
+def on_update_interval():
+    global moneda
+    if game_state == GAME_STATE_PLAYING:
+        moneda = sprites.create(assets.image("""
+            moneda
+            """), SpriteKind.moneda)
+        tiles.place_on_random_tile(moneda, sprites.dungeon.dark_ground_center)
+game.on_update_interval(1000, on_update_interval)
+
 def on_forever():
+    global mapaJoc
     if mapaJoc == True:
+        mapaJoc = False
         start_gameplay()
         tiles.set_current_tilemap(tilemap("""
             mapa
