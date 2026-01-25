@@ -2,6 +2,88 @@
 class SpriteKind:
     moneda = SpriteKind.create()
     enemic = SpriteKind.create()
+def inventari_armes():
+    global inventari_armes2
+    escudo = 0
+    bomba = 0
+    pistola = 0
+    espada = 0
+    inventari_armes2 = [miniMenu.create_menu_item("Espada" + ("" + str(espada)),
+            img("""
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                """)),
+        miniMenu.create_menu_item("Pistola" + ("" + str(pistola)),
+            img("""
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                """)),
+        miniMenu.create_menu_item("Bomba" + ("" + str(bomba)),
+            img("""
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                """)),
+        miniMenu.create_menu_item("Escudo temporal" + ("" + str(escudo)),
+            img("""
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                . . . . . . . . . . . . . . . .
+                """))]
 
 def on_countdown_end():
     # Quan s'acaba el temps: comprova si s'ha arribat a la puntuació objectiu
@@ -11,6 +93,12 @@ def on_countdown_end():
         game.splash("GAME OVER", "Score: " + ("" + str(score)))
     game.reset()
 info.on_countdown_end(on_countdown_end)
+
+def on_overlap_tile(sprite, location):
+    inventari_armes()
+scene.on_overlap_tile(SpriteKind.player,
+    sprites.dungeon.chest_closed,
+    on_overlap_tile)
 
 def start_gameplay():
     global game_state, score, game_time, player_sprite
@@ -31,28 +119,29 @@ def start_gameplay():
             SpriteKind.player)
     else:
         player_sprite = crear_jugador_random()
-
 def crear_jugador_random():
+    global randomIndex
     randomIndex = randint(1, 4)
-
     if randomIndex == 1:
         return sprites.create(assets.image("""
                 jugador_randoom1
-                """), SpriteKind.player)
+                """),
+            SpriteKind.player)
     elif randomIndex == 2:
         return sprites.create(assets.image("""
                 jugador_randoom2
-                """), SpriteKind.player)
+                """),
+            SpriteKind.player)
     elif randomIndex == 3:
         return sprites.create(assets.image("""
                 jugador_randoom3
-                """), SpriteKind.player)
+                """),
+            SpriteKind.player)
     else:
         return sprites.create(assets.image("""
                 jugador_randoom4
-                """), SpriteKind.player)
-
-
+                """),
+            SpriteKind.player)
 def show_main_menu():
     global game_state, main_menu
     # Mostra el menú principal i gestiona la selecció amb el botó A
@@ -112,7 +201,7 @@ def show_character_select():
             jugador_kira
             """)),
         miniMenu.create_menu_item("RANDOM", assets.image("""
-            jugador_randoom1
+            jugador_randoom0
             """)))
     char_menu.set_position(80, 64)
     char_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
@@ -153,12 +242,14 @@ randomIndex = 0
 player_sprite: Sprite = None
 selected_character = 0
 score = 0
+inventari_armes2: List[miniMenu.MenuItem] = []
 mapaJoc = False
 game_time = 0
 GAME_STATE_MENU = 0
 game_state = 0
 GAME_STATE_PLAYING = 0
 GAME_STATE_CHAR_SELECT = 0
+randomIndex2 = 0
 GAME_STATE_CHAR_SELECT = 1
 GAME_STATE_NAME_INPUT = 2
 GAME_STATE_PLAYING = 3
