@@ -14,15 +14,35 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "jugador_kira"
     },
-    "image3": {
-        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAACvqqqqDwAAAK+qqqoPAAD///////8P8Kqqqqqqqvqvqqqqqqqq+q+q/6+qqv8Pr/qZ+aqqDwCv+pn5qqr/D6/6mfmqqq/68P+R+aqqqvoA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "jugador_randoom"
-    },
     "image5": {
         "data": "hwQOABAAAAAAAAAAAAAAAAAAu7vMzAAAAAC7u8zMAAAAu1VV3d3/ALtV3RER3d0Pu1XdERHd3Q+7VTNVVRHdD7tV3TMz3d0Pu1XdMzPd3Q8Au1VVVVX/AAAAu7vMzAAAAAC7u8zMAAAAAAAAAAAAAAAAAAAAAAAA",
         "mimeType": "image/x-mkcd-f4",
         "displayName": "moneda"
+    },
+    "image6": {
+        "data": "hwQQABAAAADwz/wPwPwPAP/8///Mu/sAzwz/z7uxHA8PAMA8s7v7+wAAwMy7u/v7AAAAzLy7+/sAAMA8s7Ec+wAAwLy7u7v7AAD/z7u7u/sA/7+7vLu7/PC8y8zMu8sPwMu7zMz//wC/y7zLDMwAAL/MzAwAwAAAzwAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "enemic1"
+    },
+    "image3": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAACvqqqqDwAAAK+qqqoPAAD///////8P8Kqqqqqqqvqvqqqqqqqq+q+q/6+qqv8Pr/qZ+aqqDwCv+pn5qqr/D6/6mfmqqq/68P+R+aqqqvoA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_randoom1"
+    },
+    "image7": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAAA/MzMzDwAAAD8zMzMPAAD///////8P8DMzMzMzM/M/MzMzMzMz8z8z/z8zM/8PP/OZ+TMzDwA/85n5MzP/Dz/zmfkzMz/z8P+R+TMzM/MA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_randoom2"
+    },
+    "image8": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAABfVVVVDwAAAF9VVVUPAAD///////8P8FVVVVVVVfVfVVVVVVVV9V9V/19VVf8PX/WZ+VVVDwBf9Zn5VVX/D1/1mflVVV/18P+R+VVVVfUA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_randoom3"
+    },
+    "image9": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAADv7u7uDwAAAO/u7u4PAAD///////8P8O7u7u7u7v7v7u7u7u7u/u/u/+/u7v8P7/6Z+e7uDwDv/pn57u7/D+/+mfnu7u/+8P+R+e7u7v4A8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_randoom4"
     },
     "anim1": {
         "namespace": "myAnimations",

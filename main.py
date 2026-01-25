@@ -1,198 +1,147 @@
-@namespace
-class SpriteKind:
-    moneda = SpriteKind.create()
-
-def on_countdown_end():
-    if score >= 500:
-        game.splash("VICTORIA!", "Score: " + ("" + str(score)))
-    else:
-        game.splash("GAME OVER", "Score: " + ("" + str(score)))
+namespace SpriteKind {
+    export const moneda = SpriteKind.create()
+    export const enemic = SpriteKind.create()
+}
+info.onCountdownEnd(function () {
+    // Quan s'acaba el temps: comprova si s'ha arribat a la puntuació objectiu
+    if (score >= 500) {
+        game.splash("VICTORIA!", "Score: " + ("" + score))
+    } else {
+        game.splash("GAME OVER", "Score: " + ("" + score))
+    }
     game.reset()
-info.on_countdown_end(on_countdown_end)
-
-def start_gameplay():
-    global game_state, score, game_time, player_sprite
+})
+function start_gameplay () {
+    // Inicialitza el joc: crea el jugador, reinicia score i temporitzador
     game_state = GAME_STATE_PLAYING
     score = 0
     game_time = 180
-    sprites.destroy_all_sprites_of_kind(SpriteKind.player)
-    if selected_character == 0:
-        player_sprite = sprites.create(assets.image("""
-                jugador_vermell
-                """),
-            SpriteKind.player)
-    elif selected_character == 1:
-        player_sprite = sprites.create(assets.image("""
-                jugador_kira
-                """),
-            SpriteKind.player)
-    else:
-        player_sprite = sprites.create(assets.image("""
-                jugador_randoom
-                """),
-            SpriteKind.player)
-    player_sprite.set_stay_in_screen(True)
-    info.set_score(0)
-    info.start_countdown(180)
-
-def show_main_menu():
-    global game_state, main_menu
+    sprites.destroyAllSpritesOfKind(SpriteKind.Player)
+    if (selected_character == 0) {
+        player_sprite = sprites.create(assets.image`jugador_vermell`, SpriteKind.Player)
+    } else if (selected_character == 1) {
+        player_sprite = sprites.create(assets.image`jugador_kira`, SpriteKind.Player)
+    } else {
+        player_sprite = sprites.create(assets.image`jugador_randoom1`, SpriteKind.Player)
+    }
+    player_sprite.setStayInScreen(true)
+    info.setScore(0)
+    info.startCountdown(360)
+}
+function show_main_menu () {
+    // Mostra el menú principal i gestiona la selecció amb el botó A
     game_state = GAME_STATE_MENU
-    main_menu = miniMenu.create_menu(miniMenu.create_menu_item("HISTORIA"),
-        miniMenu.create_menu_item("VERSUS"),
-        miniMenu.create_menu_item("CREDITOS"))
-    main_menu.set_position(80, 60)
-    main_menu.set_menu_style_property(miniMenu.MenuStyleProperty.WIDTH, 80)
-    main_menu.set_menu_style_property(miniMenu.MenuStyleProperty.HEIGHT, 50)
-    main_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.BACKGROUND,
-        15)
-    main_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
-    main_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.BACKGROUND,
-        8)
-    main_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
-
-    def on_button_pressed(selection2, selectedIndex2):
+    main_menu = miniMenu.createMenu(
+    miniMenu.createMenuItem("HISTORIA"),
+    miniMenu.createMenuItem("VERSUS"),
+    miniMenu.createMenuItem("CREDITOS")
+    )
+    main_menu.setPosition(80, 60)
+    main_menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 80)
+    main_menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 50)
+    main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 15)
+    main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 1)
+    main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 8)
+    main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
+    main_menu.onButtonPressed(controller.A, function (selection2, selectedIndex2) {
+        // Executa l'acció segons l'opció triada al menú principal
         main_menu.close()
-        if selectedIndex2 == 0:
+        if (selectedIndex2 == 0) {
             show_character_select()
-        elif selectedIndex2 == 1:
+        } else if (selectedIndex2 == 1) {
             game.splash("VERSUS", "Proximamente!")
             show_main_menu()
-        elif selectedIndex2 == 2:
+        } else if (selectedIndex2 == 2) {
             game.splash("THE END", "Creadoras: Evelyn, Mariona")
             show_main_menu()
-    main_menu.on_button_pressed(controller.A, on_button_pressed)
-
-def show_character_select():
-    global game_state, char_menu
+        }
+    })
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function (player22, coin) {
+    // Quan el jugador toca una moneda: suma puntuació, so i destrueix la moneda
+    score += 1
+    info.changeScoreBy(1)
+    music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
+    sprites.destroy(coin, effects.spray, 200)
+})
+function show_character_select () {
+    // Mostra el menú per seleccionar personatge i activa l'inici de partida
     game_state = GAME_STATE_CHAR_SELECT
-    sprites.destroy_all_sprites_of_kind(SpriteKind.player)
-    char_menu = miniMenu.create_menu(miniMenu.create_menu_item("ANDER", assets.image("""
-            jugador_vermell
-            """)),
-        miniMenu.create_menu_item("KIRA", assets.image("""
-            jugador_kira
-            """)),
-        miniMenu.create_menu_item("RANDOM", assets.image("""
-            jugador_randoom
-            """)))
-    char_menu.set_position(80, 64)
-    char_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.BACKGROUND,
-        15)
-    char_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
-    char_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.BACKGROUND,
-        8)
-    char_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
-
-    def on_button_pressed2(selection22, selectedIndex22):
-        global selected_character, mapaJoc
+    sprites.destroyAllSpritesOfKind(SpriteKind.Player)
+    char_menu = miniMenu.createMenu(
+    miniMenu.createMenuItem("ANDER", assets.image`jugador_vermell`),
+    miniMenu.createMenuItem("KIRA", assets.image`jugador_kira`),
+    miniMenu.createMenuItem("RANDOM", assets.image`jugador_randoom1`)
+    )
+    char_menu.setPosition(80, 64)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 15)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 1)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 8)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
+    char_menu.onButtonPressed(controller.A, function (selection22, selectedIndex22) {
+        // Desa el personatge seleccionat i marca que s'ha de començar el joc
         selected_character = selectedIndex22
         char_menu.close()
-        sprites.destroy_all_sprites_of_kind(SpriteKind.player)
-        mapaJoc = True
-    char_menu.on_button_pressed(controller.A, on_button_pressed2)
-
-def show_name_input():
-    global game_state, name_menu
-    game_state = GAME_STATE_NAME_INPUT
-    name_menu = miniMenu.create_menu(miniMenu.create_menu_item("HUNTER"),
-        miniMenu.create_menu_item("CYBER"),
-        miniMenu.create_menu_item("NEON"),
-        miniMenu.create_menu_item("GLITCH"),
-        miniMenu.create_menu_item("SHADOW"))
-    name_menu.set_position(80, 60)
-    name_menu.set_menu_style_property(miniMenu.MenuStyleProperty.WIDTH, 80)
-    name_menu.set_menu_style_property(miniMenu.MenuStyleProperty.HEIGHT, 70)
-    name_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.BACKGROUND,
-        15)
-    name_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
-    name_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.BACKGROUND,
-        8)
-    name_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
-
-    def on_button_pressed3(selection3, selectedIndex3):
-        global names, player_name
-        names = ["HUNTER", "CYBER", "NEON", "GLITCH", "SHADOW"]
-        player_name = names[selectedIndex3]
-        name_menu.close()
-    name_menu.on_button_pressed(controller.A, on_button_pressed3)
-
-def on_player_overlap_moneda(player, coin):
-    global score
-    score += 10                    
-    info.change_score_by(10)
-    music.play(music.melody_playable(music.ba_ding),
-        music.PlaybackMode.IN_BACKGROUND)
-    sprites.destroy(coin, effects.spray, 200)
-sprites.on_overlap(SpriteKind.player, SpriteKind.moneda, on_player_overlap_moneda)
-
-moneda: Sprite = None
-names: List[str] = []
-name_menu: miniMenu.MenuSprite = None
-char_menu: miniMenu.MenuSprite = None
-main_menu: miniMenu.MenuSprite = None
-player_sprite: Sprite = None
-selected_character = 0
-score = 0
-mapaJoc = False
-game_time = 0
-player_name = ""
-GAME_STATE_MENU = 0
-game_state = 0
-GAME_STATE_PLAYING = 0
-GAME_STATE_NAME_INPUT = 0
-GAME_STATE_CHAR_SELECT = 0
+        sprites.destroyAllSpritesOfKind(SpriteKind.Player)
+        mapaJoc = true
+    })
+}
+sprites.onOverlap(SpriteKind.Player, SpriteKind.enemic, function (player2, enemy) {
+    // Quan l'enemic toca el jugador: game over
+    game.gameOver(false)
+})
+function show_name_input () {
+	
+}
+let enemic1: Sprite = null
+let moneda2: Sprite = null
+let char_menu: miniMenu.MenuSprite = null
+let main_menu: miniMenu.MenuSprite = null
+let player_sprite: Sprite = null
+let selected_character = 0
+let score = 0
+let mapaJoc = false
+let game_time = 0
+let GAME_STATE_MENU = 0
+let game_state = 0
+let GAME_STATE_PLAYING = 0
+let GAME_STATE_CHAR_SELECT = 0
 GAME_STATE_CHAR_SELECT = 1
-GAME_STATE_NAME_INPUT = 2
+let GAME_STATE_NAME_INPUT = 2
 GAME_STATE_PLAYING = 3
 game_state = GAME_STATE_MENU
-player_name = "HUNTER"
-game_time = 180
-mapaJoc = False
-scene.set_background_color(15)
-effects.star_field.start_screen_effect()
+let player_name = "HUNTER"
+game_time = 360
+mapaJoc = false
+scene.setBackgroundColor(15)
+effects.starField.startScreenEffect()
 game.splash("CYBER-NEON", "VIRUS HUNT")
 show_main_menu()
-
-def on_update_interval():
-    global moneda
-    if game_state == GAME_STATE_PLAYING:
-        moneda = sprites.create(assets.image("""
-            moneda
-            """), SpriteKind.moneda)
-        tiles.place_on_random_tile(moneda, sprites.dungeon.dark_ground_center)
-game.on_update_interval(1000, on_update_interval)
-
-def on_forever():
-    global mapaJoc
-    if mapaJoc == True:
-        mapaJoc = False
+game.onUpdateInterval(5000, function () {
+    // Crea una moneda cada 5 segons mentre s'està jugant
+    if (game_state == GAME_STATE_PLAYING) {
+        moneda2 = sprites.create(assets.image`moneda`, SpriteKind.moneda)
+        tiles.placeOnRandomTile(moneda2, sprites.dungeon.darkGroundCenter)
+    }
+})
+forever(function () {
+    // Quan s'ha triat personatge, inicia la partida i col·loca el jugador al mapa
+    if (mapaJoc == true) {
+        mapaJoc = false
         start_gameplay()
-        tiles.set_current_tilemap(tilemap("""
-            mapa
-            """))
-        tiles.place_on_random_tile(player_sprite, assets.tile("""
-            stage
-            """))
-        controller.move_sprite(player_sprite, 100, 100)
-        scene.camera_follow_sprite(player_sprite)
+        tiles.setCurrentTilemap(tilemap`mapa`)
+        tiles.placeOnRandomTile(player_sprite, assets.tile`stage`)
+        controller.moveSprite(player_sprite, 100, 100)
+        scene.cameraFollowSprite(player_sprite)
+    }
     pause(100)
-forever(on_forever)
+})
+game.onUpdateInterval(30000, function () {
+    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if (game_state == GAME_STATE_PLAYING && player_sprite) {
+        sprites.destroyAllSpritesOfKind(SpriteKind.enemic)
+        enemic1 = sprites.create(assets.image`enemic1`, SpriteKind.enemic)
+        tiles.placeOnRandomTile(enemic1, sprites.dungeon.collectibleBlueCrystal)
+        enemic1.follow(player_sprite, 60)
+    }
+})
