@@ -44,6 +44,11 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "jugador_randoom4"
     },
+    "image10": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAAAfERERDwAAAB8REREPAAD///////8P8BEREREREfEfERERERER8R8R/x8REf8PH/GZ+RERDwAf8Zn5ERH/Dx/xmfkRER/x8P+R+REREfEA8JH5////DwAA/w8AAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jugador_randoom0"
+    },
     "anim1": {
         "namespace": "myAnimations",
         "id": "anim1",

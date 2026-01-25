@@ -22,11 +22,20 @@ function start_gameplay () {
     } else if (selected_character == 1) {
         player_sprite = sprites.create(assets.image`jugador_kira`, SpriteKind.Player)
     } else {
-        player_sprite = sprites.create(assets.image`jugador_randoom1`, SpriteKind.Player)
+        player_sprite = crear_jugador_random()
     }
-    player_sprite.setStayInScreen(true)
-    info.setScore(0)
-    info.startCountdown(360)
+}
+function crear_jugador_random () {
+    randomIndex = randint(1, 4)
+    if (randomIndex == 1) {
+        return sprites.create(assets.image`jugador_randoom1`, SpriteKind.Player)
+    } else if (randomIndex == 2) {
+        return sprites.create(assets.image`jugador_randoom2`, SpriteKind.Player)
+    } else if (randomIndex == 3) {
+        return sprites.create(assets.image`jugador_randoom3`, SpriteKind.Player)
+    } else {
+        return sprites.create(assets.image`jugador_randoom4`, SpriteKind.Player)
+    }
 }
 function show_main_menu () {
     // Mostra el menú principal i gestiona la selecció amb el botó A
@@ -71,7 +80,7 @@ function show_character_select () {
     char_menu = miniMenu.createMenu(
     miniMenu.createMenuItem("ANDER", assets.image`jugador_vermell`),
     miniMenu.createMenuItem("KIRA", assets.image`jugador_kira`),
-    miniMenu.createMenuItem("RANDOM", assets.image`jugador_randoom1`)
+    miniMenu.createMenuItem("RANDOM", assets.image`jugador_randoom0`)
     )
     char_menu.setPosition(80, 64)
     char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 15)
@@ -97,6 +106,7 @@ let enemic1: Sprite = null
 let moneda2: Sprite = null
 let char_menu: miniMenu.MenuSprite = null
 let main_menu: miniMenu.MenuSprite = null
+let randomIndex = 0
 let player_sprite: Sprite = null
 let selected_character = 0
 let score = 0
@@ -106,6 +116,7 @@ let GAME_STATE_MENU = 0
 let game_state = 0
 let GAME_STATE_PLAYING = 0
 let GAME_STATE_CHAR_SELECT = 0
+let randomIndex2 = 0
 GAME_STATE_CHAR_SELECT = 1
 let GAME_STATE_NAME_INPUT = 2
 GAME_STATE_PLAYING = 3

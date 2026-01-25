@@ -174,6 +174,25 @@ f b c b b b c b b b b f . . . .
 . . . . f e e f . f e e f . . . 
 . . . . . f f . . . f f . . . . 
 `;
+            case "image10":
+            case "jugador_randoom0":return img`
+. . . . . . f f f f f . . . . . 
+. . . . . f 1 1 1 1 1 f . . . . 
+. . . . f 1 1 1 1 1 1 f . . . . 
+. . . . f 1 1 1 f f f f f . . . 
+. . f f f 1 1 f 9 9 9 1 1 f . . 
+. f 1 1 f 1 1 f 9 9 9 9 9 f . . 
+. f 1 1 f 1 1 f 9 9 9 9 9 f . . 
+. f 1 1 f 1 1 1 f f f f f . . . 
+. f 1 1 f 1 1 1 1 1 1 1 f . . . 
+. f 1 1 f 1 1 1 1 1 1 1 f . . . 
+. f 1 1 f 1 1 1 1 1 1 1 f . . . 
+. f 1 1 f 1 1 1 1 1 1 1 f . . . 
+. . f f f 1 1 f f f f 1 f . . . 
+. . . . f 1 1 f . f 1 1 f . . . 
+. . . . f 1 1 f . f 1 1 f . . . 
+. . . . . f f . . . f f . . . . 
+`;
         }
         return null;
     })
