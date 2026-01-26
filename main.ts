@@ -76,12 +76,35 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
             true
             )
         } else {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoom_derecha`,
-            500,
-            true
-            )
+            if (randomIndex == 1) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomlila_derecha`,
+                500,
+                true
+                )
+            } else if (randomIndex == 2) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomrosa_derecha`,
+                500,
+                true
+                )
+            } else if (randomIndex == 3) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomgroc_derecha0`,
+                500,
+                true
+                )
+            } else {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoommarro_derecha`,
+                500,
+                true
+                )
+            }
         }
     }
 })
