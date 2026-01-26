@@ -23,14 +23,14 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
             player_sprite,
             assets.animation`jugadorkira_bajar`,
             500,
-            true
+            false
             )
         } else {
             animation.runImageAnimation(
             player_sprite,
             assets.animation`jugadorrandoom_bajar`,
             500,
-            true
+            false
             )
         }
     }
