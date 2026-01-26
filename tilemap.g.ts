@@ -103,6 +103,25 @@ namespace myTiles {
 ......222.....2........................2.....2....22.......2
 ........2222222........................2222222.....222222222
 `, [myTiles.transparency16,myTiles.tile12,myTiles.tile3,myTiles.tile11,sprites.castle.tileDarkGrass1,sprites.castle.tilePath5,sprites.dungeon.darkGroundCenter,sprites.dungeon.greenOuterNorthWest,sprites.dungeon.greenOuterNorth0,sprites.dungeon.greenOuterNorthEast,sprites.dungeon.greenOuterEast0,sprites.dungeon.greenOuterSouthWest,sprites.dungeon.greenOuterSouth0,sprites.dungeon.greenOuterSouthEast,sprites.dungeon.greenOuterWest1,sprites.dungeon.collectibleBlueCrystal,sprites.dungeon.chestClosed,sprites.vehicle.roadTurn1,sprites.vehicle.roadTurn3,sprites.vehicle.roadTurn2,sprites.vehicle.roadTurn4,sprites.vehicle.roadIntersection4,sprites.vehicle.roadIntersection3,sprites.vehicle.roadIntersection1,sprites.vehicle.roadIntersection2,sprites.dungeon.chestOpen], TileScale.Sixteen);
+            case "mapa1":
+            case "nivel3":return tiles.createTilemap(hex`1000100002020202020202020202020202020202020000000000000200000000000000020100020000020002000000020000000202000202000202020002000200020002020000000002000200020000000200020200020202020000000200000002000202000000000000000002060200020002020000020202020000020202000200020200000002070000000200020002000202000202020002020202000000020002020000000000020000000000000200020200000202020402020202020002000202000000000000000000000000020002020002020202020202020202020000020200020000000000000000000000000302020202020202020202020202020205`, img`
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 
+2 . . . . . . 2 . . . . . . . 2 
+. . 2 . . 2 . 2 . . . 2 . . . 2 
+2 . 2 2 . 2 2 2 . 2 . 2 . 2 . 2 
+2 . . . . 2 . 2 . 2 . . . 2 . 2 
+2 . 2 2 2 2 . . . 2 . . . 2 . 2 
+2 . . . . . . . . 2 . 2 . 2 . 2 
+2 . . 2 2 2 2 . . 2 2 2 . 2 . 2 
+2 . . . 2 . . . . 2 . 2 . 2 . 2 
+2 . 2 2 2 . 2 2 2 2 . . . 2 . 2 
+2 . . . . . 2 . . . . . . 2 . 2 
+2 . . 2 2 2 . 2 2 2 2 2 . 2 . 2 
+2 . . . . . . . . . . . . 2 . 2 
+2 . 2 2 2 2 2 2 2 2 2 2 2 . . 2 
+2 . 2 . . . . . . . . . . . . . 
+2 2 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+`, [myTiles.transparency16,myTiles.tile11,myTiles.tile12,myTiles.tile8,sprites.dungeon.chestClosed,sprites.castle.tileDarkGrass2,sprites.dungeon.chestOpen,myTiles.transparency16], TileScale.Sixteen);
         }
         return null;
     })
