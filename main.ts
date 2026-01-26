@@ -9,28 +9,85 @@ function inventari_armes () {
     inventari_armes2 = [miniMenu.createMenuItem("Espada" + ("" + espada), assets.image`espada`), miniMenu.createMenuItem("Pistola" + ("" + pistola), assets.image`pistola`), miniMenu.createMenuItem("Escudo temporal" + ("" + escudo), assets.image`escudo`)]
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    player_sprite,
-    assets.animation`jugadorvermell_bajar`,
-    500,
-    true
-    )
+    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if (game_state == GAME_STATE_PLAYING && player_sprite) {
+        if (selected_character == 0) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorvermell_bajar`,
+            500,
+            true
+            )
+        } else if (selected_character == 1) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorkira_bajar`,
+            500,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorrandoom_bajar`,
+            500,
+            true
+            )
+        }
+    }
 })
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    player_sprite,
-    assets.animation`jugadorvermell_dreta`,
-    500,
-    true
-    )
+    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if (game_state == GAME_STATE_PLAYING && player_sprite) {
+        if (selected_character == 0) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorvermell_dreta`,
+            500,
+            true
+            )
+        } else if (selected_character == 1) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorkira_derecha`,
+            500,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorrandoom_derecha`,
+            500,
+            true
+            )
+        }
+    }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    player_sprite,
-    assets.animation`jugadorvermell_esquerra`,
-    500,
-    true
-    )
+    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if (game_state == GAME_STATE_PLAYING && player_sprite) {
+        if (selected_character == 0) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorvermell_esquerra`,
+            500,
+            true
+            )
+        } else if (selected_character == 1) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorkira_esquerra`,
+            500,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorrandoom_esquerra`,
+            500,
+            true
+            )
+        }
+    }
 })
 info.onCountdownEnd(function () {
     // Quan s'acaba el temps: comprova si s'ha arribat a la puntuació objectiu
@@ -71,12 +128,31 @@ function crear_jugador_random () {
     }
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    animation.runImageAnimation(
-    player_sprite,
-    assets.animation`jugadorvermell_subir0`,
-    500,
-    true
-    )
+    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if (game_state == GAME_STATE_PLAYING && player_sprite) {
+        if (selected_character == 0) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorvermell_subir0`,
+            500,
+            true
+            )
+        } else if (selected_character == 1) {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorkira_subir`,
+            500,
+            true
+            )
+        } else {
+            animation.runImageAnimation(
+            player_sprite,
+            assets.animation`jugadorrandoom_subir`,
+            500,
+            true
+            )
+        }
+    }
 })
 function show_main_menu () {
     // Mostra el menú principal i gestiona la selecció amb el botó A
@@ -145,8 +221,8 @@ let moneda2: Sprite = null
 let char_menu: miniMenu.MenuSprite = null
 let main_menu: miniMenu.MenuSprite = null
 let randomIndex = 0
-let selected_character = 0
 let score = 0
+let selected_character = 0
 let player_sprite: Sprite = null
 let inventari_armes2: miniMenu.MenuItem[] = []
 let mapaJoc = false
