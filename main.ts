@@ -145,6 +145,35 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
             true
             )
         } else {
+            if (randomIndex == 1) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoom1_subir`,
+                500,
+                true
+                )
+            } else if (randomIndex == 2) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomrosa_subir`,
+                500,
+                true
+                )
+            } else if (randomIndex == 3) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomgroc_subir`,
+                500,
+                true
+                )
+            } else {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoommarro_subir`,
+                500,
+                false
+                )
+            }
             animation.runImageAnimation(
             player_sprite,
             assets.animation`jugadorrandoom_subir`,

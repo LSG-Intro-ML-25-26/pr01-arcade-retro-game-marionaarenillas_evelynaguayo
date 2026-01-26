@@ -1094,6 +1094,150 @@ f f f c 3 c c c c c c f . .
 . . . . . f f . . f 1 1 f . . . 
 . . . . . . . . . . f f . . . . 
 `];
+            case "jugadorrandoom1_subir":
+            case "anim17":return [img`
+. . . . . . f f f f f . . . . . 
+. . . . . f a a a a a f . . . . 
+. . . . f a a a a a a a f . . . 
+. . . . f a a a a a a a f . . . 
+. . . . f a a f f f a a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a a f f f a a f . . . 
+. . . . f a a a a a a a f . . . 
+. . . . f a a f f f f a f . . . 
+. . . . f a a f . f a a f . . . 
+. . . . f a a f . . f f . . . . 
+. . . . . f f . . . . . . . . . 
+`, img`
+. . . . . . f f f f f . . . . . 
+. . . . . f a a a a a f . . . . 
+. . . . f a a a a a a a f . . . 
+. . . . f a a a a a a a f . . . 
+. . . . f a a f f f a a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a f a a a f a f . . . 
+. . . . f a a f f f a a f . . . 
+. . . . f a a a a a a a f . . . 
+. . . . f a a f f f f a f . . . 
+. . . . f a a f . f a a f . . . 
+. . . . . f f . . f a a f . . . 
+. . . . . . . . . . f f . . . . 
+`];
+            case "jugadorrandoomgroc_subir":
+            case "anim18":return [img`
+. . . . . . f f f f f . . . . . 
+. . . . . f 5 5 5 5 5 f . . . . 
+. . . . f 5 5 5 5 5 5 5 f . . . 
+. . . . f 5 5 5 5 5 5 5 f . . . 
+. . . . f 5 5 f f f 5 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 5 f f f 5 5 f . . . 
+. . . . f 5 5 5 5 5 5 5 f . . . 
+. . . . f 5 5 f f f f 5 f . . . 
+. . . . f 5 5 f . f 5 5 f . . . 
+. . . . . f f . . f 5 5 f . . . 
+. . . . . . . . . . f f . . . . 
+`, img`
+. . . . . . f f f f f . . . . . 
+. . . . . f 5 5 5 5 5 f . . . . 
+. . . . f 5 5 5 5 5 5 5 f . . . 
+. . . . f 5 5 5 5 5 5 5 f . . . 
+. . . . f 5 5 f f f 5 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 f 5 5 5 f 5 f . . . 
+. . . . f 5 5 f f f 5 5 f . . . 
+. . . . f 5 5 5 5 5 5 5 f . . . 
+. . . . f 5 5 f f f f 5 f . . . 
+. . . . f 5 5 f . f 5 5 f . . . 
+. . . . f 5 5 f . . f f . . . . 
+. . . . . f f . . . . . . . . . 
+`];
+            case "jugadorrandoomrosa_subir":
+            case "anim19":return [img`
+. . . . . . f f f f f . . . . . 
+. . . . . f 3 3 3 3 3 f . . . . 
+. . . . f 3 3 3 3 3 3 3 f . . . 
+. . . . f 3 3 3 3 3 3 3 f . . . 
+. . . . f 3 3 f f f 3 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 3 f f f 3 3 f . . . 
+. . . . f 3 3 3 3 3 3 3 f . . . 
+. . . . f 3 3 f f f f 3 f . . . 
+. . . . f 3 3 f . f 3 3 f . . . 
+. . . . f 3 3 f . . f f . . . . 
+. . . . . f f . . . . . . . . . 
+`, img`
+. . . . . . f f f f f . . . . . 
+. . . . . f 3 3 3 3 3 f . . . . 
+. . . . f 3 3 3 3 3 3 3 f . . . 
+. . . . f 3 3 3 3 3 3 3 f . . . 
+. . . . f 3 3 f f f 3 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 f 3 3 3 f 3 f . . . 
+. . . . f 3 3 f f f 3 3 f . . . 
+. . . . f 3 3 3 3 3 3 3 f . . . 
+. . . . f 3 3 f f f f 3 f . . . 
+. . . . f 3 3 f . f 3 3 f . . . 
+. . . . f 3 3 f . . f f . . . . 
+. . . . . f f . . . . . . . . . 
+`];
+            case "jugadorrandoommarro_subir":
+            case "anim20":return [img`
+. . . . . . f f f f f . . . . . 
+. . . . . f e e e e e f . . . . 
+. . . . f e e e e e e e f . . . 
+. . . . f e e e e e e e f . . . 
+. . . . f e e f f f e e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e e f f f e e f . . . 
+. . . . f e e e e e e e f . . . 
+. . . . f e e f f f f e f . . . 
+. . . . f e e f . f e e f . . . 
+. . . . . f f . . f e e f . . . 
+. . . . . . . . . . f f . . . . 
+`, img`
+. . . . . . f f f f f . . . . . 
+. . . . . f e e e e e f . . . . 
+. . . . f e e e e e e e f . . . 
+. . . . f e e e e e e e f . . . 
+. . . . f e e f f f e e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e f e e e f e f . . . 
+. . . . f e e f f f e e f . . . 
+. . . . f e e e e e e e f . . . 
+. . . . f e e f f f f e f . . . 
+. . . . f e e f . f e e f . . . 
+. . . . f e e f . . f f . . . . 
+. . . . . f f . . . . . . . . . 
+`];
         }
         return null;
     })
