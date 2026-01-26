@@ -2,74 +2,47 @@
 class SpriteKind:
     moneda = SpriteKind.create()
     enemic = SpriteKind.create()
-# Funció menú inventari
-def obrir_menu():
-    global pantalla, menu_obert, joc, mapa_anterior, inventari, my_menu
-    cabres = 0
-    cavalls = 0
-    gallines = 0
-    ous = 0
-    pantalla = "inventari"
-    menu_obert = True
-    joc = False
-    mapa_anterior = tilemap("""
-        mapa1
-        """)
-    tiles.set_current_tilemap(tilemap("""
-        nivel0
-        """))
-    scene.center_camera_at(80, 60)
-    controller.move_sprite(player_sprite, 0, 0)
-    inventari = [miniMenu.create_menu_item("Espada" + ("" + str(ous)), assets.image("""
-            ou
-            """)),
-        miniMenu.create_menu_item("Pistola" + ("" + str(gallines)),
+def inventari_armes():
+    global inventari_armes2
+    escudo = 0
+    pistola = 0
+    espada = 0
+    inventari_armes2 = [miniMenu.create_menu_item("Espada" + ("" + str(espada)),
             assets.image("""
-                gallina1
+                espada
                 """)),
-        miniMenu.create_menu_item("Bomba" + ("" + str(cavalls)),
+        miniMenu.create_menu_item("Pistola" + ("" + str(pistola)),
             assets.image("""
-                cavall1
+                pistola
                 """)),
-        miniMenu.create_menu_item("Escudo" + ("" + str(cabres)),
+        miniMenu.create_menu_item("Escudo temporal" + ("" + str(escudo)),
             assets.image("""
-                cabra1
+                escudo
                 """))]
-    my_menu = miniMenu.create_menu_from_array(inventari)
-    my_menu.set_title("Inventari")
-    my_menu.set_frame(assets.image("""
-        menu1
-        """))
-    my_menu.set_position(80, 60)
-    my_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.BACKGROUND,
-        50)
-    # B: seleccionar item i obrir trueque
-    
-    def on_button_pressed(selection, selectedIndex):
-        global seleccionar_item, mode_trueque
-        seleccionar_item = selection
-        mode_trueque = "comprar"
-        pause(50)
-        my_menu.close()
-    my_menu.on_button_pressed(controller.B, on_button_pressed)
-    
-    # A: tancar inventari i tornar al joc
-    
-    def on_button_pressed2(selection2, selectedIndex2):
-        global pantalla, joc, menu_obert
-        nena: Sprite = None
-        pantalla = "joc"
-        joc = True
-        menu_obert = False
-        my_menu.close()
-        # Tornar al laberint
-        if mapa_anterior:
-            tiles.set_current_tilemap(mapa_anterior)
-        controller.move_sprite(nena, 100, 100)
-        scene.camera_follow_sprite(nena)
-    my_menu.on_button_pressed(controller.A, on_button_pressed2)
-    
+
+def on_a_pressed():
+    animation.run_image_animation(player_sprite,
+        [img("""
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            . . . . . . . . . . . . . . . .
+            """)],
+        500,
+        False)
+controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
 
 def on_countdown_end():
     # Quan s'acaba el temps: comprova si s'ha arribat a la puntuació objectiu
@@ -81,7 +54,7 @@ def on_countdown_end():
 info.on_countdown_end(on_countdown_end)
 
 def on_overlap_tile(sprite, location):
-    pass
+    inventari_armes()
 scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.chest_closed,
     on_overlap_tile)
@@ -151,18 +124,18 @@ def show_main_menu():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed3(selection22, selectedIndex22):
+    def on_button_pressed(selection2, selectedIndex2):
         # Executa l'acció segons l'opció triada al menú principal
         main_menu.close()
-        if selectedIndex22 == 0:
+        if selectedIndex2 == 0:
             show_character_select()
-        elif selectedIndex22 == 1:
+        elif selectedIndex2 == 1:
             game.splash("VERSUS", "Proximamente!")
             show_main_menu()
-        elif selectedIndex22 == 2:
+        elif selectedIndex2 == 2:
             game.splash("THE END", "Creadoras: Evelyn, Mariona")
             show_main_menu()
-    main_menu.on_button_pressed(controller.A, on_button_pressed3)
+    main_menu.on_button_pressed(controller.A, on_button_pressed)
     
 
 def on_on_overlap(player22, coin):
@@ -203,14 +176,14 @@ def show_character_select():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed4(selection222, selectedIndex222):
+    def on_button_pressed2(selection22, selectedIndex22):
         global selected_character, mapaJoc
         # Desa el personatge seleccionat i marca que s'ha de començar el joc
-        selected_character = selectedIndex222
+        selected_character = selectedIndex22
         char_menu.close()
         sprites.destroy_all_sprites_of_kind(SpriteKind.player)
         mapaJoc = True
-    char_menu.on_button_pressed(controller.A, on_button_pressed4)
+    char_menu.on_button_pressed(controller.A, on_button_pressed2)
     
 
 def on_on_overlap2(player2, enemy):
@@ -218,8 +191,6 @@ def on_on_overlap2(player2, enemy):
     game.game_over(False)
 sprites.on_overlap(SpriteKind.player, SpriteKind.enemic, on_on_overlap2)
 
-def show_name_input():
-    pass
 enemic1: Sprite = None
 moneda2: Sprite = None
 char_menu: miniMenu.MenuSprite = None
@@ -227,15 +198,8 @@ main_menu: miniMenu.MenuSprite = None
 randomIndex = 0
 selected_character = 0
 score = 0
-mode_trueque = ""
-seleccionar_item = ""
-my_menu: miniMenu.MenuSprite = None
-inventari: List[miniMenu.MenuItem] = []
 player_sprite: Sprite = None
-mapa_anterior: tiles.TileMapData = None
-joc = False
-menu_obert = False
-pantalla = ""
+inventari_armes2: List[miniMenu.MenuItem] = []
 mapaJoc = False
 game_time = 0
 GAME_STATE_MENU = 0
