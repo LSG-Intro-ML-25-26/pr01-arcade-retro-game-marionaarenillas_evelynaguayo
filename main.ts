@@ -23,15 +23,38 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
             player_sprite,
             assets.animation`jugadorkira_bajar`,
             500,
-            false
+            true
             )
         } else {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoom_bajar`,
-            500,
-            false
-            )
+            if (randomIndex == 1) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomlila_bajar`,
+                500,
+                true
+                )
+            } else if (randomIndex == 2) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomrosa_bajar`,
+                500,
+                true
+                )
+            } else if (randomIndex == 3) {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoomgroc_bajar`,
+                500,
+                true
+                )
+            } else {
+                animation.runImageAnimation(
+                player_sprite,
+                assets.animation`jugadorrandoommarro_bajar`,
+                500,
+                true
+                )
+            }
         }
     }
 })
@@ -171,15 +194,9 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
                 player_sprite,
                 assets.animation`jugadorrandoommarro_subir`,
                 500,
-                false
+                true
                 )
             }
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoom_subir`,
-            500,
-            true
-            )
         }
     }
 })
@@ -249,8 +266,8 @@ let enemic1: Sprite = null
 let moneda2: Sprite = null
 let char_menu: miniMenu.MenuSprite = null
 let main_menu: miniMenu.MenuSprite = null
-let randomIndex = 0
 let score = 0
+let randomIndex = 0
 let selected_character = 0
 let player_sprite: Sprite = null
 let inventari_armes2: miniMenu.MenuItem[] = []
