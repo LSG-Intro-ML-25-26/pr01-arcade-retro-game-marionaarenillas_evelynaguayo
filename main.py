@@ -2,47 +2,200 @@
 class SpriteKind:
     moneda = SpriteKind.create()
     enemic = SpriteKind.create()
+
 def inventari_armes():
-    global inventari_armes2
+    global pantalla, mapaJoc, inventari_obert, mapa_anterior, inventari_armes2, my_menu
     escudo = 0
     pistola = 0
     espada = 0
-    inventari_armes2 = [miniMenu.create_menu_item("Espada" + ("" + str(espada)),
+    pantalla = "inventari"
+    mapaJoc = False
+    inventari_obert = True
+    mapa_anterior = tilemap("""
+        mapa
+        """)
+    scene.center_camera_at(80, 60)
+    controller.move_sprite(player_sprite, 0, 0)
+    inventari_armes2 = [miniMenu.create_menu_item("Espada " + ("" + str(espada)),
             assets.image("""
                 espada
                 """)),
-        miniMenu.create_menu_item("Pistola" + ("" + str(pistola)),
+        miniMenu.create_menu_item("Pistola " + ("" + str(pistola)),
             assets.image("""
                 pistola
                 """)),
-        miniMenu.create_menu_item("Escudo temporal" + ("" + str(escudo)),
+        miniMenu.create_menu_item("Escudo temporal " + ("" + str(escudo)),
             assets.image("""
                 escudo
                 """))]
+    my_menu = miniMenu.create_menu_from_array(inventari_armes2)
+    my_menu.set_title("Inventari")
+    my_menu.set_frame(assets.image("""
+        mapa_inventari
+        """))
+    my_menu.set_position(80, 60)
+    my_menu.set_style_property(miniMenu.StyleKind.SELECTED,
+        miniMenu.StyleProperty.BACKGROUND,
+        54)
+    
+    def on_button_pressed(selection, selectedIndex):
+        global mapaJoc, inventari_obert, pantalla
+        # ✅ CANVI MINIM: treiem mapaJoc = True perquè no et reinicii al forever
+        # mapaJoc = True
+        inventari_obert = False
+        my_menu.close()
+        if mapa_anterior:
+            tiles.set_current_tilemap(mapa_anterior)
+        pantalla = "joc"
+        tiles.place_on_random_tile(player_sprite, sprites.dungeon.chest_open)
+        controller.move_sprite(player_sprite, 100, 100)
+        scene.camera_follow_sprite(player_sprite)
+    my_menu.on_button_pressed(controller.A, on_button_pressed)
 
-def on_a_pressed():
-    animation.run_image_animation(player_sprite,
-        [img("""
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            . . . . . . . . . . . . . . . .
-            """)],
-        500,
-        False)
-controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
+
+def on_down_pressed():
+    # Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if game_state == GAME_STATE_PLAYING and player_sprite:
+        if selected_character == 0:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorvermell_bajar
+                    """),
+                500,
+                True)
+        elif selected_character == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorkira_bajar
+                    """),
+                500,
+                True)
+        else:
+            if randomIndex == 1:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomlila_bajar
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 2:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomrosa_bajar
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 3:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomgroc_bajar
+                        """),
+                    500,
+                    True)
+            else:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoommarro_bajar
+                        """),
+                    500,
+                    True)
+controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
+
+def on_right_pressed():
+    # Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if game_state == GAME_STATE_PLAYING and player_sprite:
+        if selected_character == 0:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorvermell_dreta
+                    """),
+                500,
+                True)
+        elif selected_character == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorkira_derecha
+                    """),
+                500,
+                True)
+        else:
+            if randomIndex == 1:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomlila_derecha
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 2:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomrosa_derecha
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 3:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomgroc_derecha0
+                        """),
+                    500,
+                    True)
+            else:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoommarro_derecha
+                        """),
+                    500,
+                    True)
+controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
+
+def on_left_pressed():
+    # Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if game_state == GAME_STATE_PLAYING and player_sprite:
+        if selected_character == 0:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorvermell_esquerra
+                    """),
+                500,
+                True)
+        elif selected_character == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorkira_esquerra
+                    """),
+                500,
+                True)
+        else:
+            if randomIndex == 1:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomlila_esquerra
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 2:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomrosa_esquerra
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 3:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomgroc_esquerra
+                        """),
+                    500,
+                    True)
+            else:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoommarro_esquerra0
+                        """),
+                    500,
+                    True)
+controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
 def on_countdown_end():
     # Quan s'acaba el temps: comprova si s'ha arribat a la puntuació objectiu
@@ -54,7 +207,8 @@ def on_countdown_end():
 info.on_countdown_end(on_countdown_end)
 
 def on_overlap_tile(sprite, location):
-    inventari_armes()
+    if pantalla == "joc":
+        inventari_armes()
 scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.chest_closed,
     on_overlap_tile)
@@ -78,6 +232,7 @@ def start_gameplay():
             SpriteKind.player)
     else:
         player_sprite = crear_jugador_random()
+
 def crear_jugador_random():
     global randomIndex
     randomIndex = randint(1, 4)
@@ -101,6 +256,55 @@ def crear_jugador_random():
                 jugador_randoom4
                 """),
             SpriteKind.player)
+
+def on_up_pressed():
+    # Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if game_state == GAME_STATE_PLAYING and player_sprite:
+        if selected_character == 0:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorvermell_subir0
+                    """),
+                500,
+                True)
+        elif selected_character == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorkira_subir
+                    """),
+                500,
+                True)
+        else:
+            if randomIndex == 1:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoom1_subir
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 2:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomrosa_subir
+                        """),
+                    500,
+                    True)
+            elif randomIndex == 3:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoomgroc_subir
+                        """),
+                    500,
+                    True)
+            else:
+                animation.run_image_animation(player_sprite,
+                    assets.animation("""
+                        jugadorrandoommarro_subir
+                        """),
+                    500,
+                    True)
+controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
+
 def show_main_menu():
     global game_state, main_menu
     # Mostra el menú principal i gestiona la selecció amb el botó A
@@ -124,7 +328,7 @@ def show_main_menu():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed(selection2, selectedIndex2):
+    def on_button_pressed2(selection2, selectedIndex2):
         # Executa l'acció segons l'opció triada al menú principal
         main_menu.close()
         if selectedIndex2 == 0:
@@ -135,8 +339,8 @@ def show_main_menu():
         elif selectedIndex2 == 2:
             game.splash("THE END", "Creadoras: Evelyn, Mariona")
             show_main_menu()
-    main_menu.on_button_pressed(controller.A, on_button_pressed)
-    
+    main_menu.on_button_pressed(controller.A, on_button_pressed2)
+
 
 def on_on_overlap(player22, coin):
     global score
@@ -176,15 +380,15 @@ def show_character_select():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed2(selection22, selectedIndex22):
+    def on_button_pressed3(selection22, selectedIndex22):
         global selected_character, mapaJoc
         # Desa el personatge seleccionat i marca que s'ha de començar el joc
         selected_character = selectedIndex22
         char_menu.close()
         sprites.destroy_all_sprites_of_kind(SpriteKind.player)
         mapaJoc = True
-    char_menu.on_button_pressed(controller.A, on_button_pressed2)
-    
+    char_menu.on_button_pressed(controller.A, on_button_pressed3)
+
 
 def on_on_overlap2(player2, enemy):
     # Quan l'enemic toca el jugador: game over
@@ -195,12 +399,16 @@ enemic1: Sprite = None
 moneda2: Sprite = None
 char_menu: miniMenu.MenuSprite = None
 main_menu: miniMenu.MenuSprite = None
+score = 0
 randomIndex = 0
 selected_character = 0
-score = 0
-player_sprite: Sprite = None
+my_menu: miniMenu.MenuSprite = None
 inventari_armes2: List[miniMenu.MenuItem] = []
+player_sprite: Sprite = None
+mapa_anterior: tiles.TileMapData = None
+inventari_obert = False
 mapaJoc = False
+pantalla = ""
 game_time = 0
 GAME_STATE_MENU = 0
 game_state = 0
@@ -213,6 +421,7 @@ GAME_STATE_PLAYING = 3
 game_state = GAME_STATE_MENU
 player_name = "HUNTER"
 game_time = 360
+pantalla = "joc"
 mapaJoc = False
 scene.set_background_color(15)
 effects.star_field.start_screen_effect()
