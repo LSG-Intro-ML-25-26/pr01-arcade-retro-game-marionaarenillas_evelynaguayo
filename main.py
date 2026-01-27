@@ -2,7 +2,6 @@
 class SpriteKind:
     moneda = SpriteKind.create()
     enemic = SpriteKind.create()
-
 def inventari_armes():
     global pantalla, mapaJoc, inventari_obert, mapa_anterior, inventari_armes2, my_menu
     escudo = 0
@@ -37,21 +36,17 @@ def inventari_armes():
     my_menu.set_style_property(miniMenu.StyleKind.SELECTED,
         miniMenu.StyleProperty.BACKGROUND,
         54)
-    
-    def on_button_pressed(selection, selectedIndex):
-        global mapaJoc, inventari_obert, pantalla
-        # ✅ CANVI MINIM: treiem mapaJoc = True perquè no et reinicii al forever
-        # mapaJoc = True
+    def on_button_pressed(selection: any, selectedIndex: any):
+        global inventari_obert, pantalla, game_state
         inventari_obert = False
+        pantalla = "joc"
+        game_state = GAME_STATE_PLAYING
         my_menu.close()
         if mapa_anterior:
             tiles.set_current_tilemap(mapa_anterior)
-        pantalla = "joc"
         tiles.place_on_random_tile(player_sprite, sprites.dungeon.chest_open)
         controller.move_sprite(player_sprite, 100, 100)
         scene.camera_follow_sprite(player_sprite)
-    my_menu.on_button_pressed(controller.A, on_button_pressed)
-
 
 def on_down_pressed():
     # Crea un enemic cada 30 segons i fa que persegueixi el jugador
@@ -70,35 +65,34 @@ def on_down_pressed():
                     """),
                 500,
                 True)
+        elif randomIndex == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomlila_bajar
+                    """),
+                500,
+                True)
+        elif randomIndex == 2:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomrosa_bajar
+                    """),
+                500,
+                True)
+        elif randomIndex == 3:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomgroc_bajar
+                    """),
+                500,
+                True)
         else:
-            if randomIndex == 1:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomlila_bajar
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 2:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomrosa_bajar
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 3:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomgroc_bajar
-                        """),
-                    500,
-                    True)
-            else:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoommarro_bajar
-                        """),
-                    500,
-                    True)
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoommarro_bajar
+                    """),
+                500,
+                True)
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
 
 def on_right_pressed():
@@ -118,35 +112,34 @@ def on_right_pressed():
                     """),
                 500,
                 True)
+        elif randomIndex == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomlila_derecha
+                    """),
+                500,
+                True)
+        elif randomIndex == 2:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomrosa_derecha
+                    """),
+                500,
+                True)
+        elif randomIndex == 3:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomgroc_derecha0
+                    """),
+                500,
+                True)
         else:
-            if randomIndex == 1:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomlila_derecha
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 2:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomrosa_derecha
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 3:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomgroc_derecha0
-                        """),
-                    500,
-                    True)
-            else:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoommarro_derecha
-                        """),
-                    500,
-                    True)
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoommarro_derecha
+                    """),
+                500,
+                True)
 controller.right.on_event(ControllerButtonEvent.PRESSED, on_right_pressed)
 
 def on_left_pressed():
@@ -166,35 +159,34 @@ def on_left_pressed():
                     """),
                 500,
                 True)
+        elif randomIndex == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomlila_esquerra
+                    """),
+                500,
+                True)
+        elif randomIndex == 2:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomrosa_esquerra
+                    """),
+                500,
+                True)
+        elif randomIndex == 3:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomgroc_esquerra
+                    """),
+                500,
+                True)
         else:
-            if randomIndex == 1:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomlila_esquerra
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 2:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomrosa_esquerra
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 3:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomgroc_esquerra
-                        """),
-                    500,
-                    True)
-            else:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoommarro_esquerra0
-                        """),
-                    500,
-                    True)
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoommarro_esquerra0
+                    """),
+                500,
+                True)
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
 def on_countdown_end():
@@ -232,7 +224,6 @@ def start_gameplay():
             SpriteKind.player)
     else:
         player_sprite = crear_jugador_random()
-
 def crear_jugador_random():
     global randomIndex
     randomIndex = randint(1, 4)
@@ -274,35 +265,34 @@ def on_up_pressed():
                     """),
                 500,
                 True)
+        elif randomIndex == 1:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoom1_subir
+                    """),
+                500,
+                True)
+        elif randomIndex == 2:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomrosa_subir
+                    """),
+                500,
+                True)
+        elif randomIndex == 3:
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoomgroc_subir
+                    """),
+                500,
+                True)
         else:
-            if randomIndex == 1:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoom1_subir
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 2:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomrosa_subir
-                        """),
-                    500,
-                    True)
-            elif randomIndex == 3:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoomgroc_subir
-                        """),
-                    500,
-                    True)
-            else:
-                animation.run_image_animation(player_sprite,
-                    assets.animation("""
-                        jugadorrandoommarro_subir
-                        """),
-                    500,
-                    True)
+            animation.run_image_animation(player_sprite,
+                assets.animation("""
+                    jugadorrandoommarro_subir
+                    """),
+                500,
+                True)
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
 def show_main_menu():
@@ -340,7 +330,7 @@ def show_main_menu():
             game.splash("THE END", "Creadoras: Evelyn, Mariona")
             show_main_menu()
     main_menu.on_button_pressed(controller.A, on_button_pressed2)
-
+    
 
 def on_on_overlap(player22, coin):
     global score
@@ -388,7 +378,7 @@ def show_character_select():
         sprites.destroy_all_sprites_of_kind(SpriteKind.player)
         mapaJoc = True
     char_menu.on_button_pressed(controller.A, on_button_pressed3)
-
+    
 
 def on_on_overlap2(player2, enemy):
     # Quan l'enemic toca el jugador: game over
@@ -402,19 +392,19 @@ main_menu: miniMenu.MenuSprite = None
 score = 0
 randomIndex = 0
 selected_character = 0
-my_menu: miniMenu.MenuSprite = None
 inventari_armes2: List[miniMenu.MenuItem] = []
-player_sprite: Sprite = None
-mapa_anterior: tiles.TileMapData = None
-inventari_obert = False
 mapaJoc = False
-pantalla = ""
 game_time = 0
 GAME_STATE_MENU = 0
-game_state = 0
-GAME_STATE_PLAYING = 0
 GAME_STATE_CHAR_SELECT = 0
 randomIndex2 = 0
+GAME_STATE_PLAYING = 0
+game_state = 0
+pantalla = ""
+inventari_obert = False
+mapa_anterior: tiles.TileMapData = None
+player_sprite: Sprite = None
+my_menu: miniMenu.MenuSprite = None
 GAME_STATE_CHAR_SELECT = 1
 GAME_STATE_NAME_INPUT = 2
 GAME_STATE_PLAYING = 3
@@ -465,4 +455,10 @@ def on_update_interval2():
             """), SpriteKind.enemic)
         tiles.place_on_random_tile(enemic1, sprites.dungeon.collectible_blue_crystal)
         enemic1.follow(player_sprite, 60)
+        animation.run_image_animation(enemic1,
+            assets.animation("""
+                enimacio_enemic
+                """),
+            200,
+            True)
 game.on_update_interval(30000, on_update_interval2)

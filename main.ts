@@ -30,21 +30,21 @@ function inventari_armes() {
         `)
     my_menu.setPosition(80, 60)
     my_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 54)
-    my_menu.onButtonPressed(controller.A, function on_button_pressed(selection: any, selectedIndex: any) {
+    function on_button_pressed(selection: any, selectedIndex: any) {
         
-        //  ✅ CANVI MINIM: treiem mapaJoc = True perquè no et reinicii al forever
-        //  mapaJoc = True
         inventari_obert = false
+        pantalla = "joc"
+        game_state = GAME_STATE_PLAYING
         my_menu.close()
         if (mapa_anterior) {
             tiles.setCurrentTilemap(mapa_anterior)
         }
         
-        pantalla = "joc"
         tiles.placeOnRandomTile(player_sprite, sprites.dungeon.chestOpen)
         controller.moveSprite(player_sprite, 100, 100)
         scene.cameraFollowSprite(player_sprite)
-    })
+    }
+    
 }
 
 controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
@@ -60,20 +60,20 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed(
                     `, 500, true)
         } else if (randomIndex == 1) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomlila_bajar
-                        `, 500, true)
+                    jugadorrandoomlila_bajar
+                    `, 500, true)
         } else if (randomIndex == 2) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomrosa_bajar
-                        `, 500, true)
+                    jugadorrandoomrosa_bajar
+                    `, 500, true)
         } else if (randomIndex == 3) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomgroc_bajar
-                        `, 500, true)
+                    jugadorrandoomgroc_bajar
+                    `, 500, true)
         } else {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoommarro_bajar
-                        `, 500, true)
+                    jugadorrandoommarro_bajar
+                    `, 500, true)
         }
         
     }
@@ -92,20 +92,20 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_presse
                     `, 500, true)
         } else if (randomIndex == 1) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomlila_derecha
-                        `, 500, true)
+                    jugadorrandoomlila_derecha
+                    `, 500, true)
         } else if (randomIndex == 2) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomrosa_derecha
-                        `, 500, true)
+                    jugadorrandoomrosa_derecha
+                    `, 500, true)
         } else if (randomIndex == 3) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomgroc_derecha0
-                        `, 500, true)
+                    jugadorrandoomgroc_derecha0
+                    `, 500, true)
         } else {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoommarro_derecha
-                        `, 500, true)
+                    jugadorrandoommarro_derecha
+                    `, 500, true)
         }
         
     }
@@ -124,20 +124,20 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed(
                     `, 500, true)
         } else if (randomIndex == 1) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomlila_esquerra
-                        `, 500, true)
+                    jugadorrandoomlila_esquerra
+                    `, 500, true)
         } else if (randomIndex == 2) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomrosa_esquerra
-                        `, 500, true)
+                    jugadorrandoomrosa_esquerra
+                    `, 500, true)
         } else if (randomIndex == 3) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomgroc_esquerra
-                        `, 500, true)
+                    jugadorrandoomgroc_esquerra
+                    `, 500, true)
         } else {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoommarro_esquerra0
-                        `, 500, true)
+                    jugadorrandoommarro_esquerra0
+                    `, 500, true)
         }
         
     }
@@ -216,20 +216,20 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function on_up_pressed() {
                     `, 500, true)
         } else if (randomIndex == 1) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoom1_subir
-                        `, 500, true)
+                    jugadorrandoom1_subir
+                    `, 500, true)
         } else if (randomIndex == 2) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomrosa_subir
-                        `, 500, true)
+                    jugadorrandoomrosa_subir
+                    `, 500, true)
         } else if (randomIndex == 3) {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoomgroc_subir
-                        `, 500, true)
+                    jugadorrandoomgroc_subir
+                    `, 500, true)
         } else {
             animation.runImageAnimation(player_sprite, assets.animation`
-                        jugadorrandoommarro_subir
-                        `, 500, true)
+                    jugadorrandoommarro_subir
+                    `, 500, true)
         }
         
     }
@@ -309,19 +309,19 @@ let main_menu : miniMenu.MenuSprite = null
 let score = 0
 let randomIndex = 0
 let selected_character = 0
-let my_menu : miniMenu.MenuSprite = null
 let inventari_armes2 : miniMenu.MenuItem[] = []
-let player_sprite : Sprite = null
-let mapa_anterior : tiles.TileMapData = null
-let inventari_obert = false
 let mapaJoc = false
-let pantalla = ""
 let game_time = 0
 let GAME_STATE_MENU = 0
-let game_state = 0
-let GAME_STATE_PLAYING = 0
 let GAME_STATE_CHAR_SELECT = 0
 let randomIndex2 = 0
+let GAME_STATE_PLAYING = 0
+let game_state = 0
+let pantalla = ""
+let inventari_obert = false
+let mapa_anterior : tiles.TileMapData = null
+let player_sprite : Sprite = null
+let my_menu : miniMenu.MenuSprite = null
 GAME_STATE_CHAR_SELECT = 1
 let GAME_STATE_NAME_INPUT = 2
 GAME_STATE_PLAYING = 3
@@ -373,6 +373,9 @@ game.onUpdateInterval(30000, function on_update_interval2() {
             `, SpriteKind.enemic)
         tiles.placeOnRandomTile(enemic1, sprites.dungeon.collectibleBlueCrystal)
         enemic1.follow(player_sprite, 60)
+        animation.runImageAnimation(enemic1, assets.animation`
+                enimacio_enemic
+                `, 200, true)
     }
     
 })
