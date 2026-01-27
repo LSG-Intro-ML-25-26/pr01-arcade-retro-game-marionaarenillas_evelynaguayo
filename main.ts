@@ -30,7 +30,7 @@ function inventari_armes() {
         `)
     my_menu.setPosition(80, 60)
     my_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 54)
-    function on_button_pressed(selection: any, selectedIndex: any) {
+    my_menu.onButtonPressed(controller.A, function on_button_pressed(selection: any, selectedIndex: any) {
         
         inventari_obert = false
         pantalla = "joc"
@@ -43,8 +43,7 @@ function inventari_armes() {
         tiles.placeOnRandomTile(player_sprite, sprites.dungeon.chestOpen)
         controller.moveSprite(player_sprite, 100, 100)
         scene.cameraFollowSprite(player_sprite)
-    }
-    
+    })
 }
 
 controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
@@ -373,9 +372,6 @@ game.onUpdateInterval(30000, function on_update_interval2() {
             `, SpriteKind.enemic)
         tiles.placeOnRandomTile(enemic1, sprites.dungeon.collectibleBlueCrystal)
         enemic1.follow(player_sprite, 60)
-        animation.runImageAnimation(enemic1, assets.animation`
-                enimacio_enemic
-                `, 200, true)
     }
     
 })

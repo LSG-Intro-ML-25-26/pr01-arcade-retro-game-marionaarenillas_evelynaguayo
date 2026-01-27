@@ -2,6 +2,7 @@
 class SpriteKind:
     moneda = SpriteKind.create()
     enemic = SpriteKind.create()
+
 def inventari_armes():
     global pantalla, mapaJoc, inventari_obert, mapa_anterior, inventari_armes2, my_menu
     escudo = 0
@@ -47,6 +48,8 @@ def inventari_armes():
         tiles.place_on_random_tile(player_sprite, sprites.dungeon.chest_open)
         controller.move_sprite(player_sprite, 100, 100)
         scene.camera_follow_sprite(player_sprite)
+        
+    my_menu.on_button_pressed(controller.A, on_button_pressed)
 
 def on_down_pressed():
     # Crea un enemic cada 30 segons i fa que persegueixi el jugador
@@ -455,10 +458,4 @@ def on_update_interval2():
             """), SpriteKind.enemic)
         tiles.place_on_random_tile(enemic1, sprites.dungeon.collectible_blue_crystal)
         enemic1.follow(player_sprite, 60)
-        animation.run_image_animation(enemic1,
-            assets.animation("""
-                enimacio_enemic
-                """),
-            200,
-            True)
 game.on_update_interval(30000, on_update_interval2)
