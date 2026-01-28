@@ -2,6 +2,24 @@
 class SpriteKind:
     moneda = SpriteKind.create()
     enemic = SpriteKind.create()
+def configuracion_partida():
+    global menu_configuracio
+    menu_configuracio.set_title("Configuración Partida")
+    menu_configuracio = miniMenu.create_menu(miniMenu.create_menu_item("Tiempo Partida"),
+        miniMenu.create_menu_item("Dificultad"),
+        miniMenu.create_menu_item("Volver"))
+    menu_configuracio.set_position(80, 60)
+    
+    def on_button_pressed(selection, selectedIndex):
+        menu_configuracio.close()
+        if selectedIndex == 0:
+            menu_temps()
+        elif selectedIndex == 1:
+            menu_dificultad()
+        else:
+            show_main_menu()
+    menu_configuracio.on_button_pressed(controller.A, on_button_pressed)
+    
 def inventari_armes():
     global pantalla, mapaJoc, inventari_obert, mapa_anterior, inventari_armes2, my_menu
     escudo = 0
@@ -37,18 +55,43 @@ def inventari_armes():
         miniMenu.StyleProperty.BACKGROUND,
         54)
     
-    def on_button_pressed(selection, selectedIndex):
+    def on_button_pressed2(selection2, selectedIndex2):
         global inventari_obert, pantalla, game_state
         inventari_obert = False
         pantalla = "joc"
         # Mostra el menú per seleccionar personatge i activa l'inici de partida
-        game_state = GAME_STATE_CHAR_SELECT
+        game_state = GAME_STATE_PLAYING
         my_menu.close()
         tiles.set_current_tilemap(mapa_anterior)
         tiles.place_on_random_tile(player_sprite, sprites.dungeon.chest_open)
         scene.camera_follow_sprite(player_sprite)
         controller.move_sprite(player_sprite, 100, 100)
-    my_menu.on_button_pressed(controller.A, on_button_pressed)
+    my_menu.on_button_pressed(controller.A, on_button_pressed2)
+    
+def menu_temps():
+    global menu_temps2
+    menu_temps2.set_title("Tiempo Partida")
+    menu_temps2 = miniMenu.create_menu(miniMenu.create_menu_item("3 minutos"),
+        miniMenu.create_menu_item("5 minutos"),
+        miniMenu.create_menu_item("7 minutos"),
+        miniMenu.create_menu_item("Volver"))
+    menu_temps2.set_position(80, 60)
+    
+    def on_button_pressed3(selection3, selectedIndex3):
+        global duracion_partida
+        menu_temps2.close()
+        if selectedIndex3 == 0:
+            duracion_partida = 180
+            game.splash("Tiempo seleccionado: 3 minutos")
+        elif selectedIndex3 == 1:
+            duracion_partida = 300
+            game.splash("Tiempo seleccionado: 5 minutos")
+        elif selectedIndex3 == 2:
+            duracion_partida = 420
+            game.splash("Tiempo seleccionado: 7 minutos")
+        else:
+            configuracion_partida()
+    menu_temps2.on_button_pressed(controller.A, on_button_pressed3)
     
 
 def on_down_pressed():
@@ -208,8 +251,36 @@ scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.chest_closed,
     on_overlap_tile)
 
+def menu_dificultad():
+    global menu_dificultad2
+    menu_dificultad2.set_title("Dificultad Partida")
+    menu_dificultad2 = miniMenu.create_menu(miniMenu.create_menu_item("Fácil"),
+        miniMenu.create_menu_item("Difícil"),
+        miniMenu.create_menu_item("Volver"))
+    menu_temps2.set_position(80, 60)
+    
+    def on_button_pressed4(selection4, selectedIndex4):
+        global dificultad, enemigos_intervalo, velocidad_enemigo
+        menu_dificultad2.close()
+        if selectedIndex4 == 0:
+            dificultad = "FACIL"
+            enemigos_intervalo = 30000
+            velocidad_enemigo = 55
+            game.show_long_text("MODO FÁCIL: Enemigos cada 30s Velocidad baja Más tiempo de reacción",
+                DialogLayout.BOTTOM)
+        elif selectedIndex4 == 1:
+            dificultad = "DIFICIL"
+            enemigos_intervalo = 15000
+            velocidad_enemigo = 85
+            game.show_long_text("MODO DIFÍCIL: Enemigos cada 15s Velocidad alta Más presión",
+                DialogLayout.BOTTOM)
+        elif selectedIndex4 == 2:
+            configuracion_partida()
+    menu_dificultad2.on_button_pressed(controller.A, on_button_pressed4)
+    
 def start_gameplay():
     global game_state, score, game_time, player_sprite
+    info.start_countdown(duracion_partida)
     # Inicialitza el joc: crea el jugador, reinicia score i temporitzador
     game_state = GAME_STATE_PLAYING
     score = 0
@@ -303,8 +374,9 @@ def show_main_menu():
     # Mostra el menú principal i gestiona la selecció amb el botó A
     game_state = GAME_STATE_MENU
     main_menu = miniMenu.create_menu(miniMenu.create_menu_item("HISTORIA"),
+        miniMenu.create_menu_item("CONFIGURACIÓN"),
         miniMenu.create_menu_item("VERSUS"),
-        miniMenu.create_menu_item("CREDITOS"))
+        miniMenu.create_menu_item("THE END"))
     main_menu.set_position(80, 60)
     main_menu.set_menu_style_property(miniMenu.MenuStyleProperty.WIDTH, 80)
     main_menu.set_menu_style_property(miniMenu.MenuStyleProperty.HEIGHT, 50)
@@ -321,18 +393,21 @@ def show_main_menu():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed2(selection2, selectedIndex2):
+    def on_button_pressed5(selection22, selectedIndex22):
         # Executa l'acció segons l'opció triada al menú principal
         main_menu.close()
-        if selectedIndex2 == 0:
+        if selectedIndex22 == 0:
             show_character_select()
-        elif selectedIndex2 == 1:
+        elif selectedIndex22 == 1:
+            game.splash("CONFIGURACIÓN")
+            configuracion_partida()
+        elif selectedIndex22 == 2:
             game.splash("VERSUS", "Proximamente!")
             show_main_menu()
-        elif selectedIndex2 == 2:
+        elif selectedIndex22 == 3:
             game.splash("THE END", "Creadoras: Evelyn, Mariona")
             show_main_menu()
-    main_menu.on_button_pressed(controller.A, on_button_pressed2)
+    main_menu.on_button_pressed(controller.A, on_button_pressed5)
     
 
 def on_on_overlap(player22, coin):
@@ -373,14 +448,14 @@ def show_character_select():
         miniMenu.StyleProperty.FOREGROUND,
         1)
     
-    def on_button_pressed3(selection22, selectedIndex22):
+    def on_button_pressed6(selection222, selectedIndex222):
         global selected_character, mapaJoc
         # Desa el personatge seleccionat i marca que s'ha de començar el joc
-        selected_character = selectedIndex22
+        selected_character = selectedIndex222
         char_menu.close()
         sprites.destroy_all_sprites_of_kind(SpriteKind.player)
         mapaJoc = True
-    char_menu.on_button_pressed(controller.A, on_button_pressed3)
+    char_menu.on_button_pressed(controller.A, on_button_pressed6)
     
 
 def on_on_overlap2(player2, enemy):
@@ -392,10 +467,17 @@ enemic1: Sprite = None
 moneda2: Sprite = None
 char_menu: miniMenu.MenuSprite = None
 main_menu: miniMenu.MenuSprite = None
+velocidad_enemigo = 0
+enemigos_intervalo = 0
+dificultad = ""
+menu_dificultad2: miniMenu.MenuSprite = None
 score = 0
 randomIndex = 0
 selected_character = 0
+duracion_partida = 0
+menu_temps2: miniMenu.MenuSprite = None
 inventari_armes2: List[miniMenu.MenuItem] = []
+menu_configuracio: miniMenu.MenuSprite = None
 mapaJoc = False
 game_time = 0
 GAME_STATE_MENU = 0

@@ -3,19 +3,19 @@ namespace SpriteKind {
     export const enemic = SpriteKind.create()
 }
 function configuracion_partida () {
-    menu_configuracio.setTitle("Configuración Partida")
     menu_configuracio = miniMenu.createMenu(
     miniMenu.createMenuItem("Tiempo Partida"),
     miniMenu.createMenuItem("Dificultad"),
     miniMenu.createMenuItem("Volver")
     )
-    menu_configuracio.setPosition(80, 60)
+    menu = menu_configuracio
+    estructura_menus()
     menu_configuracio.onButtonPressed(controller.A, function (selection, selectedIndex) {
         menu_configuracio.close()
         if (selectedIndex == 0) {
-            menu_temps()
+            menu_temps2()
         } else if (selectedIndex == 1) {
-            menu_dificultad()
+            menu_dificultad2()
         } else {
             show_main_menu()
         }
@@ -47,31 +47,6 @@ function inventari_armes () {
         tiles.placeOnRandomTile(player_sprite, sprites.dungeon.chestOpen)
         scene.cameraFollowSprite(player_sprite)
         controller.moveSprite(player_sprite, 100, 100)
-    })
-}
-function menu_temps () {
-    menu_temps2.setTitle("Tiempo Partida")
-    menu_temps2 = miniMenu.createMenu(
-    miniMenu.createMenuItem("3 minutos"),
-    miniMenu.createMenuItem("5 minutos"),
-    miniMenu.createMenuItem("7 minutos"),
-    miniMenu.createMenuItem("Volver")
-    )
-    menu_temps2.setPosition(80, 60)
-    menu_temps2.onButtonPressed(controller.A, function (selection, selectedIndex) {
-        menu_temps2.close()
-        if (selectedIndex == 0) {
-            duracion_partida = 180
-            game.splash("Tiempo seleccionado: 3 minutos")
-        } else if (selectedIndex == 1) {
-            duracion_partida = 300
-            game.splash("Tiempo seleccionado: 5 minutos")
-        } else if (selectedIndex == 2) {
-            duracion_partida = 420
-            game.splash("Tiempo seleccionado: 7 minutos")
-        } else {
-            configuracion_partida()
-        }
     })
 }
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
@@ -122,6 +97,31 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
         }
     }
 })
+function menu_temps2 () {
+    menu_temps = miniMenu.createMenu(
+    miniMenu.createMenuItem("3 minutos"),
+    miniMenu.createMenuItem("5 minutos"),
+    miniMenu.createMenuItem("7 minutos"),
+    miniMenu.createMenuItem("Volver")
+    )
+    menu = menu_temps
+    estructura_menus()
+    menu_temps.onButtonPressed(controller.A, function (selection, selectedIndex) {
+        menu_temps.close()
+        if (selectedIndex == 0) {
+            duracion_partida = 180
+            game.splash("Tiempo seleccionado: 3 minutos")
+        } else if (selectedIndex == 1) {
+            duracion_partida = 300
+            game.splash("Tiempo seleccionado: 5 minutos")
+        } else if (selectedIndex == 2) {
+            duracion_partida = 420
+            game.splash("Tiempo seleccionado: 7 minutos")
+        } else {
+            configuracion_partida()
+        }
+    })
+}
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     // Crea un enemic cada 30 segons i fa que persegueixi el jugador
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
@@ -232,31 +232,6 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
         inventari_armes()
     }
 })
-function menu_dificultad () {
-    menu_dificultad2.setTitle("Dificultad Partida")
-    menu_dificultad2 = miniMenu.createMenu(
-    miniMenu.createMenuItem("Fácil"),
-    miniMenu.createMenuItem("Difícil"),
-    miniMenu.createMenuItem("Volver")
-    )
-    menu_temps2.setPosition(80, 60)
-    menu_dificultad2.onButtonPressed(controller.A, function (selection, selectedIndex) {
-        menu_dificultad2.close()
-        if (selectedIndex == 0) {
-            dificultad = "FACIL"
-            enemigos_intervalo = 30000
-            velocidad_enemigo = 55
-            game.showLongText("MODO FÁCIL: Enemigos cada 30s Velocidad baja Más tiempo de reacción", DialogLayout.Bottom)
-        } else if (selectedIndex == 1) {
-            dificultad = "DIFICIL"
-            enemigos_intervalo = 15000
-            velocidad_enemigo = 85
-            game.showLongText("MODO DIFÍCIL: Enemigos cada 15s Velocidad alta Más presión", DialogLayout.Bottom)
-        } else if (selectedIndex == 2) {
-            configuracion_partida()
-        }
-    })
-}
 function start_gameplay () {
     info.startCountdown(duracion_partida)
     // Inicialitza el joc: crea el jugador, reinicia score i temporitzador
@@ -283,6 +258,31 @@ function crear_jugador_random () {
     } else {
         return sprites.create(assets.image`jugador_randoom4`, SpriteKind.Player)
     }
+}
+function menu_dificultad2 () {
+    menu_dificultad = miniMenu.createMenu(
+    miniMenu.createMenuItem("Fácil"),
+    miniMenu.createMenuItem("Difícil"),
+    miniMenu.createMenuItem("Volver")
+    )
+    menu = menu_dificultad
+    estructura_menus()
+    menu_dificultad.onButtonPressed(controller.A, function (selection, selectedIndex) {
+        menu_dificultad.close()
+        if (selectedIndex == 0) {
+            dificultad = "FACIL"
+            enemigos_intervalo = 30000
+            velocidad_enemigo = 55
+            game.showLongText("MODO FÁCIL: Enemigos cada 30s Velocidad baja Más tiempo de reacción", DialogLayout.Bottom)
+        } else if (selectedIndex == 1) {
+            dificultad = "DIFICIL"
+            enemigos_intervalo = 15000
+            velocidad_enemigo = 85
+            game.showLongText("MODO DIFÍCIL: Enemigos cada 15s Velocidad alta Más presión", DialogLayout.Bottom)
+        } else if (selectedIndex == 2) {
+            configuracion_partida()
+        }
+    })
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     // Crea un enemic cada 30 segons i fa que persegueixi el jugador
@@ -341,13 +341,8 @@ function show_main_menu () {
     miniMenu.createMenuItem("VERSUS"),
     miniMenu.createMenuItem("THE END")
     )
-    main_menu.setPosition(80, 60)
-    main_menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 80)
-    main_menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 50)
-    main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 15)
-    main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 1)
-    main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 8)
-    main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
+    menu = main_menu
+    estructura_menus()
     main_menu.onButtonPressed(controller.A, function (selection2, selectedIndex2) {
         // Executa l'acció segons l'opció triada al menú principal
         main_menu.close()
@@ -398,6 +393,15 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.enemic, function (player2, enemy
     // Quan l'enemic toca el jugador: game over
     game.gameOver(false)
 })
+function estructura_menus () {
+    main_menu.setPosition(80, 60)
+    menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 80)
+    menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 50)
+    menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 15)
+    menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 1)
+    menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 8)
+    menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
+}
 let enemic1: Sprite = null
 let moneda2: Sprite = null
 let char_menu: miniMenu.MenuSprite = null
@@ -405,13 +409,14 @@ let main_menu: miniMenu.MenuSprite = null
 let velocidad_enemigo = 0
 let enemigos_intervalo = 0
 let dificultad = ""
-let menu_dificultad2: miniMenu.MenuSprite = null
+let menu_dificultad: miniMenu.MenuSprite = null
 let score = 0
+let duracion_partida = 0
+let menu_temps: miniMenu.MenuSprite = null
 let randomIndex = 0
 let selected_character = 0
-let duracion_partida = 0
-let menu_temps2: miniMenu.MenuSprite = null
 let inventari_armes2: miniMenu.MenuItem[] = []
+let menu: miniMenu.MenuSprite = null
 let menu_configuracio: miniMenu.MenuSprite = null
 let mapaJoc = false
 let game_time = 0
