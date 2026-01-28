@@ -11,10 +11,11 @@ function configuracion_partida () {
     )
     menu_configuracio.setPosition(80, 60)
     menu_configuracio.onButtonPressed(controller.A, function (selection, selectedIndex) {
+        menu_configuracio.close()
         if (selectedIndex == 0) {
             menu_temps()
         } else if (selectedIndex == 1) {
-        	
+            menu_dificultad()
         } else {
             show_main_menu()
         }
@@ -58,6 +59,7 @@ function menu_temps () {
     )
     menu_temps2.setPosition(80, 60)
     menu_temps2.onButtonPressed(controller.A, function (selection, selectedIndex) {
+        menu_temps2.close()
         if (selectedIndex == 0) {
             duracion_partida = 180
             game.splash("Tiempo seleccionado: 3 minutos")
@@ -68,7 +70,7 @@ function menu_temps () {
             duracion_partida = 420
             game.splash("Tiempo seleccionado: 7 minutos")
         } else {
-            show_main_menu()
+            configuracion_partida()
         }
     })
 }
@@ -230,6 +232,31 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sp
         inventari_armes()
     }
 })
+function menu_dificultad () {
+    menu_dificultad2.setTitle("Dificultad Partida")
+    menu_dificultad2 = miniMenu.createMenu(
+    miniMenu.createMenuItem("Fácil"),
+    miniMenu.createMenuItem("Difícil"),
+    miniMenu.createMenuItem("Volver")
+    )
+    menu_temps2.setPosition(80, 60)
+    menu_dificultad2.onButtonPressed(controller.A, function (selection, selectedIndex) {
+        menu_dificultad2.close()
+        if (selectedIndex == 0) {
+            dificultad = "FACIL"
+            enemigos_intervalo = 30000
+            velocidad_enemigo = 55
+            game.showLongText("MODO FÁCIL: Enemigos cada 30s Velocidad baja Más tiempo de reacción", DialogLayout.Bottom)
+        } else if (selectedIndex == 1) {
+            dificultad = "DIFICIL"
+            enemigos_intervalo = 15000
+            velocidad_enemigo = 85
+            game.showLongText("MODO DIFÍCIL: Enemigos cada 15s Velocidad alta Más presión", DialogLayout.Bottom)
+        } else if (selectedIndex == 2) {
+            configuracion_partida()
+        }
+    })
+}
 function start_gameplay () {
     info.startCountdown(duracion_partida)
     // Inicialitza el joc: crea el jugador, reinicia score i temporitzador
@@ -375,6 +402,10 @@ let enemic1: Sprite = null
 let moneda2: Sprite = null
 let char_menu: miniMenu.MenuSprite = null
 let main_menu: miniMenu.MenuSprite = null
+let velocidad_enemigo = 0
+let enemigos_intervalo = 0
+let dificultad = ""
+let menu_dificultad2: miniMenu.MenuSprite = null
 let score = 0
 let randomIndex = 0
 let selected_character = 0
