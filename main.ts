@@ -7,7 +7,9 @@ namespace SpriteKind {
     export const NPC_Jigsaw = SpriteKind.create()
     export const Complete = SpriteKind.create()
     export const Dead = SpriteKind.create()
+    export const ENEMIE_PROJECTILE = SpriteKind.create()
 }
+// ========== FUNCIONES DEL JUEGO ORIGINAL ==========
 function configuracion_partida () {
     menu_configuracio = miniMenu.createMenu(
     miniMenu.createMenuItem("Tiempo Partida"),
@@ -27,33 +29,21 @@ function configuracion_partida () {
         }
     })
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function (sprite2, otherSprite2) {
-    let respuesta: boolean;
-if (is_player_talking || doctor_npc.kind() == SpriteKind.Complete || doctor_npc.kind() == SpriteKind.Dead) {
+// ========== SISTEMA DE ATAQUE DE ENEMIGOS ==========
+function mode_attack () {
+    for (let un_enemigo of sprites.allOfKind(SpriteKind.enemic)) {
+        un_enemigo.follow(player_sprite, velocidad_enemigo)
+    }
+}
+// ========== COLISIÓN PROYECTIL ENEMIGO - JUGADOR ==========
+sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function (sprite_player, sprite_proj) {
+    sprite_proj.destroy()
+    if (dodge_roll || escudo_activo) {
         return
     }
-    if (controller.A.isPressed()) {
-        is_player_talking = true
-        game.splash("DOCTOR", "¡Bomba en el pecho! ¿Me ayudas?")
-        respuesta = game.ask("¿Ayudarlo?", "A=SÍ, B=NO")
-        if (respuesta) {
-            game.splash("DOCTOR", "¡Gracias! ¡Salvaste mi vida!")
-            doctor_npc.setKind(SpriteKind.Complete)
-            info.changeScoreBy(150)
-            npcs_saved += 1
-        } else {
-            game.splash("", "*EXPLOSIÓN*")
-            doctor_npc.destroy()
-            npcs_dead += 1
-            info.changeScoreBy(-50)
-        }
-        is_player_talking = false
-    }
-})
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite4, location) {
-    if (pantalla == "joc") {
-        inventari_armes()
-    }
+    info.changeLifeBy(-1)
+    scene.cameraShake(2, 100)
+    music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
 })
 function show_character_story () {
     game_state = GAME_STATE_CHAR_STORY
@@ -70,19 +60,20 @@ function show_character_story () {
     pause(1000)
     show_jigsaw_message()
 }
+// ========== INVENTARIO MEJORADO CON ARMAS ==========
 function inventari_armes () {
-    let escudo = 0
-    let pistola = 0
-    let espada = 0
+    tiene_espada = true
+    tiene_pistola = true
+    tiene_escudo = true
     pantalla = "inventari"
     mapaJoc = false
     inventari_obert = true
     mapa_anterior = tilemap`mapa`
     scene.centerCameraAt(80, 60)
     controller.moveSprite(player_sprite, 0, 0)
-    inventari_armes2 = [miniMenu.createMenuItem("Espada " + ("" + espada), assets.image`espada`), miniMenu.createMenuItem("Pistola " + ("" + pistola), assets.image`pistola`), miniMenu.createMenuItem("Escudo temporal " + ("" + escudo), assets.image`escudo`)]
+    inventari_armes2 = [miniMenu.createMenuItem("Espada (Cuerpo a cuerpo)", assets.image`espada`), miniMenu.createMenuItem("Pistola (Disparo)", assets.image`pistola`), miniMenu.createMenuItem("Escudo (Defensa temporal)", assets.image`escudo`)]
     my_menu = miniMenu.createMenuFromArray(inventari_armes2)
-    my_menu.setTitle("Inventari")
+    my_menu.setTitle("ARMAS DESBLOQUEADAS")
     my_menu.setFrame(assets.image`mapa_inventari`)
     my_menu.setPosition(80, 60)
     my_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 54)
@@ -90,12 +81,30 @@ function inventari_armes () {
         inventari_obert = false
         pantalla = "joc"
         game_state = GAME_STATE_PLAYING
+        if (selectedIndex2 == 0) {
+            arma_equipada = "espada"
+            game.splash("ESPADA EQUIPADA", "Presiona B cerca del enemigo")
+        } else if (selectedIndex2 == 1) {
+            arma_equipada = "pistola"
+            game.splash("PISTOLA EQUIPADA", "Presiona B para disparar")
+        } else if (selectedIndex2 == 2) {
+            arma_equipada = "escudo"
+            activar_escudo()
+        }
         my_menu.close()
         tiles.setCurrentTilemap(mapa_anterior)
-        tiles.placeOnRandomTile(player_sprite, sprites.dungeon.chestOpen)
         scene.cameraFollowSprite(player_sprite)
         controller.moveSprite(player_sprite, 100, 100)
     })
+}
+// ========== SISTEMA DE ESCUDO ==========
+function activar_escudo () {
+    escudo_activo = true
+    game.splash("ESCUDO ACTIVADO", "Inmune por 5 segundos")
+    effects.starField.startScreenEffect()
+    pause(5000)
+    escudo_activo = false
+    game.splash("ESCUDO DESACTIVADO", "")
 }
 sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function (sprite, otherSprite) {
     let respuesta2: boolean;
@@ -121,7 +130,6 @@ if (is_player_talking || girl_npc.kind() == SpriteKind.Complete || girl_npc.kind
     }
 })
 function spawn_npcs_in_map () {
-    // NPCs en diferentes tiles del mapa
     doctor_npc = sprites.create(assets.image`jugador_vermell`, SpriteKind.NPC_Doctor)
     tiles.placeOnRandomTile(doctor_npc, assets.tile`transparency16`)
     girl_npc = sprites.create(assets.image`jugador_kira`, SpriteKind.NPC_Girl)
@@ -129,6 +137,30 @@ function spawn_npcs_in_map () {
     prisoner_npc = sprites.create(assets.image`jugador_randoom0`, SpriteKind.NPC_Prisoner)
     tiles.placeOnRandomTile(prisoner_npc, assets.tile`transparency16`)
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function (sprite, otherSprite) {
+    let respuesta: boolean;
+if (is_player_talking || doctor_npc.kind() == SpriteKind.Complete || doctor_npc.kind() == SpriteKind.Dead) {
+        return
+    }
+    if (controller.A.isPressed()) {
+        is_player_talking = true
+        game.splash("DOCTOR", "¡Bomba en el pecho! ¿Me ayudas?")
+        respuesta = game.ask("¿Ayudarlo?", "A=SÍ, B=NO")
+        if (respuesta) {
+            game.splash("DOCTOR", "¡Gracias! ¡Salvaste mi vida!")
+            doctor_npc.setKind(SpriteKind.Complete)
+            info.changeScoreBy(150)
+            npcs_saved += 1
+        } else {
+            game.splash("", "*EXPLOSIÓN*")
+            doctor_npc.destroy()
+            npcs_dead += 1
+            info.changeScoreBy(-50)
+        }
+        is_player_talking = false
+    }
+})
+// ========== ANIMACIONES (SIMPLIFICADAS) ==========
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
@@ -142,34 +174,6 @@ controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
             animation.runImageAnimation(
             player_sprite,
             assets.animation`jugadorkira_bajar`,
-            500,
-            true
-            )
-        } else if (randomIndex == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomlila_bajar`,
-            500,
-            true
-            )
-        } else if (randomIndex == 2) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomrosa_bajar`,
-            500,
-            true
-            )
-        } else if (randomIndex == 3) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomgroc_bajar`,
-            500,
-            true
-            )
-        } else {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoommarro_bajar`,
             500,
             true
             )
@@ -252,34 +256,6 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
             500,
             true
             )
-        } else if (randomIndex == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomlila_derecha`,
-            500,
-            true
-            )
-        } else if (randomIndex == 2) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomrosa_derecha`,
-            500,
-            true
-            )
-        } else if (randomIndex == 3) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomgroc_derecha0`,
-            500,
-            true
-            )
-        } else {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoommarro_derecha`,
-            500,
-            true
-            )
         }
     }
 })
@@ -299,36 +275,18 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
             500,
             true
             )
-        } else if (randomIndex == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomlila_esquerra`,
-            500,
-            true
-            )
-        } else if (randomIndex == 2) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomrosa_esquerra`,
-            500,
-            true
-            )
-        } else if (randomIndex == 3) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomgroc_esquerra`,
-            500,
-            true
-            )
-        } else {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoommarro_esquerra0`,
-            500,
-            true
-            )
         }
     }
+})
+// ========== DODGE ROLL ==========
+controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+    if (game_state != GAME_STATE_PLAYING) {
+        return
+    }
+    dodge_roll = true
+    scene.cameraShake(2, 200)
+    pause(500)
+    dodge_roll = false
 })
 info.onCountdownEnd(function () {
     scene.setBackgroundColor(0)
@@ -344,6 +302,34 @@ info.onCountdownEnd(function () {
     }
     game.reset()
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function (sprite, otherSprite) {
+    let respuesta3: boolean;
+if (is_player_talking || prisoner_npc.kind() == SpriteKind.Complete || prisoner_npc.kind() == SpriteKind.Dead) {
+        return
+    }
+    if (controller.A.isPressed()) {
+        is_player_talking = true
+        game.splash("PRISIONERO", "Cadenas apretando... ¿Ayuda?")
+        respuesta3 = game.ask("¿Liberarlo?", "A=SÍ, B=NO")
+        if (respuesta3) {
+            game.splash("PRISIONERO", "¡Libre! ¡Gracias!")
+            prisoner_npc.setKind(SpriteKind.Complete)
+            info.changeScoreBy(150)
+            npcs_saved += 1
+        } else {
+            game.splash("...", "*Aplastado*")
+            prisoner_npc.destroy()
+            npcs_dead += 1
+            info.changeScoreBy(-50)
+        }
+        is_player_talking = false
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+    if (pantalla == "joc") {
+        inventari_armes()
+    }
+})
 function start_gameplay () {
     ultimo_enemigo = game.runtime()
     info.startCountdown(duracion_partida)
@@ -351,6 +337,7 @@ function start_gameplay () {
     score = 0
     game_time = 180
     sprites.destroyAllSpritesOfKind(SpriteKind.Player)
+    info.setLife(5)
     if (selected_character == 0) {
         player_sprite = sprites.create(assets.image`jugador_vermell`, SpriteKind.Player)
     } else if (selected_character == 1) {
@@ -358,7 +345,6 @@ function start_gameplay () {
     } else {
         player_sprite = crear_jugador_random()
     }
-    // Spawear NPCs en el mapa
     spawn_npcs_in_map()
 }
 function crear_jugador_random () {
@@ -418,34 +404,6 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
             500,
             true
             )
-        } else if (randomIndex == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoom1_subir`,
-            500,
-            true
-            )
-        } else if (randomIndex == 2) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomrosa_subir`,
-            500,
-            true
-            )
-        } else if (randomIndex == 3) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoomgroc_subir`,
-            500,
-            true
-            )
-        } else {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorrandoommarro_subir`,
-            500,
-            true
-            )
         }
     }
 })
@@ -461,7 +419,6 @@ function show_main_menu () {
     )
     menu = main_menu
     estructura_menus()
-    // Colores SAW
     main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 2)
     main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 0)
     main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 15)
@@ -487,29 +444,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function (player22, coin
     info.changeScoreBy(1)
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     sprites.destroy(coin, effects.spray, 200)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function (sprite3, otherSprite3) {
-    let respuesta3: boolean;
-if (is_player_talking || prisoner_npc.kind() == SpriteKind.Complete || prisoner_npc.kind() == SpriteKind.Dead) {
-        return
-    }
-    if (controller.A.isPressed()) {
-        is_player_talking = true
-        game.splash("PRISIONERO", "Cadenas apretando... ¿Ayuda?")
-        respuesta3 = game.ask("¿Liberarlo?", "A=SÍ, B=NO")
-        if (respuesta3) {
-            game.splash("PRISIONERO", "¡Libre! ¡Gracias!")
-            prisoner_npc.setKind(SpriteKind.Complete)
-            info.changeScoreBy(150)
-            npcs_saved += 1
-        } else {
-            game.splash("...", "*Aplastado*")
-            prisoner_npc.destroy()
-            npcs_dead += 1
-            info.changeScoreBy(-50)
-        }
-        is_player_talking = false
-    }
 })
 function show_character_select () {
     game_state = GAME_STATE_CHAR_SELECT
@@ -538,15 +472,25 @@ function show_jigsaw_message () {
     char_name = character_names[selected_character]
     game.splash("JIGSAW", "Hola, " + char_name + ".")
     game.splash("JIGSAW", "Tienes 180 segundos para redimirte.")
-    game.splash("JIGSAW", "Salva a los inocentes atrapados.")
+    game.splash("JIGSAW", "Salva a los inocentes... y sobrevive.")
     pause(1000)
     game.showLongText("Vive o muere. Haz tu elección.", DialogLayout.Center)
     pause(1000)
-    // Inicia el juego
     mapaJoc = true
 }
+// ========== COLISIÓN ENEMIGO - JUGADOR (DAÑO) ==========
 sprites.onOverlap(SpriteKind.Player, SpriteKind.enemic, function (player2, enemy) {
-    game.gameOver(false)
+    if (dodge_roll || escudo_activo) {
+        return
+    }
+    info.changeLifeBy(-1)
+    scene.cameraShake(4, 500)
+    distancia_repulsion = 10
+    if (player2.x > enemy.x) {
+        player2.x += distancia_repulsion
+    } else {
+        player2.x -= distancia_repulsion
+    }
 })
 function estructura_menus () {
     main_menu.setPosition(80, 60)
@@ -557,30 +501,48 @@ function estructura_menus () {
     menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 8)
     menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
 }
+// ========== COLISIÓN PROYECTIL JUGADOR - ENEMIGO ==========
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemic, function (sprite_proj, enemigo_sprite) {
+    sprite_proj.destroy()
+    enemigo_sprite.setVelocity((0 - enemigo_sprite.vx) * 2, (0 - enemigo_sprite.vy) * 2)
+    if (randint(0, 100) < 30) {
+        sprites.destroy(enemigo_sprite, effects.disintegrate, 500)
+        info.changeScoreBy(50)
+    }
+})
 let moneda2: Sprite = null
+let projectile: Sprite = null
+let tiempo_ultimo_disparo = 0
+let distancia_repulsion = 0
 let char_name = ""
 let character_names: string[] = []
 let char_menu: miniMenu.MenuSprite = null
 let main_menu: miniMenu.MenuSprite = null
 let menu_dificultad: miniMenu.MenuSprite = null
+let randomIndex = 0
 let ultimo_enemigo = 0
 let score = 0
 let enemic1: Sprite = null
 let ultimo_enemigo2 = 0
 let menu_temps: miniMenu.MenuSprite = null
-let randomIndex = 0
 let prisoner_npc: Sprite = null
-let girl_npc: Sprite = null
-let my_menu: miniMenu.MenuSprite = null
-let inventari_armes2: miniMenu.MenuItem[] = []
-let player_sprite: Sprite = null
-let mapa_anterior: tiles.TileMapData = null
-let inventari_obert = false
-let selected_character = 0
+let doctor_npc: Sprite = null
 let npcs_dead = 0
 let npcs_saved = 0
-let doctor_npc: Sprite = null
+let girl_npc: Sprite = null
 let is_player_talking = false
+let arma_equipada = ""
+let my_menu: miniMenu.MenuSprite = null
+let inventari_armes2: miniMenu.MenuItem[] = []
+let mapa_anterior: tiles.TileMapData = null
+let inventari_obert = false
+let tiene_escudo = false
+let tiene_pistola = false
+let tiene_espada = false
+let selected_character = 0
+let escudo_activo = false
+let dodge_roll = false
+let player_sprite: Sprite = null
 let menu: miniMenu.MenuSprite = null
 let menu_configuracio: miniMenu.MenuSprite = null
 let mapaJoc = false
@@ -596,9 +558,29 @@ let velocidad_enemigo = 0
 let GAME_STATE_JIGSAW_MESSAGE = 0
 let GAME_STATE_CHAR_STORY = 0
 let duracion_partida = 0
-let randomIndex2 = 0
 let jigsaw_npc = null
+let randomIndex2 = 0
 duracion_partida = 180
+let stats_armas = {
+    "espada" : {
+        "damage" : 2,
+        "speed" : 0,
+        "cooldown" : 800,
+    }
+    ,
+    "pistola" : {
+        "damage" : 1,
+        "speed" : 200,
+        "cooldown" : 500,
+    }
+    ,
+    "escudo" : {
+        "damage" : 0,
+        "speed" : 0,
+        "cooldown" : 0,
+    }
+    ,
+}
 // Estados adicionales
 let GAME_STATE_INTRO = -1
 GAME_STATE_CHAR_STORY = 4
@@ -618,10 +600,47 @@ pantalla = "joc"
 mapaJoc = false
 // ========== INICIALIZACIÓN ==========
 scene.setBackgroundColor(0)
-// INTRO SAW
 show_saw_intro()
-// MENÚ PRINCIPAL
 show_main_menu()
+// ========== SISTEMA DE DISPARO (CORREGIDO) ==========
+// ========== SISTEMA DE DISPARO (SIMPLIFICADO Y FUNCIONAL) ==========
+game.onUpdate(function () {
+    let daño: number;
+let velocidad: number;
+let cooldown: number;
+let vx: number;
+let vy: number;
+mode_attack()
+    if (controller.B.isPressed() && game_state == GAME_STATE_PLAYING) {
+        daño = 1
+        velocidad = 200
+        cooldown = 500
+        if (arma_equipada == "espada") {
+            daño = 2
+            velocidad = 0
+            cooldown = 800
+        } else if (arma_equipada == "pistola") {
+            daño = 1
+            velocidad = 200
+            cooldown = 500
+        } else if (arma_equipada == "escudo") {
+            return
+        }
+        // El escudo no dispara
+        if (velocidad == 0) {
+            return
+        }
+        if (game.runtime() - tiempo_ultimo_disparo < cooldown) {
+            return
+        }
+        tiempo_ultimo_disparo = game.runtime()
+        vx = velocidad
+        vy = 0
+        projectile = sprites.createProjectileFromSprite(assets.image`pistola`, player_sprite, vx, vy)
+        sprites.setDataNumber(projectile, "damage", daño)
+        music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.InBackground)
+    }
+})
 game.onUpdateInterval(5000, function () {
     if (game_state == GAME_STATE_PLAYING) {
         moneda2 = sprites.create(assets.image`moneda`, SpriteKind.moneda)
