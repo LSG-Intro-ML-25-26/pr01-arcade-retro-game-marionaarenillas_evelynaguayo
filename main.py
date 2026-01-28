@@ -9,7 +9,7 @@ class SpriteKind:
     Complete = SpriteKind.create()
     Dead = SpriteKind.create()
     ENEMIE_PROJECTILE = SpriteKind.create()
-# ========== FUNCIONES DEL JUEGO ORIGINAL ==========
+
 def configuracion_partida():
     global menu_configuracio, menu
     menu_configuracio = miniMenu.create_menu(miniMenu.create_menu_item("Tiempo Partida"),
@@ -28,11 +28,9 @@ def configuracion_partida():
             show_main_menu()
     menu_configuracio.on_button_pressed(controller.A, on_button_pressed)
     
-# ========== SISTEMA DE ATAQUE DE ENEMIGOS ==========
 def mode_attack():
     for un_enemigo in sprites.all_of_kind(SpriteKind.enemic):
         un_enemigo.follow(player_sprite, velocidad_enemigo)
-# ========== COLISIÓN PROYECTIL ENEMIGO - JUGADOR ==========
 
 def on_on_overlap(sprite_player, sprite_proj):
     sprite_proj.destroy()
@@ -60,7 +58,7 @@ def show_character_story():
     game.show_long_text("Y entonces... todo se volvió negro.", DialogLayout.BOTTOM)
     pause(1000)
     show_jigsaw_message()
-# ========== INVENTARIO MEJORADO CON ARMAS ==========
+
 def inventari_armes():
     global tiene_espada, tiene_pistola, tiene_escudo, pantalla, mapaJoc, inventari_obert, mapa_anterior, inventari_armes2, my_menu
     tiene_espada = True
@@ -115,7 +113,6 @@ def inventari_armes():
         controller.move_sprite(player_sprite, 100, 100)
     my_menu.on_button_pressed(controller.A, on_button_pressed2)
     
-# ========== SISTEMA DE ESCUDO ==========
 def activar_escudo():
     global escudo_activo
     escudo_activo = True
@@ -191,8 +188,6 @@ def on_on_overlap3(sprite2, otherSprite2):
         is_player_talking = False
 sprites.on_overlap(SpriteKind.player, SpriteKind.NPC_Doctor, on_on_overlap3)
 
-# ========== ANIMACIONES (SIMPLIFICADAS) ==========
-
 def on_down_pressed():
     if game_state == GAME_STATE_PLAYING and player_sprite:
         if selected_character == 0:
@@ -253,7 +248,7 @@ def spawner_enemics():
         """), SpriteKind.enemic)
     tiles.place_on_random_tile(enemic1, sprites.dungeon.collectible_blue_crystal)
     enemic1.follow(player_sprite, velocidad_enemigo)
-# ========== INTRO SIMPLIFICADA DE JIGSAW ==========
+
 def show_saw_intro():
     scene.set_background_color(0)
     game.show_long_text("Hola... Quiero jugar un juego.", DialogLayout.CENTER)
@@ -307,7 +302,6 @@ def on_left_pressed():
                 True)
 controller.left.on_event(ControllerButtonEvent.PRESSED, on_left_pressed)
 
-# ========== DODGE ROLL ==========
 
 def on_a_pressed():
     global dodge_roll
@@ -673,12 +667,10 @@ player_name = "HUNTER"
 game_time = 180
 pantalla = "joc"
 mapaJoc = False
-# ========== INICIALIZACIÓN ==========
+
 scene.set_background_color(0)
 show_saw_intro()
 show_main_menu()
-# ========== SISTEMA DE DISPARO (CORREGIDO) ==========
-# ========== SISTEMA DE DISPARO (SIMPLIFICADO Y FUNCIONAL) ==========
 
 def on_on_update():
     global daño, velocidad, cooldown, tiempo_ultimo_disparo, vx, vy, projectile

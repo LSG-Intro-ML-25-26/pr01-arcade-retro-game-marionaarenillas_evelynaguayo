@@ -10,7 +10,6 @@ namespace SpriteKind {
     export const ENEMIE_PROJECTILE = SpriteKind.create()
 }
 
-//  ========== FUNCIONES DEL JUEGO ORIGINAL ==========
 function configuracion_partida() {
     
     menu_configuracio = miniMenu.createMenu(miniMenu.createMenuItem("Tiempo Partida"), miniMenu.createMenuItem("Dificultad"), miniMenu.createMenuItem("Volver"))
@@ -29,14 +28,12 @@ function configuracion_partida() {
     })
 }
 
-//  ========== SISTEMA DE ATAQUE DE ENEMIGOS ==========
 function mode_attack() {
     for (let un_enemigo of sprites.allOfKind(SpriteKind.enemic)) {
         un_enemigo.follow(player_sprite, velocidad_enemigo)
     }
 }
 
-//  ========== COLISIÓN PROYECTIL ENEMIGO - JUGADOR ==========
 sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function on_on_overlap(sprite_player: Sprite, sprite_proj: Sprite) {
     sprite_proj.destroy()
     if (dodge_roll || escudo_activo) {
@@ -65,7 +62,6 @@ function show_character_story() {
     show_jigsaw_message()
 }
 
-//  ========== INVENTARIO MEJORADO CON ARMAS ==========
 function inventari_armes() {
     
     tiene_espada = true
@@ -116,7 +112,6 @@ function inventari_armes() {
     })
 }
 
-//  ========== SISTEMA DE ESCUDO ==========
 function activar_escudo() {
     
     escudo_activo = true
@@ -201,7 +196,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function on_on_overl
     }
     
 })
-//  ========== ANIMACIONES (SIMPLIFICADAS) ==========
 controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
@@ -266,7 +260,6 @@ function spawner_enemics() {
     enemic1.follow(player_sprite, velocidad_enemigo)
 }
 
-//  ========== INTRO SIMPLIFICADA DE JIGSAW ==========
 function show_saw_intro() {
     scene.setBackgroundColor(0)
     game.showLongText("Hola... Quiero jugar un juego.", DialogLayout.Center)
@@ -314,7 +307,6 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed(
     }
     
 })
-//  ========== DODGE ROLL ==========
 controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
     
     if (game_state != GAME_STATE_PLAYING) {
@@ -654,12 +646,9 @@ let player_name = "HUNTER"
 game_time = 180
 pantalla = "joc"
 mapaJoc = false
-//  ========== INICIALIZACIÓN ==========
 scene.setBackgroundColor(0)
 show_saw_intro()
 show_main_menu()
-//  ========== SISTEMA DE DISPARO (CORREGIDO) ==========
-//  ========== SISTEMA DE DISPARO (SIMPLIFICADO Y FUNCIONAL) ==========
 game.onUpdate(function on_on_update() {
     
     mode_attack()
