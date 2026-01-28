@@ -36,17 +36,20 @@ def inventari_armes():
     my_menu.set_style_property(miniMenu.StyleKind.SELECTED,
         miniMenu.StyleProperty.BACKGROUND,
         54)
-    def on_button_pressed(selection: any, selectedIndex: any):
+    
+    def on_button_pressed(selection, selectedIndex):
         global inventari_obert, pantalla, game_state
         inventari_obert = False
         pantalla = "joc"
+        # Mostra el menú per seleccionar personatge i activa l'inici de partida
         game_state = GAME_STATE_PLAYING
         my_menu.close()
-        if mapa_anterior:
-            tiles.set_current_tilemap(mapa_anterior)
+        tiles.set_current_tilemap(mapa_anterior)
         tiles.place_on_random_tile(player_sprite, sprites.dungeon.chest_open)
-        controller.move_sprite(player_sprite, 100, 100)
         scene.camera_follow_sprite(player_sprite)
+        controller.move_sprite(player_sprite, 100, 100)
+    my_menu.on_button_pressed(controller.A, on_button_pressed)
+    
 
 def on_down_pressed():
     # Crea un enemic cada 30 segons i fa que persegueixi el jugador
