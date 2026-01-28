@@ -42,7 +42,7 @@ def inventari_armes():
         inventari_obert = False
         pantalla = "joc"
         # Mostra el menú per seleccionar personatge i activa l'inici de partida
-        game_state = GAME_STATE_PLAYING
+        game_state = GAME_STATE_CHAR_SELECT
         my_menu.close()
         tiles.set_current_tilemap(mapa_anterior)
         tiles.place_on_random_tile(player_sprite, sprites.dungeon.chest_open)
