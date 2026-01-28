@@ -3,19 +3,19 @@ class SpriteKind:
     moneda = SpriteKind.create()
     enemic = SpriteKind.create()
 def configuracion_partida():
-    global menu_configuracio
-    menu_configuracio.set_title("Configuración Partida")
+    global menu_configuracio, menu
     menu_configuracio = miniMenu.create_menu(miniMenu.create_menu_item("Tiempo Partida"),
         miniMenu.create_menu_item("Dificultad"),
         miniMenu.create_menu_item("Volver"))
-    menu_configuracio.set_position(80, 60)
+    menu = menu_configuracio
+    estructura_menus()
     
     def on_button_pressed(selection, selectedIndex):
         menu_configuracio.close()
         if selectedIndex == 0:
-            menu_temps()
+            menu_temps2()
         elif selectedIndex == 1:
-            menu_dificultad()
+            menu_dificultad2()
         else:
             show_main_menu()
     menu_configuracio.on_button_pressed(controller.A, on_button_pressed)
@@ -68,31 +68,6 @@ def inventari_armes():
         controller.move_sprite(player_sprite, 100, 100)
     my_menu.on_button_pressed(controller.A, on_button_pressed2)
     
-def menu_temps():
-    global menu_temps2
-    menu_temps2.set_title("Tiempo Partida")
-    menu_temps2 = miniMenu.create_menu(miniMenu.create_menu_item("3 minutos"),
-        miniMenu.create_menu_item("5 minutos"),
-        miniMenu.create_menu_item("7 minutos"),
-        miniMenu.create_menu_item("Volver"))
-    menu_temps2.set_position(80, 60)
-    
-    def on_button_pressed3(selection3, selectedIndex3):
-        global duracion_partida
-        menu_temps2.close()
-        if selectedIndex3 == 0:
-            duracion_partida = 180
-            game.splash("Tiempo seleccionado: 3 minutos")
-        elif selectedIndex3 == 1:
-            duracion_partida = 300
-            game.splash("Tiempo seleccionado: 5 minutos")
-        elif selectedIndex3 == 2:
-            duracion_partida = 420
-            game.splash("Tiempo seleccionado: 7 minutos")
-        else:
-            configuracion_partida()
-    menu_temps2.on_button_pressed(controller.A, on_button_pressed3)
-    
 
 def on_down_pressed():
     # Crea un enemic cada 30 segons i fa que persegueixi el jugador
@@ -140,6 +115,53 @@ def on_down_pressed():
                 500,
                 True)
 controller.down.on_event(ControllerButtonEvent.PRESSED, on_down_pressed)
+
+def menu_temps2():
+    global menu_temps, menu
+    menu_temps = miniMenu.create_menu(miniMenu.create_menu_item("3 minutos"),
+        miniMenu.create_menu_item("5 minutos"),
+        miniMenu.create_menu_item("7 minutos"),
+        miniMenu.create_menu_item("Volver"))
+    menu = menu_temps
+    estructura_menus()
+    
+    def on_button_pressed3(selection3, selectedIndex3):
+        global duracion_partida
+        menu_temps.close()
+        if selectedIndex3 == 0:
+            duracion_partida = 180
+            game.splash("Tiempo seleccionado: 3 minutos")
+            configuracion_partida()
+        elif selectedIndex3 == 1:
+            duracion_partida = 300
+            game.splash("Tiempo seleccionado: 5 minutos")
+            configuracion_partida()
+        elif selectedIndex3 == 2:
+            duracion_partida = 420
+            game.splash("Tiempo seleccionado: 7 minutos")
+            configuracion_partida()
+        else:
+            configuracion_partida()
+    menu_temps.on_button_pressed(controller.A, on_button_pressed3)
+    
+def spawner_enemics():
+    global ultimo_enemigo2, enemic1
+    if game_state != GAME_STATE_PLAYING or not (player_sprite):
+        return
+    # límit d'enemics en pantalla
+    if len(sprites.all_of_kind(SpriteKind.enemic)) >= max_enemics:
+        return
+    # control del temps segons dificultat
+    if game.runtime() - ultimo_enemigo2 < enemigos_intervalo:
+        return
+    ultimo_enemigo2 = game.runtime()
+    # crear enemic nou (sense destruir els anteriors)
+    enemic1 = sprites.create(assets.image("""
+        enemic1
+        """), SpriteKind.enemic)
+    tiles.place_on_random_tile(enemic1, sprites.dungeon.collectible_blue_crystal)
+    # ✅ velocitat segons configuració
+    enemic1.follow(player_sprite, velocidad_enemigo)
 
 def on_right_pressed():
     # Crea un enemic cada 30 segons i fa que persegueixi el jugador
@@ -251,35 +273,9 @@ scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.chest_closed,
     on_overlap_tile)
 
-def menu_dificultad():
-    global menu_dificultad2
-    menu_dificultad2.set_title("Dificultad Partida")
-    menu_dificultad2 = miniMenu.create_menu(miniMenu.create_menu_item("Fácil"),
-        miniMenu.create_menu_item("Difícil"),
-        miniMenu.create_menu_item("Volver"))
-    menu_temps2.set_position(80, 60)
-    
-    def on_button_pressed4(selection4, selectedIndex4):
-        global dificultad, enemigos_intervalo, velocidad_enemigo
-        menu_dificultad2.close()
-        if selectedIndex4 == 0:
-            dificultad = "FACIL"
-            enemigos_intervalo = 30000
-            velocidad_enemigo = 55
-            game.show_long_text("MODO FÁCIL: Enemigos cada 30s Velocidad baja Más tiempo de reacción",
-                DialogLayout.BOTTOM)
-        elif selectedIndex4 == 1:
-            dificultad = "DIFICIL"
-            enemigos_intervalo = 15000
-            velocidad_enemigo = 85
-            game.show_long_text("MODO DIFÍCIL: Enemigos cada 15s Velocidad alta Más presión",
-                DialogLayout.BOTTOM)
-        elif selectedIndex4 == 2:
-            configuracion_partida()
-    menu_dificultad2.on_button_pressed(controller.A, on_button_pressed4)
-    
 def start_gameplay():
-    global game_state, score, game_time, player_sprite
+    global ultimo_enemigo, game_state, score, game_time, player_sprite
+    ultimo_enemigo = game.runtime()
     info.start_countdown(duracion_partida)
     # Inicialitza el joc: crea el jugador, reinicia score i temporitzador
     game_state = GAME_STATE_PLAYING
@@ -321,6 +317,37 @@ def crear_jugador_random():
                 jugador_randoom4
                 """),
             SpriteKind.player)
+def menu_dificultad2():
+    global menu_dificultad, menu
+    menu_dificultad = miniMenu.create_menu(miniMenu.create_menu_item("Fácil"),
+        miniMenu.create_menu_item("Difícil"),
+        miniMenu.create_menu_item("Volver"))
+    menu = menu_dificultad
+    estructura_menus()
+    
+    def on_button_pressed4(selection4, selectedIndex4):
+        global dificultad, enemigos_intervalo, velocidad_enemigo, max_enemics
+        menu_dificultad.close()
+        if selectedIndex4 == 0:
+            dificultad = "FACIL"
+            enemigos_intervalo = 30000
+            velocidad_enemigo = 55
+            max_enemics = 6
+            game.show_long_text("MODO FÁCIL: Enemigos cada 30s, velocidad baja, más tiempo de reacción, máximo 6 enemigos",
+                DialogLayout.BOTTOM)
+            configuracion_partida()
+        elif selectedIndex4 == 1:
+            dificultad = "DIFICIL"
+            enemigos_intervalo = 15000
+            velocidad_enemigo = 85
+            max_enemics = 10
+            game.show_long_text("MODO DIFÍCIL: Enemigos cada 15s, velocidad alta, más presión, máximo 10 enemigos",
+                DialogLayout.BOTTOM)
+            configuracion_partida()
+        elif selectedIndex4 == 2:
+            configuracion_partida()
+    menu_dificultad.on_button_pressed(controller.A, on_button_pressed4)
+    
 
 def on_up_pressed():
     # Crea un enemic cada 30 segons i fa que persegueixi el jugador
@@ -370,28 +397,15 @@ def on_up_pressed():
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
 def show_main_menu():
-    global game_state, main_menu
+    global game_state, main_menu, menu
     # Mostra el menú principal i gestiona la selecció amb el botó A
     game_state = GAME_STATE_MENU
     main_menu = miniMenu.create_menu(miniMenu.create_menu_item("HISTORIA"),
         miniMenu.create_menu_item("CONFIGURACIÓN"),
         miniMenu.create_menu_item("VERSUS"),
         miniMenu.create_menu_item("THE END"))
-    main_menu.set_position(80, 60)
-    main_menu.set_menu_style_property(miniMenu.MenuStyleProperty.WIDTH, 80)
-    main_menu.set_menu_style_property(miniMenu.MenuStyleProperty.HEIGHT, 50)
-    main_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.BACKGROUND,
-        15)
-    main_menu.set_style_property(miniMenu.StyleKind.DEFAULT,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
-    main_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.BACKGROUND,
-        8)
-    main_menu.set_style_property(miniMenu.StyleKind.SELECTED,
-        miniMenu.StyleProperty.FOREGROUND,
-        1)
+    menu = main_menu
+    estructura_menus()
     
     def on_button_pressed5(selection22, selectedIndex22):
         # Executa l'acció segons l'opció triada al menú principal
@@ -409,6 +423,16 @@ def show_main_menu():
             show_main_menu()
     main_menu.on_button_pressed(controller.A, on_button_pressed5)
     
+def on_update_interval2():
+    global enemic1
+    # Crea un enemic cada 30 segons i fa que persegueixi el jugador
+    if game_state == GAME_STATE_PLAYING and player_sprite:
+        sprites.destroy_all_sprites_of_kind(SpriteKind.enemic)
+        enemic1 = sprites.create(assets.image("""
+            enemic1
+            """), SpriteKind.enemic)
+        tiles.place_on_random_tile(enemic1, sprites.dungeon.collectible_blue_crystal)
+        enemic1.follow(player_sprite, 60)
 
 def on_on_overlap(player22, coin):
     global score
@@ -463,33 +487,57 @@ def on_on_overlap2(player2, enemy):
     game.game_over(False)
 sprites.on_overlap(SpriteKind.player, SpriteKind.enemic, on_on_overlap2)
 
-enemic1: Sprite = None
+def estructura_menus():
+    main_menu.set_position(80, 60)
+    menu.set_menu_style_property(miniMenu.MenuStyleProperty.WIDTH, 120)
+    menu.set_menu_style_property(miniMenu.MenuStyleProperty.HEIGHT, 60)
+    menu.set_style_property(miniMenu.StyleKind.DEFAULT,
+        miniMenu.StyleProperty.BACKGROUND,
+        15)
+    menu.set_style_property(miniMenu.StyleKind.DEFAULT,
+        miniMenu.StyleProperty.FOREGROUND,
+        1)
+    menu.set_style_property(miniMenu.StyleKind.SELECTED,
+        miniMenu.StyleProperty.BACKGROUND,
+        8)
+    menu.set_style_property(miniMenu.StyleKind.SELECTED,
+        miniMenu.StyleProperty.FOREGROUND,
+        1)
 moneda2: Sprite = None
 char_menu: miniMenu.MenuSprite = None
 main_menu: miniMenu.MenuSprite = None
-velocidad_enemigo = 0
-enemigos_intervalo = 0
-dificultad = ""
-menu_dificultad2: miniMenu.MenuSprite = None
+menu_dificultad: miniMenu.MenuSprite = None
+ultimo_enemigo = 0
 score = 0
+enemic1: Sprite = None
+ultimo_enemigo2 = 0
+duracion_partida = 30000
+menu_temps: miniMenu.MenuSprite = None
 randomIndex = 0
 selected_character = 0
-duracion_partida = 0
-menu_temps2: miniMenu.MenuSprite = None
+my_menu: miniMenu.MenuSprite = None
 inventari_armes2: List[miniMenu.MenuItem] = []
+player_sprite: Sprite = None
+mapa_anterior: tiles.TileMapData = None
+inventari_obert = False
+menu: miniMenu.MenuSprite = None
 menu_configuracio: miniMenu.MenuSprite = None
 mapaJoc = False
+pantalla = ""
 game_time = 0
 GAME_STATE_MENU = 0
-GAME_STATE_CHAR_SELECT = 0
-randomIndex2 = 0
-GAME_STATE_PLAYING = 0
 game_state = 0
-pantalla = ""
-inventari_obert = False
-mapa_anterior: tiles.TileMapData = None
-player_sprite: Sprite = None
-my_menu: miniMenu.MenuSprite = None
+GAME_STATE_PLAYING = 0
+GAME_STATE_CHAR_SELECT = 0
+max_enemics = 0
+dificultad = ""
+enemigos_intervalo = 0
+velocidad_enemigo = 0
+randomIndex2 = 0
+velocidad_enemigo = 55
+enemigos_intervalo = 30000
+dificultad = "FACIL"
+max_enemics = 6
 GAME_STATE_CHAR_SELECT = 1
 GAME_STATE_NAME_INPUT = 2
 GAME_STATE_PLAYING = 3
@@ -527,17 +575,6 @@ def on_forever():
             """))
         controller.move_sprite(player_sprite, 100, 100)
         scene.camera_follow_sprite(player_sprite)
+    spawner_enemics()
     pause(100)
 forever(on_forever)
-
-def on_update_interval2():
-    global enemic1
-    # Crea un enemic cada 30 segons i fa que persegueixi el jugador
-    if game_state == GAME_STATE_PLAYING and player_sprite:
-        sprites.destroy_all_sprites_of_kind(SpriteKind.enemic)
-        enemic1 = sprites.create(assets.image("""
-            enemic1
-            """), SpriteKind.enemic)
-        tiles.place_on_random_tile(enemic1, sprites.dungeon.collectible_blue_crystal)
-        enemic1.follow(player_sprite, 60)
-game.on_update_interval(30000, on_update_interval2)
