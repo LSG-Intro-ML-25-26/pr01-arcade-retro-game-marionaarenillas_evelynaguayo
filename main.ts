@@ -1,6 +1,12 @@
 namespace SpriteKind {
     export const moneda = SpriteKind.create()
     export const enemic = SpriteKind.create()
+    export const NPC_Doctor = SpriteKind.create()
+    export const NPC_Girl = SpriteKind.create()
+    export const NPC_Prisoner = SpriteKind.create()
+    export const NPC_Jigsaw = SpriteKind.create()
+    export const Complete = SpriteKind.create()
+    export const Dead = SpriteKind.create()
 }
 function configuracion_partida () {
     menu_configuracio = miniMenu.createMenu(
@@ -21,6 +27,49 @@ function configuracion_partida () {
         }
     })
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function (sprite2, otherSprite2) {
+    let respuesta: boolean;
+if (is_player_talking || doctor_npc.kind() == SpriteKind.Complete || doctor_npc.kind() == SpriteKind.Dead) {
+        return
+    }
+    if (controller.A.isPressed()) {
+        is_player_talking = true
+        game.splash("DOCTOR", "¡Bomba en el pecho! ¿Me ayudas?")
+        respuesta = game.ask("¿Ayudarlo?", "A=SÍ, B=NO")
+        if (respuesta) {
+            game.splash("DOCTOR", "¡Gracias! ¡Salvaste mi vida!")
+            doctor_npc.setKind(SpriteKind.Complete)
+            info.changeScoreBy(150)
+            npcs_saved += 1
+        } else {
+            game.splash("", "*EXPLOSIÓN*")
+            doctor_npc.destroy()
+            npcs_dead += 1
+            info.changeScoreBy(-50)
+        }
+        is_player_talking = false
+    }
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite4, location) {
+    if (pantalla == "joc") {
+        inventari_armes()
+    }
+})
+function show_character_story () {
+    game_state = GAME_STATE_CHAR_STORY
+    scene.setBackgroundColor(0)
+    if (selected_character == 0) {
+        game.splash("ANDER", "Vi a un hombre morir... y no hice nada.")
+    } else if (selected_character == 1) {
+        game.splash("KIRA", "Manipulé y destruí vidas sin remordimiento.")
+    } else {
+        game.splash("RANDOM", "Siempre fui indiferente al sufrimiento.")
+    }
+    pause(1000)
+    game.showLongText("Y entonces... todo se volvió negro.", DialogLayout.Bottom)
+    pause(1000)
+    show_jigsaw_message()
+}
 function inventari_armes () {
     let escudo = 0
     let pistola = 0
@@ -40,7 +89,6 @@ function inventari_armes () {
     my_menu.onButtonPressed(controller.A, function (selection2, selectedIndex2) {
         inventari_obert = false
         pantalla = "joc"
-        // Mostra el menú per seleccionar personatge i activa l'inici de partida
         game_state = GAME_STATE_PLAYING
         my_menu.close()
         tiles.setCurrentTilemap(mapa_anterior)
@@ -49,8 +97,39 @@ function inventari_armes () {
         controller.moveSprite(player_sprite, 100, 100)
     })
 }
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function (sprite, otherSprite) {
+    let respuesta2: boolean;
+if (is_player_talking || girl_npc.kind() == SpriteKind.Complete || girl_npc.kind() == SpriteKind.Dead) {
+        return
+    }
+    if (controller.A.isPressed()) {
+        is_player_talking = true
+        game.splash("NIÑA", "Me envenenaron... ¿Me salvas?")
+        respuesta2 = game.ask("¿Buscar antídoto?", "A=SÍ, B=NO")
+        if (respuesta2) {
+            game.splash("NIÑA", "¡Gracias por salvarme!")
+            girl_npc.setKind(SpriteKind.Complete)
+            info.changeScoreBy(200)
+            npcs_saved += 1
+        } else {
+            game.splash("...", "*La niña muere*")
+            girl_npc.destroy()
+            npcs_dead += 1
+            info.changeScoreBy(-100)
+        }
+        is_player_talking = false
+    }
+})
+function spawn_npcs_in_map () {
+    // NPCs en diferentes tiles del mapa
+    doctor_npc = sprites.create(assets.image`jugador_vermell`, SpriteKind.NPC_Doctor)
+    tiles.placeOnRandomTile(doctor_npc, assets.tile`transparency16`)
+    girl_npc = sprites.create(assets.image`jugador_kira`, SpriteKind.NPC_Girl)
+    tiles.placeOnRandomTile(girl_npc, assets.tile`transparency16`)
+    prisoner_npc = sprites.create(assets.image`jugador_randoom0`, SpriteKind.NPC_Prisoner)
+    tiles.placeOnRandomTile(prisoner_npc, assets.tile`transparency16`)
+}
 controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
-    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
             animation.runImageAnimation(
@@ -129,29 +208,35 @@ function spawner_enemics () {
     if (game_state != GAME_STATE_PLAYING || !(player_sprite)) {
         return
     }
-    // límit d'enemics en pantalla
     if (sprites.allOfKind(SpriteKind.enemic).length >= max_enemics) {
         return
     }
-    // control del temps segons dificultat
     if (game.runtime() - ultimo_enemigo2 < enemigos_intervalo) {
         return
     }
     ultimo_enemigo2 = game.runtime()
-    // crear enemic nou (sense destruir els anteriors)
     enemic1 = sprites.create(assets.image`enemic1`, SpriteKind.enemic)
     tiles.placeOnRandomTile(enemic1, sprites.dungeon.collectibleBlueCrystal)
-    // ✅ velocitat segons configuració
     enemic1.follow(player_sprite, velocidad_enemigo)
-    animation.runImageAnimation(
-    enemic1,
-    assets.animation`enemic_esquerra`,
-    500,
-    false
-    )
+}
+// ========== INTRO SIMPLIFICADA DE JIGSAW ==========
+function show_saw_intro () {
+    scene.setBackgroundColor(0)
+    game.showLongText("Hola... Quiero jugar un juego.", DialogLayout.Center)
+    pause(2000)
+    game.showLongText("Has ignorado el sufrimiento ajeno.", DialogLayout.Center)
+    pause(2000)
+    game.showLongText("Ahora deberás demostrar que valoras la vida.", DialogLayout.Center)
+    pause(2000)
+    game.showLongText("Tienes 180 segundos.", DialogLayout.Center)
+    pause(2000)
+    game.showLongText("Vive o muere. Haz tu elección.", DialogLayout.Center)
+    pause(2000)
+    scene.setBackgroundColor(2)
+    game.splash("LAS PRUEBAS DE", "JIGSAW")
+    pause(1000)
 }
 controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
-    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
             animation.runImageAnimation(
@@ -199,7 +284,6 @@ controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
-    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
             animation.runImageAnimation(
@@ -247,23 +331,22 @@ controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 info.onCountdownEnd(function () {
-    // Quan s'acaba el temps: comprova si s'ha arribat a la puntuació objectiu
-    if (score >= 500) {
-        game.splash("VICTORIA!", "Score: " + ("" + score))
+    scene.setBackgroundColor(0)
+    if (score >= 500 && npcs_dead == 0) {
+        game.splash("JIGSAW", "Impresionante. Eres libre.")
+        game.splash("FINAL PERFECTO", "Score: " + ("" + score))
+    } else if (score >= 300) {
+        game.splash("JIGSAW", "Sobreviviste... pero a qué costo.")
+        game.splash("FINAL BUENO", "Score: " + ("" + score))
     } else {
+        game.splash("JIGSAW", "Fallaste.")
         game.splash("GAME OVER", "Score: " + ("" + score))
     }
     game.reset()
 })
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
-    if (pantalla == "joc") {
-        inventari_armes()
-    }
-})
 function start_gameplay () {
     ultimo_enemigo = game.runtime()
     info.startCountdown(duracion_partida)
-    // Inicialitza el joc: crea el jugador, reinicia score i temporitzador
     game_state = GAME_STATE_PLAYING
     score = 0
     game_time = 180
@@ -275,6 +358,8 @@ function start_gameplay () {
     } else {
         player_sprite = crear_jugador_random()
     }
+    // Spawear NPCs en el mapa
+    spawn_npcs_in_map()
 }
 function crear_jugador_random () {
     randomIndex = randint(1, 4)
@@ -303,14 +388,14 @@ function menu_dificultad2 () {
             enemigos_intervalo = 30000
             velocidad_enemigo = 55
             max_enemics = 6
-            game.showLongText("MODO FÁCIL: Enemigos cada 30s, velocidad baja, más tiempo de reacción, máximo 6 enemigos", DialogLayout.Bottom)
+            game.showLongText("MODO FÁCIL: Enemigos cada 30s, velocidad baja, máximo 6 enemigos", DialogLayout.Bottom)
             configuracion_partida()
         } else if (selectedIndex4 == 1) {
             dificultad = "DIFICIL"
             enemigos_intervalo = 15000
             velocidad_enemigo = 85
             max_enemics = 10
-            game.showLongText("MODO DIFÍCIL: Enemigos cada 15s, velocidad alta, más presión, máximo 10 enemigos", DialogLayout.Bottom)
+            game.showLongText("MODO DIFÍCIL: Enemigos cada 15s, velocidad alta, máximo 10 enemigos", DialogLayout.Bottom)
             configuracion_partida()
         } else if (selectedIndex4 == 2) {
             configuracion_partida()
@@ -318,7 +403,6 @@ function menu_dificultad2 () {
     })
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
-    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
             animation.runImageAnimation(
@@ -366,18 +450,23 @@ controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     }
 })
 function show_main_menu () {
-    // Mostra el menú principal i gestiona la selecció amb el botó A
+    let GAME_STATE_MENU = 0
     game_state = GAME_STATE_MENU
+    scene.setBackgroundColor(0)
     main_menu = miniMenu.createMenu(
     miniMenu.createMenuItem("HISTORIA"),
     miniMenu.createMenuItem("CONFIGURACIÓN"),
     miniMenu.createMenuItem("VERSUS"),
-    miniMenu.createMenuItem("THE END")
+    miniMenu.createMenuItem("CREDITOS")
     )
     menu = main_menu
     estructura_menus()
+    // Colores SAW
+    main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 2)
+    main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 0)
+    main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 15)
+    main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 2)
     main_menu.onButtonPressed(controller.A, function (selection22, selectedIndex22) {
-        // Executa l'acció segons l'opció triada al menú principal
         main_menu.close()
         if (selectedIndex22 == 0) {
             show_character_select()
@@ -388,51 +477,75 @@ function show_main_menu () {
             game.splash("VERSUS", "Proximamente!")
             show_main_menu()
         } else if (selectedIndex22 == 3) {
-            game.splash("THE END", "Creadoras: Evelyn, Mariona")
+            game.splash("LAS PRUEBAS DE JIGSAW", "Creado por New")
             show_main_menu()
         }
     })
 }
-function on_update_interval2 () {
-    // Crea un enemic cada 30 segons i fa que persegueixi el jugador
-    if (game_state == GAME_STATE_PLAYING && player_sprite) {
-        sprites.destroyAllSpritesOfKind(SpriteKind.enemic)
-        enemic1 = sprites.create(assets.image`enemic1`, SpriteKind.enemic)
-        tiles.placeOnRandomTile(enemic1, sprites.dungeon.collectibleBlueCrystal)
-        enemic1.follow(player_sprite, 60)
-    }
-}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function (player22, coin) {
-    // Quan el jugador toca una moneda: suma puntuació, so i destrueix la moneda
     score += 1
     info.changeScoreBy(1)
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     sprites.destroy(coin, effects.spray, 200)
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function (sprite3, otherSprite3) {
+    let respuesta3: boolean;
+if (is_player_talking || prisoner_npc.kind() == SpriteKind.Complete || prisoner_npc.kind() == SpriteKind.Dead) {
+        return
+    }
+    if (controller.A.isPressed()) {
+        is_player_talking = true
+        game.splash("PRISIONERO", "Cadenas apretando... ¿Ayuda?")
+        respuesta3 = game.ask("¿Liberarlo?", "A=SÍ, B=NO")
+        if (respuesta3) {
+            game.splash("PRISIONERO", "¡Libre! ¡Gracias!")
+            prisoner_npc.setKind(SpriteKind.Complete)
+            info.changeScoreBy(150)
+            npcs_saved += 1
+        } else {
+            game.splash("...", "*Aplastado*")
+            prisoner_npc.destroy()
+            npcs_dead += 1
+            info.changeScoreBy(-50)
+        }
+        is_player_talking = false
+    }
+})
 function show_character_select () {
-    // Mostra el menú per seleccionar personatge i activa l'inici de partida
     game_state = GAME_STATE_CHAR_SELECT
     sprites.destroyAllSpritesOfKind(SpriteKind.Player)
     char_menu = miniMenu.createMenu(
-    miniMenu.createMenuItem("ANDER", assets.image`jugador_vermell`),
-    miniMenu.createMenuItem("KIRA", assets.image`jugador_kira`),
-    miniMenu.createMenuItem("RANDOM", assets.image`jugador_randoom0`)
+    miniMenu.createMenuItem("ANDER - El Cobarde", assets.image`jugador_vermell`),
+    miniMenu.createMenuItem("KIRA - La Manipuladora", assets.image`jugador_kira`),
+    miniMenu.createMenuItem("RANDOM - El Indiferente", assets.image`jugador_randoom0`)
     )
     char_menu.setPosition(80, 64)
-    char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 15)
-    char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 1)
-    char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 8)
-    char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 2)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 0)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 15)
+    char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 2)
     char_menu.onButtonPressed(controller.A, function (selection222, selectedIndex222) {
-        // Desa el personatge seleccionat i marca que s'ha de començar el joc
         selected_character = selectedIndex222
         char_menu.close()
         sprites.destroyAllSpritesOfKind(SpriteKind.Player)
-        mapaJoc = true
+        show_character_story()
     })
 }
+function show_jigsaw_message () {
+    game_state = GAME_STATE_JIGSAW_MESSAGE
+    scene.setBackgroundColor(0)
+    character_names = ["Ander", "Kira", "Random"]
+    char_name = character_names[selected_character]
+    game.splash("JIGSAW", "Hola, " + char_name + ".")
+    game.splash("JIGSAW", "Tienes 180 segundos para redimirte.")
+    game.splash("JIGSAW", "Salva a los inocentes atrapados.")
+    pause(1000)
+    game.showLongText("Vive o muere. Haz tu elección.", DialogLayout.Center)
+    pause(1000)
+    // Inicia el juego
+    mapaJoc = true
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.enemic, function (player2, enemy) {
-    // Quan l'enemic toca el jugador: game over
     game.gameOver(false)
 })
 function estructura_menus () {
@@ -445,28 +558,34 @@ function estructura_menus () {
     menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
 }
 let moneda2: Sprite = null
+let char_name = ""
+let character_names: string[] = []
 let char_menu: miniMenu.MenuSprite = null
 let main_menu: miniMenu.MenuSprite = null
 let menu_dificultad: miniMenu.MenuSprite = null
-let game_time = 0
 let ultimo_enemigo = 0
 let score = 0
 let enemic1: Sprite = null
 let ultimo_enemigo2 = 0
 let menu_temps: miniMenu.MenuSprite = null
 let randomIndex = 0
-let selected_character = 0
+let prisoner_npc: Sprite = null
+let girl_npc: Sprite = null
 let my_menu: miniMenu.MenuSprite = null
 let inventari_armes2: miniMenu.MenuItem[] = []
 let player_sprite: Sprite = null
 let mapa_anterior: tiles.TileMapData = null
 let inventari_obert = false
+let selected_character = 0
+let npcs_dead = 0
+let npcs_saved = 0
+let doctor_npc: Sprite = null
+let is_player_talking = false
 let menu: miniMenu.MenuSprite = null
 let menu_configuracio: miniMenu.MenuSprite = null
 let mapaJoc = false
 let pantalla = ""
-let duracion_partida = 0
-let GAME_STATE_MENU = 0
+let game_time = 0
 let game_state = 0
 let GAME_STATE_PLAYING = 0
 let GAME_STATE_CHAR_SELECT = 0
@@ -474,32 +593,42 @@ let max_enemics = 0
 let dificultad = ""
 let enemigos_intervalo = 0
 let velocidad_enemigo = 0
+let GAME_STATE_JIGSAW_MESSAGE = 0
+let GAME_STATE_CHAR_STORY = 0
+let duracion_partida = 0
 let randomIndex2 = 0
+let jigsaw_npc = null
+duracion_partida = 180
+// Estados adicionales
+let GAME_STATE_INTRO = -1
+GAME_STATE_CHAR_STORY = 4
+let GAME_STATE_NAME_INPUT = 5
+GAME_STATE_JIGSAW_MESSAGE = 6
 velocidad_enemigo = 55
 enemigos_intervalo = 30000
 dificultad = "FACIL"
 max_enemics = 6
 GAME_STATE_CHAR_SELECT = 1
-let GAME_STATE_NAME_INPUT = 2
+GAME_STATE_NAME_INPUT = 2
 GAME_STATE_PLAYING = 3
-game_state = GAME_STATE_MENU
+game_state = GAME_STATE_INTRO
 let player_name = "HUNTER"
-duracion_partida = 180
+game_time = 180
 pantalla = "joc"
 mapaJoc = false
-scene.setBackgroundColor(15)
-effects.starField.startScreenEffect()
-game.splash("CYBER-NEON", "VIRUS HUNT")
+// ========== INICIALIZACIÓN ==========
+scene.setBackgroundColor(0)
+// INTRO SAW
+show_saw_intro()
+// MENÚ PRINCIPAL
 show_main_menu()
 game.onUpdateInterval(5000, function () {
-    // Crea una moneda cada 5 segons mentre s'està jugant
     if (game_state == GAME_STATE_PLAYING) {
         moneda2 = sprites.create(assets.image`moneda`, SpriteKind.moneda)
         tiles.placeOnRandomTile(moneda2, sprites.dungeon.darkGroundCenter)
     }
 })
 forever(function () {
-    // Quan s'ha triat personatge, inicia la partida i col·loca el jugador al mapa
     if (mapaJoc == true) {
         mapaJoc = false
         start_gameplay()
