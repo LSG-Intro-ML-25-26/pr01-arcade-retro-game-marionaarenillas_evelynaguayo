@@ -9,16 +9,14 @@ namespace SpriteKind {
     export const Dead = SpriteKind.create()
     export const ENEMIE_PROJECTILE = SpriteKind.create()
 }
-// ========== FUNCIONES DEL JUEGO ORIGINAL ==========
-function configuracion_partida () {
-    menu_configuracio = miniMenu.createMenu(
-    miniMenu.createMenuItem("Tiempo Partida"),
-    miniMenu.createMenuItem("Dificultad"),
-    miniMenu.createMenuItem("Volver")
-    )
+
+//  ========== FUNCIONES DEL JUEGO ORIGINAL ==========
+function configuracion_partida() {
+    
+    menu_configuracio = miniMenu.createMenu(miniMenu.createMenuItem("Tiempo Partida"), miniMenu.createMenuItem("Dificultadd"), miniMenu.createMenuItem("Volver"))
     menu = menu_configuracio
     estructura_menus()
-    menu_configuracio.onButtonPressed(controller.A, function (selection, selectedIndex) {
+    menu_configuracio.onButtonPressed(controller.A, function on_button_pressed(selection: any, selectedIndex: any) {
         menu_configuracio.close()
         if (selectedIndex == 0) {
             menu_temps2()
@@ -27,25 +25,30 @@ function configuracion_partida () {
         } else {
             show_main_menu()
         }
+        
     })
 }
-// ========== SISTEMA DE ATAQUE DE ENEMIGOS ==========
-function mode_attack () {
+
+//  ========== SISTEMA DE ATAQUE DE ENEMIGOS ==========
+function mode_attack() {
     for (let un_enemigo of sprites.allOfKind(SpriteKind.enemic)) {
         un_enemigo.follow(player_sprite, velocidad_enemigo)
     }
 }
-// ========== COLISIÓN PROYECTIL ENEMIGO - JUGADOR ==========
-sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function (sprite_player, sprite_proj) {
+
+//  ========== COLISIÓN PROYECTIL ENEMIGO - JUGADOR ==========
+sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function on_on_overlap(sprite_player: Sprite, sprite_proj: Sprite) {
     sprite_proj.destroy()
     if (dodge_roll || escudo_activo) {
-    	
+        
     }
+    
     info.changeLifeBy(-1)
     scene.cameraShake(2, 100)
     music.play(music.melodyPlayable(music.thump), music.PlaybackMode.InBackground)
 })
-function show_character_story () {
+function show_character_story() {
+    
     game_state = GAME_STATE_CHAR_STORY
     scene.setBackgroundColor(0)
     if (selected_character == 0) {
@@ -55,29 +58,43 @@ function show_character_story () {
     } else {
         game.splash("RANDOM", "Siempre fui indiferente al sufrimiento.")
     }
+    
     pause(1000)
     game.showLongText("Y entonces... todo se volvió negro.", DialogLayout.Bottom)
     pause(1000)
     show_jigsaw_message()
 }
-// ========== INVENTARIO MEJORADO CON ARMAS ==========
-function inventari_armes () {
+
+//  ========== INVENTARIO MEJORADO CON ARMAS ==========
+function inventari_armes() {
+    
     tiene_espada = true
     tiene_pistola = true
     tiene_escudo = true
     pantalla = "inventari"
     mapaJoc = false
     inventari_obert = true
-    mapa_anterior = tilemap`mapa`
+    mapa_anterior = tilemap`
+        mapa
+        `
     scene.centerCameraAt(80, 60)
     controller.moveSprite(player_sprite, 0, 0)
-    inventari_armes2 = [miniMenu.createMenuItem("Espada (Cuerpo a cuerpo)", assets.image`espada`), miniMenu.createMenuItem("Pistola (Disparo)", assets.image`pistola`), miniMenu.createMenuItem("Escudo (Defensa temporal)", assets.image`escudo`)]
+    inventari_armes2 = [miniMenu.createMenuItem("Espada (Cuerpo a cuerpo)", assets.image`
+                espada
+                `), miniMenu.createMenuItem("Pistola (Disparo)", assets.image`
+            pistola
+            `), miniMenu.createMenuItem("Escudo (Defensa temporal)", assets.image`
+                escudo
+                `)]
     my_menu = miniMenu.createMenuFromArray(inventari_armes2)
     my_menu.setTitle("ARMAS DESBLOQUEADAS")
-    my_menu.setFrame(assets.image`mapa_inventari`)
+    my_menu.setFrame(assets.image`
+        mapa_inventari
+        `)
     my_menu.setPosition(80, 60)
     my_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 54)
-    my_menu.onButtonPressed(controller.A, function (selection2, selectedIndex2) {
+    my_menu.onButtonPressed(controller.A, function on_button_pressed2(selection2: any, selectedIndex2: any) {
+        
         inventari_obert = false
         pantalla = "joc"
         game_state = GAME_STATE_PLAYING
@@ -91,14 +108,17 @@ function inventari_armes () {
             arma_equipada = "escudo"
             activar_escudo()
         }
+        
         my_menu.close()
         tiles.setCurrentTilemap(mapa_anterior)
         scene.cameraFollowSprite(player_sprite)
         controller.moveSprite(player_sprite, 100, 100)
     })
 }
-// ========== SISTEMA DE ESCUDO ==========
-function activar_escudo () {
+
+//  ========== SISTEMA DE ESCUDO ==========
+function activar_escudo() {
+    
     escudo_activo = true
     game.splash("ESCUDO ACTIVADO", "Inmune por 5 segundos")
     effects.starField.startScreenEffect()
@@ -106,10 +126,13 @@ function activar_escudo () {
     escudo_activo = false
     game.splash("ESCUDO DESACTIVADO", "")
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function (sprite, otherSprite) {
+
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function on_on_overlap2(sprite: Sprite, otherSprite: Sprite) {
+    
     if (is_player_talking || girl_npc.kind() == SpriteKind.Complete || girl_npc.kind() == SpriteKind.Dead) {
-    	
+        
     }
+    
     if (controller.A.isPressed()) {
         is_player_talking = true
         game.splash("NIÑA", "Me envenenaron... ¿Me salvas?")
@@ -125,21 +148,39 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function (sprite, othe
             npcs_dead += 1
             info.changeScoreBy(-100)
         }
+        
         is_player_talking = false
     }
+    
 })
-function spawn_npcs_in_map () {
-    doctor_npc = sprites.create(assets.image`jugador_vermell`, SpriteKind.NPC_Doctor)
-    tiles.placeOnRandomTile(doctor_npc, assets.tile`transparency16`)
-    girl_npc = sprites.create(assets.image`jugador_kira`, SpriteKind.NPC_Girl)
-    tiles.placeOnRandomTile(girl_npc, assets.tile`transparency16`)
-    prisoner_npc = sprites.create(assets.image`jugador_randoom0`, SpriteKind.NPC_Prisoner)
-    tiles.placeOnRandomTile(prisoner_npc, assets.tile`transparency16`)
+function spawn_npcs_in_map() {
+    
+    doctor_npc = sprites.create(assets.image`
+            jugador_vermell
+            `, SpriteKind.NPC_Doctor)
+    tiles.placeOnRandomTile(doctor_npc, assets.tile`
+        transparency16
+        `)
+    girl_npc = sprites.create(assets.image`
+            jugador_kira
+            `, SpriteKind.NPC_Girl)
+    tiles.placeOnRandomTile(girl_npc, assets.tile`
+        transparency16
+        `)
+    prisoner_npc = sprites.create(assets.image`
+            jugador_randoom0
+            `, SpriteKind.NPC_Prisoner)
+    tiles.placeOnRandomTile(prisoner_npc, assets.tile`
+        transparency16
+        `)
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function (sprite, otherSprite) {
+
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function on_on_overlap3(sprite2: Sprite, otherSprite2: Sprite) {
+    
     if (is_player_talking || doctor_npc.kind() == SpriteKind.Complete || doctor_npc.kind() == SpriteKind.Dead) {
-    	
+        
     }
+    
     if (controller.A.isPressed()) {
         is_player_talking = true
         game.splash("DOCTOR", "¡Bomba en el pecho! ¿Me ayudas?")
@@ -155,39 +196,34 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function (sprite, ot
             npcs_dead += 1
             info.changeScoreBy(-50)
         }
+        
         is_player_talking = false
     }
+    
 })
-// ========== ANIMACIONES (SIMPLIFICADAS) ==========
-controller.down.onEvent(ControllerButtonEvent.Pressed, function () {
+//  ========== ANIMACIONES (SIMPLIFICADAS) ==========
+controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorvermell_bajar`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorvermell_bajar
+                    `, 500, true)
         } else if (selected_character == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorkira_bajar`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorkira_bajar
+                    `, 500, true)
         }
+        
     }
+    
 })
-function menu_temps2 () {
-    menu_temps = miniMenu.createMenu(
-    miniMenu.createMenuItem("3 minutos"),
-    miniMenu.createMenuItem("5 minutos"),
-    miniMenu.createMenuItem("7 minutos"),
-    miniMenu.createMenuItem("Volver")
-    )
+function menu_temps2() {
+    
+    menu_temps = miniMenu.createMenu(miniMenu.createMenuItem("3 minutos"), miniMenu.createMenuItem("5 minutos"), miniMenu.createMenuItem("7 minutos"), miniMenu.createMenuItem("Volver"))
     menu = menu_temps
     estructura_menus()
-    menu_temps.onButtonPressed(controller.A, function (selection3, selectedIndex3) {
+    menu_temps.onButtonPressed(controller.A, function on_button_pressed3(selection3: any, selectedIndex3: any) {
+        
         menu_temps.close()
         if (selectedIndex3 == 0) {
             duracion_partida = 180
@@ -204,25 +240,34 @@ function menu_temps2 () {
         } else {
             configuracion_partida()
         }
+        
     })
 }
-function spawner_enemics () {
-    if (game_state != GAME_STATE_PLAYING || !(player_sprite)) {
+
+function spawner_enemics() {
+    
+    if (game_state != GAME_STATE_PLAYING || !player_sprite) {
         return
     }
+    
     if (sprites.allOfKind(SpriteKind.enemic).length >= max_enemics) {
         return
     }
+    
     if (game.runtime() - ultimo_enemigo2 < enemigos_intervalo) {
         return
     }
+    
     ultimo_enemigo2 = game.runtime()
-    enemic1 = sprites.create(assets.image`enemic1`, SpriteKind.enemic)
+    enemic1 = sprites.create(assets.image`
+        enemic1
+        `, SpriteKind.enemic)
     tiles.placeOnRandomTile(enemic1, sprites.dungeon.collectibleBlueCrystal)
     enemic1.follow(player_sprite, velocidad_enemigo)
 }
-// ========== INTRO SIMPLIFICADA DE JIGSAW ==========
-function show_saw_intro () {
+
+//  ========== INTRO SIMPLIFICADA DE JIGSAW ==========
+function show_saw_intro() {
     scene.setBackgroundColor(0)
     game.showLongText("Hola... Quiero jugar un juego.", DialogLayout.Center)
     pause(2000)
@@ -238,72 +283,70 @@ function show_saw_intro () {
     game.splash("LAS PRUEBAS DE", "JIGSAW")
     pause(1000)
 }
-controller.right.onEvent(ControllerButtonEvent.Pressed, function () {
+
+controller.right.onEvent(ControllerButtonEvent.Pressed, function on_right_pressed() {
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorvermell_dreta`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorvermell_dreta
+                    `, 500, true)
         } else if (selected_character == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorkira_derecha`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorkira_derecha
+                    `, 500, true)
         }
+        
     }
+    
 })
-controller.left.onEvent(ControllerButtonEvent.Pressed, function () {
+controller.left.onEvent(ControllerButtonEvent.Pressed, function on_left_pressed() {
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorvermell_esquerra`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorvermell_esquerra
+                    `, 500, true)
         } else if (selected_character == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorkira_esquerra`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorkira_esquerra
+                    `, 500, true)
         }
+        
     }
+    
 })
-// ========== DODGE ROLL ==========
-controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
+//  ========== DODGE ROLL ==========
+controller.A.onEvent(ControllerButtonEvent.Pressed, function on_a_pressed() {
+    
     if (game_state != GAME_STATE_PLAYING) {
-    	
+        
     }
+    
     dodge_roll = true
     scene.cameraShake(2, 200)
     pause(500)
     dodge_roll = false
 })
-info.onCountdownEnd(function () {
+info.onCountdownEnd(function on_countdown_end() {
     scene.setBackgroundColor(0)
     if (score >= 500 && npcs_dead == 0) {
         game.splash("JIGSAW", "Impresionante. Eres libre.")
-        game.splash("FINAL PERFECTO", "Score: " + ("" + score))
+        game.splash("FINAL PERFECTO", "Score: " + ("" + ("" + score)))
     } else if (score >= 300) {
         game.splash("JIGSAW", "Sobreviviste... pero a qué costo.")
-        game.splash("FINAL BUENO", "Score: " + ("" + score))
+        game.splash("FINAL BUENO", "Score: " + ("" + ("" + score)))
     } else {
         game.splash("JIGSAW", "Fallaste.")
-        game.splash("GAME OVER", "Score: " + ("" + score))
+        game.splash("GAME OVER", "Score: " + ("" + ("" + score)))
     }
+    
     game.reset()
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function (sprite, otherSprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function on_on_overlap4(sprite3: Sprite, otherSprite3: Sprite) {
+    
     if (is_player_talking || prisoner_npc.kind() == SpriteKind.Complete || prisoner_npc.kind() == SpriteKind.Dead) {
-    	
+        
     }
+    
     if (controller.A.isPressed()) {
         is_player_talking = true
         game.splash("PRISIONERO", "Cadenas apretando... ¿Ayuda?")
@@ -319,15 +362,19 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function (sprite, 
             npcs_dead += 1
             info.changeScoreBy(-50)
         }
+        
         is_player_talking = false
     }
+    
 })
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function on_overlap_tile(sprite4: Sprite, location: tiles.Location) {
     if (pantalla == "joc") {
         inventari_armes()
     }
+    
 })
-function start_gameplay () {
+function start_gameplay() {
+    
     ultimo_enemigo = game.runtime()
     info.startCountdown(duracion_partida)
     game_state = GAME_STATE_PLAYING
@@ -336,35 +383,50 @@ function start_gameplay () {
     sprites.destroyAllSpritesOfKind(SpriteKind.Player)
     info.setLife(5)
     if (selected_character == 0) {
-        player_sprite = sprites.create(assets.image`jugador_vermell`, SpriteKind.Player)
+        player_sprite = sprites.create(assets.image`
+                jugador_vermell
+                `, SpriteKind.Player)
     } else if (selected_character == 1) {
-        player_sprite = sprites.create(assets.image`jugador_kira`, SpriteKind.Player)
+        player_sprite = sprites.create(assets.image`
+                jugador_kira
+                `, SpriteKind.Player)
     } else {
         player_sprite = crear_jugador_random()
     }
+    
     spawn_npcs_in_map()
 }
-function crear_jugador_random () {
+
+function crear_jugador_random(): Sprite {
+    
     randomIndex = randint(1, 4)
     if (randomIndex == 1) {
-        return sprites.create(assets.image`jugador_randoom1`, SpriteKind.Player)
+        return sprites.create(assets.image`
+                jugador_randoom1
+                `, SpriteKind.Player)
     } else if (randomIndex == 2) {
-        return sprites.create(assets.image`jugador_randoom2`, SpriteKind.Player)
+        return sprites.create(assets.image`
+                jugador_randoom2
+                `, SpriteKind.Player)
     } else if (randomIndex == 3) {
-        return sprites.create(assets.image`jugador_randoom3`, SpriteKind.Player)
+        return sprites.create(assets.image`
+                jugador_randoom3
+                `, SpriteKind.Player)
     } else {
-        return sprites.create(assets.image`jugador_randoom4`, SpriteKind.Player)
+        return sprites.create(assets.image`
+                jugador_randoom4
+                `, SpriteKind.Player)
     }
+    
 }
-function menu_dificultad2 () {
-    menu_dificultad = miniMenu.createMenu(
-    miniMenu.createMenuItem("Fácil"),
-    miniMenu.createMenuItem("Difícil"),
-    miniMenu.createMenuItem("Volver")
-    )
+
+function menu_dificultad2() {
+    
+    menu_dificultad = miniMenu.createMenu(miniMenu.createMenuItem("Fácil"), miniMenu.createMenuItem("Difícil"), miniMenu.createMenuItem("Volver"))
     menu = menu_dificultad
     estructura_menus()
-    menu_dificultad.onButtonPressed(controller.A, function (selection4, selectedIndex4) {
+    menu_dificultad.onButtonPressed(controller.A, function on_button_pressed4(selection4: any, selectedIndex4: any) {
+        
         menu_dificultad.close()
         if (selectedIndex4 == 0) {
             dificultad = "FACIL"
@@ -383,44 +445,38 @@ function menu_dificultad2 () {
         } else if (selectedIndex4 == 2) {
             configuracion_partida()
         }
+        
     })
 }
-controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
+
+controller.up.onEvent(ControllerButtonEvent.Pressed, function on_up_pressed() {
     if (game_state == GAME_STATE_PLAYING && player_sprite) {
         if (selected_character == 0) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorvermell_subir0`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorvermell_subir0
+                    `, 500, true)
         } else if (selected_character == 1) {
-            animation.runImageAnimation(
-            player_sprite,
-            assets.animation`jugadorkira_subir`,
-            500,
-            true
-            )
+            animation.runImageAnimation(player_sprite, assets.animation`
+                    jugadorkira_subir
+                    `, 500, true)
         }
+        
     }
+    
 })
-function show_main_menu () {
+function show_main_menu() {
+    
     let GAME_STATE_MENU = 0
     game_state = GAME_STATE_MENU
     scene.setBackgroundColor(0)
-    main_menu = miniMenu.createMenu(
-    miniMenu.createMenuItem("HISTORIA"),
-    miniMenu.createMenuItem("CONFIGURACIÓN"),
-    miniMenu.createMenuItem("VERSUS"),
-    miniMenu.createMenuItem("CREDITOS")
-    )
+    main_menu = miniMenu.createMenu(miniMenu.createMenuItem("HISTORIA"), miniMenu.createMenuItem("CONFIGURACIÓN"), miniMenu.createMenuItem("VERSUS"), miniMenu.createMenuItem("CREDITOS"))
     menu = main_menu
     estructura_menus()
     main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 2)
     main_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 0)
     main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 15)
     main_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 2)
-    main_menu.onButtonPressed(controller.A, function (selection22, selectedIndex22) {
+    main_menu.onButtonPressed(controller.A, function on_button_pressed5(selection22: any, selectedIndex22: any) {
         main_menu.close()
         if (selectedIndex22 == 0) {
             show_character_select()
@@ -434,35 +490,44 @@ function show_main_menu () {
             game.splash("LAS PRUEBAS DE JIGSAW", "Creado por New")
             show_main_menu()
         }
+        
     })
 }
-sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function (player22, coin) {
+
+sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function on_on_overlap5(player22: Sprite, coin: Sprite) {
+    
     score += 1
     info.changeScoreBy(1)
     music.play(music.melodyPlayable(music.baDing), music.PlaybackMode.InBackground)
     sprites.destroy(coin, effects.spray, 200)
 })
-function show_character_select () {
+function show_character_select() {
+    
     game_state = GAME_STATE_CHAR_SELECT
     sprites.destroyAllSpritesOfKind(SpriteKind.Player)
-    char_menu = miniMenu.createMenu(
-    miniMenu.createMenuItem("ANDER - El Cobarde", assets.image`jugador_vermell`),
-    miniMenu.createMenuItem("KIRA - La Manipuladora", assets.image`jugador_kira`),
-    miniMenu.createMenuItem("RANDOM - El Indiferente", assets.image`jugador_randoom0`)
-    )
+    char_menu = miniMenu.createMenu(miniMenu.createMenuItem("ANDER - El Cobarde", assets.image`
+                jugador_vermell
+                `), miniMenu.createMenuItem("KIRA - La Manipuladora", assets.image`
+                jugador_kira
+                `), miniMenu.createMenuItem("RANDOM - El Indiferente", assets.image`
+                jugador_randoom0
+                `))
     char_menu.setPosition(80, 64)
     char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Background, 2)
     char_menu.setStyleProperty(miniMenu.StyleKind.Default, miniMenu.StyleProperty.Foreground, 0)
     char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 15)
     char_menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 2)
-    char_menu.onButtonPressed(controller.A, function (selection222, selectedIndex222) {
+    char_menu.onButtonPressed(controller.A, function on_button_pressed6(selection222: any, selectedIndex222: number) {
+        
         selected_character = selectedIndex222
         char_menu.close()
         sprites.destroyAllSpritesOfKind(SpriteKind.Player)
         show_character_story()
     })
 }
-function show_jigsaw_message () {
+
+function show_jigsaw_message() {
+    
     game_state = GAME_STATE_JIGSAW_MESSAGE
     scene.setBackgroundColor(0)
     character_names = ["Ander", "Kira", "Random"]
@@ -475,21 +540,25 @@ function show_jigsaw_message () {
     pause(1000)
     mapaJoc = true
 }
-// ========== COLISIÓN ENEMIGO - JUGADOR (DAÑO) ==========
-sprites.onOverlap(SpriteKind.Player, SpriteKind.enemic, function (player2, enemy) {
+
+//  ========== COLISIÓN ENEMIGO - JUGADOR (DAÑO) ==========
+sprites.onOverlap(SpriteKind.Player, SpriteKind.enemic, function on_on_overlap6(player2: Sprite, enemy: Sprite) {
+    
     if (dodge_roll || escudo_activo) {
-    	
+        
     }
+    
     info.changeLifeBy(-1)
     scene.cameraShake(4, 500)
     distancia_repulsion = 10
     if (player2.x > enemy.x) {
         player2.x += distancia_repulsion
     } else {
-    	
+        
     }
+    
 })
-function estructura_menus () {
+function estructura_menus() {
     main_menu.setPosition(80, 60)
     menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Width, 120)
     menu.setMenuStyleProperty(miniMenu.MenuStyleProperty.Height, 60)
@@ -498,17 +567,19 @@ function estructura_menus () {
     menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Background, 8)
     menu.setStyleProperty(miniMenu.StyleKind.Selected, miniMenu.StyleProperty.Foreground, 1)
 }
-// ========== COLISIÓN PROYECTIL JUGADOR - ENEMIGO ==========
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemic, function (sprite_proj, enemigo_sprite) {
-    sprite_proj.destroy()
+
+//  ========== COLISIÓN PROYECTIL JUGADOR - ENEMIGO ==========
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemic, function on_on_overlap7(sprite_proj2: Sprite, enemigo_sprite: Sprite) {
+    sprite_proj2.destroy()
     enemigo_sprite.setVelocity((0 - enemigo_sprite.vx) * 2, (0 - enemigo_sprite.vy) * 2)
     if (randint(0, 100) < 30) {
         sprites.destroy(enemigo_sprite, effects.disintegrate, 500)
         info.changeScoreBy(50)
     }
+    
 })
-let moneda2: Sprite = null
-let projectile: Sprite = null
+let moneda2 : Sprite = null
+let projectile : Sprite = null
 let vy = 0
 let vx = 0
 let tiempo_ultimo_disparo = 0
@@ -517,29 +588,29 @@ let velocidad = 0
 let daño = 0
 let distancia_repulsion = 0
 let char_name = ""
-let character_names: string[] = []
-let char_menu: miniMenu.MenuSprite = null
-let main_menu: miniMenu.MenuSprite = null
-let menu_dificultad: miniMenu.MenuSprite = null
+let character_names : string[] = []
+let char_menu : miniMenu.MenuSprite = null
+let main_menu : miniMenu.MenuSprite = null
+let menu_dificultad : miniMenu.MenuSprite = null
 let randomIndex = 0
 let ultimo_enemigo = 0
 let respuesta3 = false
 let score = 0
-let enemic1: Sprite = null
+let enemic1 : Sprite = null
 let ultimo_enemigo2 = 0
-let menu_temps: miniMenu.MenuSprite = null
+let menu_temps : miniMenu.MenuSprite = null
 let respuesta = false
-let prisoner_npc: Sprite = null
-let doctor_npc: Sprite = null
+let prisoner_npc : Sprite = null
+let doctor_npc : Sprite = null
 let npcs_dead = 0
 let npcs_saved = 0
 let respuesta2 = false
-let girl_npc: Sprite = null
+let girl_npc : Sprite = null
 let is_player_talking = false
 let arma_equipada = ""
-let my_menu: miniMenu.MenuSprite = null
-let inventari_armes2: miniMenu.MenuItem[] = []
-let mapa_anterior: tiles.TileMapData = null
+let my_menu : miniMenu.MenuSprite = null
+let inventari_armes2 : miniMenu.MenuItem[] = []
+let mapa_anterior : tiles.TileMapData = null
 let inventari_obert = false
 let tiene_escudo = false
 let tiene_pistola = false
@@ -547,9 +618,9 @@ let tiene_espada = false
 let selected_character = 0
 let escudo_activo = false
 let dodge_roll = false
-let player_sprite: Sprite = null
-let menu: miniMenu.MenuSprite = null
-let menu_configuracio: miniMenu.MenuSprite = null
+let player_sprite : Sprite = null
+let menu : miniMenu.MenuSprite = null
+let menu_configuracio : miniMenu.MenuSprite = null
 let mapaJoc = false
 let pantalla = ""
 let game_time = 0
@@ -566,7 +637,7 @@ let duracion_partida = 0
 let jigsaw_npc = null
 let randomIndex2 = 0
 duracion_partida = 180
-// Estados adicionales
+//  Estados adicionales
 let GAME_STATE_INTRO = -1
 GAME_STATE_CHAR_STORY = 4
 let GAME_STATE_NAME_INPUT = 5
@@ -583,13 +654,14 @@ let player_name = "HUNTER"
 game_time = 180
 pantalla = "joc"
 mapaJoc = false
-// ========== INICIALIZACIÓN ==========
+//  ========== INICIALIZACIÓN ==========
 scene.setBackgroundColor(0)
 show_saw_intro()
 show_main_menu()
-// ========== SISTEMA DE DISPARO (CORREGIDO) ==========
-// ========== SISTEMA DE DISPARO (SIMPLIFICADO Y FUNCIONAL) ==========
-game.onUpdate(function () {
+//  ========== SISTEMA DE DISPARO (CORREGIDO) ==========
+//  ========== SISTEMA DE DISPARO (SIMPLIFICADO Y FUNCIONAL) ==========
+game.onUpdate(function on_on_update() {
+    
     mode_attack()
     if (controller.B.isPressed() && game_state == GAME_STATE_PLAYING) {
         daño = 1
@@ -604,38 +676,54 @@ game.onUpdate(function () {
             velocidad = 200
             cooldown = 500
         } else if (arma_equipada == "escudo") {
-        	
+            
         }
-        // El escudo no dispara
+        
+        //  El escudo no dispara
         if (velocidad == 0) {
-        	
+            
         }
+        
         if (game.runtime() - tiempo_ultimo_disparo < cooldown) {
-        	
+            
         }
+        
         tiempo_ultimo_disparo = game.runtime()
         vx = velocidad
         vy = 0
-        projectile = sprites.createProjectileFromSprite(assets.image`pistola`, player_sprite, vx, vy)
+        projectile = sprites.createProjectileFromSprite(assets.image`
+            pistola
+            `, player_sprite, vx, vy)
         sprites.setDataNumber(projectile, "damage", daño)
         music.play(music.melodyPlayable(music.pewPew), music.PlaybackMode.InBackground)
     }
+    
 })
-game.onUpdateInterval(5000, function () {
+game.onUpdateInterval(5000, function on_update_interval() {
+    
     if (game_state == GAME_STATE_PLAYING) {
-        moneda2 = sprites.create(assets.image`moneda`, SpriteKind.moneda)
+        moneda2 = sprites.create(assets.image`
+            moneda
+            `, SpriteKind.moneda)
         tiles.placeOnRandomTile(moneda2, sprites.dungeon.darkGroundCenter)
     }
+    
 })
-forever(function () {
+forever(function on_forever() {
+    
     if (mapaJoc == true) {
         mapaJoc = false
         start_gameplay()
-        tiles.setCurrentTilemap(tilemap`mapa`)
-        tiles.placeOnRandomTile(player_sprite, assets.tile`stage`)
+        tiles.setCurrentTilemap(tilemap`
+            mapa
+            `)
+        tiles.placeOnRandomTile(player_sprite, assets.tile`
+            stage
+            `)
         controller.moveSprite(player_sprite, 100, 100)
         scene.cameraFollowSprite(player_sprite)
     }
+    
     spawner_enemics()
     pause(100)
 })
