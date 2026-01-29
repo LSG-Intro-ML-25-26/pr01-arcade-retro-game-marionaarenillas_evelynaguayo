@@ -955,7 +955,6 @@ function show_main_menu() {
     })
 }
 
-//  ✅ CAMBIO: moneda2 → moneda22
 game.onUpdateInterval(5000, function on_update_interval() {
     
     if (game_state != GAME_STATE_PLAYING) {

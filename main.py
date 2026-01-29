@@ -920,6 +920,7 @@ def show_main_menu():
             show_main_menu()
     main_menu.on_button_pressed(controller.A, on_button_pressed10)
     
+
 def on_update_interval():
     global moneda22
     if game_state != GAME_STATE_PLAYING:
@@ -935,9 +936,10 @@ def on_update_interval():
         200,
         True)
     
-    tiles.place_on_random_tile(moneda22, sprites.dungeon.floor_dark5)  # ✅ CAMBIO: moneda2 → moneda22
+    tiles.place_on_random_tile(moneda22, sprites.dungeon.floor_dark5)  
 
 game.on_update_interval(5000, on_update_interval)
+
 
 def on_on_overlap7(player22, coin):
     global score
