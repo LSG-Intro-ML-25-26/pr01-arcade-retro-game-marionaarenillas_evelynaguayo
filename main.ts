@@ -955,7 +955,7 @@ function show_main_menu() {
     })
 }
 
-game.onUpdateInterval(5000, function on_update_interval() {
+function on_update_interval() {
     
     if (game_state != GAME_STATE_PLAYING) {
         return
@@ -968,8 +968,16 @@ game.onUpdateInterval(5000, function on_update_interval() {
     animation.runImageAnimation(moneda22, assets.animation`
             item_coin_rotating
             `, 200, true)
-    tiles.placeOnRandomTile(moneda22, sprites.dungeon.floorDark5)
-})
+    if (floor1_coordenadas.length > 0) {
+        tiles.placeOnTile(moneda22, floor1_coordenadas[randint(0, floor1_coordenadas.length - 1)])
+    } else if (floor2_coordenadas.length > 0) {
+        tiles.placeOnTile(moneda22, floor2_coordenadas[randint(0, floor2_coordenadas.length - 1)])
+    } else {
+        moneda22.setPosition(randint(20, 140), randint(20, 100))
+    }
+    
+}
+
 sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function on_on_overlap7(player22: Sprite, coin: Sprite) {
     
     score += MONEDA_VALOR
@@ -1183,37 +1191,37 @@ scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function on_
     }
     
     tiles.setTileAt(cofre, sprites.dungeon.chestOpen)
-    game.showLongText("Cofre! Tu dinero: $" + ("" + ("" + score)), DialogLayout.Bottom)
-    menu_armas = miniMenu.createMenu(miniMenu.createMenuItem("Espada ($50)", assets.image`
-                sword_swing_right
-                `), miniMenu.createMenuItem("Pistola ($75)", assets.image`
-            gun_right
-            `), miniMenu.createMenuItem("Escudo ($100)", assets.image`
-            shield
-            `), miniMenu.createMenuItem("Cancelar"))
+    game.showLongText("Cofre! Tu dinero: $" + ("" + score), DialogLayout.Bottom)
+    menu_armas = miniMenu.createMenu(miniMenu.createMenuItem("Espada ($50)"), miniMenu.createMenuItem("Pistola ($75)"), miniMenu.createMenuItem("Escudo ($100)"), miniMenu.createMenuItem("Cancelar"))
     menu_armas.setPosition(80, 60)
+    let respuesta_cofre = -1
     menu_armas.onButtonPressed(controller.A, function on_button_pressed13(selection13: any, selectedIndex13: any) {
-        menu_armas.close()
-        if (selectedIndex13 == 0 && score >= PRECIO_ESPADA) {
-            comprar_arma("espada", PRECIO_ESPADA, assets.image`
-                    sword_swing_right
-                    `)
-        } else if (selectedIndex13 == 1 && score >= PRECIO_PISTOLA) {
-            comprar_arma("pistola", PRECIO_PISTOLA, assets.image`
-                    gun_right
-                    `)
-        } else if (selectedIndex13 == 2 && score >= PRECIO_ESCUDO) {
-            comprar_arma("escudo", PRECIO_ESCUDO, assets.image`
-                    shield
-                    `)
-        } else if (selectedIndex13 < 3) {
-            game.splash("DINERO INSUFICIENTE", "")
-        }
         
-    })
-    menu_armas.onButtonPressed(controller.B, function on_button_pressed14(selection14: any, selectedIndex14: any) {
+        respuesta_cofre = selectedIndex13
         menu_armas.close()
     })
+    //  Esperar a que se seleccione algo
+    let tiempo_cofre = game.runtime()
+    while (respuesta_cofre == -1 && game.runtime() - tiempo_cofre < 30000) {
+        pause(100)
+    }
+    //  Procesar la compra después de esperar
+    if (respuesta_cofre == 0 && score >= PRECIO_ESPADA) {
+        comprar_arma("espada", PRECIO_ESPADA, assets.image`
+                sword_swing_right
+                `)
+    } else if (respuesta_cofre == 1 && score >= PRECIO_PISTOLA) {
+        comprar_arma("pistola", PRECIO_PISTOLA, assets.image`
+                gun_right
+                `)
+    } else if (respuesta_cofre == 2 && score >= PRECIO_ESCUDO) {
+        comprar_arma("escudo", PRECIO_ESCUDO, assets.image`
+                shield
+                `)
+    } else if (respuesta_cofre >= 0 && respuesta_cofre < 3) {
+        game.splash("DINERO INSUFICIENTE", "")
+    }
+    
 })
 function minijuego_desactiva_trampas(): boolean {
     let palanca2: Sprite;
@@ -1232,26 +1240,27 @@ function minijuego_desactiva_trampas(): boolean {
         palanca2 = sprites.create(assets.image`
             lever_off
             `, SpriteKind.palanca)
-        palanca2.setPosition(20 + j * 30, 60)
+        tiles.placeOnRandomTile(palanca2, sprites.dungeon.floorDark5)
         palancas.push(palanca2)
         num = textsprite.create("" + ("" + (j + 1)), 0, 1)
-        num.setPosition(20 + j * 30, 45)
+        num.setPosition(palanca2.x, palanca2.y - 15)
         numeros_sprites.push(num)
     }
     cursor2 = sprites.create(assets.image`
             cursor_arrow
             `, SpriteKind.cursor)
-    cursor2.setPosition(palancas[0].x, 40)
+    cursor2.setPosition(palancas[0].x, palancas[0].y - 20)
     intentos_text = textsprite.create("Intentos: 3/3", 0, 1)
+    intentos_text.setFlag(SpriteFlag.RelativeToCamera, true)
     intentos_text.setPosition(80, 10)
     while (intentos < 3 && !minijuego_terminado) {
         if (controller.right.isPressed() && cursor_pos < 4) {
             cursor_pos += 1
-            cursor2.setPosition(palancas[cursor_pos].x, 40)
+            cursor2.setPosition(palancas[cursor_pos].x, palancas[cursor_pos].y - 20)
             pause(200)
         } else if (controller.left.isPressed() && cursor_pos > 0) {
-            cursor_pos += 0 - 1
-            cursor2.setPosition(palancas[cursor_pos].x, 40)
+            cursor_pos -= 1
+            cursor2.setPosition(palancas[cursor_pos].x, palancas[cursor_pos].y - 20)
             pause(200)
         }
         
@@ -1272,7 +1281,7 @@ function minijuego_desactiva_trampas(): boolean {
         
         if (controller.B.isPressed()) {
             intentos += 1
-            intentos_text.setText("Intentos: " + ("" + ("" + (3 - intentos))) + "/3")
+            intentos_text.setText("Intentos: " + ("" + (3 - intentos)) + "/3")
             if (estados_palancas[1] && estados_palancas[3] && !estados_palancas[0] && !estados_palancas[2] && !estados_palancas[4]) {
                 game.showLongText("CORRECTO! Marcus libre!", DialogLayout.Bottom)
                 resultado_final = true

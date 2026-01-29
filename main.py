@@ -920,7 +920,6 @@ def show_main_menu():
             show_main_menu()
     main_menu.on_button_pressed(controller.A, on_button_pressed10)
     
-
 def on_update_interval():
     global moneda22
     if game_state != GAME_STATE_PLAYING:
@@ -935,11 +934,14 @@ def on_update_interval():
             """),
         200,
         True)
-    
-    tiles.place_on_random_tile(moneda22, sprites.dungeon.floor_dark5)  
-
-game.on_update_interval(5000, on_update_interval)
-
+    if len(floor1_coordenadas) > 0:
+        tiles.place_on_tile(moneda22,
+            floor1_coordenadas[randint(0, len(floor1_coordenadas) - 1)])
+    elif len(floor2_coordenadas) > 0:
+        tiles.place_on_tile(moneda22,
+            floor2_coordenadas[randint(0, len(floor2_coordenadas) - 1)])
+    else:
+        moneda22.set_position(randint(20, 140), randint(20, 100))
 
 def on_on_overlap7(player22, coin):
     global score
@@ -1120,57 +1122,60 @@ def update_escudo():
         desactivar_escudo()
 
 def on_overlap_tile(sprite_jugador2, cofre):
-    global menu_armas
+    global menu_armas, score
     if not (controller.A.is_pressed()):
         return
     tiles.set_tile_at(cofre, sprites.dungeon.chest_open)
-    game.show_long_text("Cofre! Tu dinero: $" + ("" + str(score)),
+    game.show_long_text("Cofre! Tu dinero: $" + str(score),
         DialogLayout.BOTTOM)
-    menu_armas = miniMenu.create_menu(miniMenu.create_menu_item("Espada ($50)",
-            assets.image("""
-                sword_swing_right
-                """)),
-        miniMenu.create_menu_item("Pistola ($75)", assets.image("""
-            gun_right
-            """)),
-        miniMenu.create_menu_item("Escudo ($100)", assets.image("""
-            shield
-            """)),
+    
+    menu_armas = miniMenu.create_menu(
+        miniMenu.create_menu_item("Espada ($50)"),
+        miniMenu.create_menu_item("Pistola ($75)"),
+        miniMenu.create_menu_item("Escudo ($100)"),
         miniMenu.create_menu_item("Cancelar"))
     menu_armas.set_position(80, 60)
     
+    respuesta_cofre = -1
+    
     def on_button_pressed13(selection13, selectedIndex13):
+        nonlocal respuesta_cofre
+        respuesta_cofre = selectedIndex13
         menu_armas.close()
-        if selectedIndex13 == 0 and score >= PRECIO_ESPADA:
-            comprar_arma("espada",
-                PRECIO_ESPADA,
-                assets.image("""
-                    sword_swing_right
-                    """))
-        elif selectedIndex13 == 1 and score >= PRECIO_PISTOLA:
-            comprar_arma("pistola",
-                PRECIO_PISTOLA,
-                assets.image("""
-                    gun_right
-                    """))
-        elif selectedIndex13 == 2 and score >= PRECIO_ESCUDO:
-            comprar_arma("escudo",
-                PRECIO_ESCUDO,
-                assets.image("""
-                    shield
-                    """))
-        elif selectedIndex13 < 3:
-            game.splash("DINERO INSUFICIENTE", "")
+    
     menu_armas.on_button_pressed(controller.A, on_button_pressed13)
     
+    # Esperar a que se seleccione algo
+    tiempo_cofre = game.runtime()
+    while respuesta_cofre == -1 and game.runtime() - tiempo_cofre < 30000:
+        pause(100)
     
-    def on_button_pressed14(selection14, selectedIndex14):
-        menu_armas.close()
-    menu_armas.on_button_pressed(controller.B, on_button_pressed14)
-    
+    # Procesar la compra después de esperar
+    if respuesta_cofre == 0 and score >= PRECIO_ESPADA:
+        comprar_arma("espada",
+            PRECIO_ESPADA,
+            assets.image("""
+                sword_swing_right
+                """))
+    elif respuesta_cofre == 1 and score >= PRECIO_PISTOLA:
+        comprar_arma("pistola",
+            PRECIO_PISTOLA,
+            assets.image("""
+                gun_right
+                """))
+    elif respuesta_cofre == 2 and score >= PRECIO_ESCUDO:
+        comprar_arma("escudo",
+            PRECIO_ESCUDO,
+            assets.image("""
+                shield
+                """))
+    elif respuesta_cofre >= 0 and respuesta_cofre < 3:
+        game.splash("DINERO INSUFICIENTE", "")
+
 scene.on_overlap_tile(SpriteKind.player,
     sprites.dungeon.chest_closed,
     on_overlap_tile)
+
 
 def minijuego_desactiva_trampas():
     global estados_palancas, cursor_pos, intentos, resultado_final, minijuego_terminado, cursor2, intentos_text
@@ -1184,31 +1189,37 @@ def minijuego_desactiva_trampas():
     intentos = 0
     resultado_final = False
     minijuego_terminado = False
+    
     for j in range(5):
         palanca2 = sprites.create(assets.image("""
             lever_off
             """), SpriteKind.palanca)
-        palanca2.set_position(20 + j * 30, 60)
+        tiles.place_on_random_tile(palanca2, sprites.dungeon.floor_dark5)
         palancas.append(palanca2)
+        
         num = textsprite.create("" + str((j + 1)), 0, 1)
-        num.set_position(20 + j * 30, 45)
+        num.set_position(palanca2.x, palanca2.y - 15)
         numeros_sprites.append(num)
+    
     cursor2 = sprites.create(assets.image("""
             cursor_arrow
             """),
         SpriteKind.cursor)
-    cursor2.set_position(palancas[0].x, 40)
+    cursor2.set_position(palancas[0].x, palancas[0].y - 20)
     intentos_text = textsprite.create("Intentos: 3/3", 0, 1)
+    intentos_text.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
     intentos_text.set_position(80, 10)
+    
     while intentos < 3 and not (minijuego_terminado):
         if controller.right.is_pressed() and cursor_pos < 4:
             cursor_pos += 1
-            cursor2.set_position(palancas[cursor_pos].x, 40)
+            cursor2.set_position(palancas[cursor_pos].x, palancas[cursor_pos].y - 20)
             pause(200)
         elif controller.left.is_pressed() and cursor_pos > 0:
-            cursor_pos += 0 - 1
-            cursor2.set_position(palancas[cursor_pos].x, 40)
+            cursor_pos -= 1
+            cursor2.set_position(palancas[cursor_pos].x, palancas[cursor_pos].y - 20)
             pause(200)
+        
         if controller.A.is_pressed():
             estados_palancas[cursor_pos] = not (estados_palancas[cursor_pos])
             if estados_palancas[cursor_pos]:
@@ -1220,9 +1231,10 @@ def minijuego_desactiva_trampas():
                     lever_off
                     """))
             pause(300)
+        
         if controller.B.is_pressed():
             intentos += 1
-            intentos_text.set_text("Intentos: " + ("" + str((3 - intentos))) + "/3")
+            intentos_text.set_text("Intentos: " + str((3 - intentos)) + "/3")
             if estados_palancas[1] and estados_palancas[3] and not (estados_palancas[0]) and not (estados_palancas[2]) and not (estados_palancas[4]):
                 game.show_long_text("CORRECTO! Marcus libre!", DialogLayout.BOTTOM)
                 resultado_final = True
@@ -1240,6 +1252,7 @@ def minijuego_desactiva_trampas():
                             """))
             pause(500)
         pause(50)
+    
     cursor2.destroy()
     intentos_text.destroy()
     for p in palancas:
@@ -1247,6 +1260,8 @@ def minijuego_desactiva_trampas():
     for ns in numeros_sprites:
         ns.destroy()
     return resultado_final
+
+
 projectile: Sprite = None
 tiempo_ultimo_disparo = 0
 ultimo_ataque = 0
@@ -1312,7 +1327,7 @@ npcs_saved = 0
 doctor_npc: Sprite = None
 is_player_talking = False
 player_sprite: Sprite = None
-menu: miniMenu.MenuSprite = None
+menu: miniMenu.MenuSprite = None 
 menu_configuracio: miniMenu.MenuSprite = None
 cooldown_minimo_dodge = 0
 mapaJoc = False
