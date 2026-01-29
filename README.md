@@ -1,27 +1,41 @@
-[![Work in MakeCode](https://classroom.github.com/assets/work-in-make-code-8824cc13a1a3f34ffcd245c82f0ae96fdae6b7d554b6539aec3a03a70825519c.svg)](https://classroom.github.com/online_ide?assignment_repo_id=22151192&assignment_repo_type=AssignmentRepo)
- 
+# PLAY OR DIE - JIGSAW
 
+**Descripción:**
+"Play or Die - Jigsaw" es un juego de supervivencia en el que debes salvar a NPCs y sobrevivir a trampas y enemigos. 
 
-> Open this page at [https://raimonizard.github.io/makecode-arcade-template-nena-mov/](https://raimonizard.github.io/makecode-arcade-template-nena-mov/)
+**Objetivo:**
 
-## Use as Extension
+* Sobrevive durante el tiempo límite.
+* Salva a 3 NPCs mediante minijuegos de destreza o acertijos.
+* Acumula la mayor puntuación posible.
 
-This repository can be added as an **extension** in MakeCode.
+**Controles:**
 
-* open [https://arcade.makecode.com/](https://arcade.makecode.com/)
-* click on **New Project**
-* click on **Extensions** under the gearwheel menu
-* search for **https://github.com/raimonizard/makecode-arcade-template-nena-mov** and import
+* **Flechas:** Mover al personaje
+* **A:** Dodge (rodar) / Interactuar con NPCs
+* **B:** Atacar con el arma equipada
+* **Cofres:** Presiona A para comprar armas o escudos
+* **Saltos de diálogo:** Presiona B para omitir
 
-## Edit this project
+**Armas y Equipamiento:**
 
-To edit this repository in MakeCode.
+* Espada
+* Pistola
+* Escudo
 
-* open [https://arcade.makecode.com/](https://arcade.makecode.com/)
-* click on **Import** then click on **Import URL**
-* paste **https://github.com/raimonizard/makecode-arcade-template-nena-mov** and click import
+**Minijuegos:**
 
-#### Metadata (used for search, rendering)
+* **Esquivar sierras:** Mueve al personaje para esquivar obstáculos.
+* **Desactivar trampas:** Interactúa con palancas en el orden correcto.
+* **Adivinar cable:** Elige el cable correcto para salvar NPCs.
 
-* for PXT/arcade
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
+**Modos y Configuración:**
+
+* Configura duración de partida: 3, 5 o 7 minutos.
+* Configura dificultad: Fácil o Difícil.
+
+**Links Importantes:**
+
+* **Juega ahora:** [MakeCode Arcade](https://arcade.makecode.com/90931-68234-88097-02895)
+* **Video demo:** [Ver demo](https://drive.google.com/drive/folders/1MHtjRM8AF4GRWaQioWVdxZslyyUjw8Qn?usp=drive_link)
+* **Presentacion Canva:** [Canva](https://www.canva.com/design/DAG_uz0rSrI/6aAdZXhweoScDcffJR4Bcw/view?utm_content=DAG_uz0rSrI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hbfdc634f40)
