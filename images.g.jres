@@ -79,21 +79,6 @@
         "mimeType": "image/x-mkcd-f4",
         "displayName": "menu1"
     },
-    "image17": {
-        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/w8AAAAAAABvDwAA8A8A8P4PAADw9g/vDwAAAABv9v4AAAAAAPBvDwAAAAAAb/b2AAAAAPBm9vYAAAAAb2YPbw8AAPBm9gDwDwAAb2YPAAAAAABv9gAAAAAAAP8PAAAAAAAAAAAAAAAAAA==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "espada"
-    },
-    "image18": {
-        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAA8P8AAAAA8P9/dw8AAAB/9+d+DwAA8GZ3/n4PAADw5ufv9wAAAPDnd34PAAAA8Od39wAAAADw5hf3AAAAAPDmF/cAAAAA8OZ3DwAAAADw5vcAAAAAAPDm9wAAAAAA8Ob3AAAAAADw5vcAAAAAAAD/DwAAAA==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "pistola"
-    },
-    "image19": {
-        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACAiIiIAAAAA8v///wIAACD/IiLyLwAAIC///y8vAAAgL//xLy8AACAvHxEvLwAAIC//8S8vAAAgL///Ly8AACD/IiLyLwAAAPL///8CAAAAICIiIgAAAAAAAAAAAAAAAAAAAAAAAA==",
-        "mimeType": "image/x-mkcd-f4",
-        "displayName": "escudo"
-    },
     "image20": {
         "data": "hwQQABAAAAAAAAAAAAAAAAAA8P///wAAAAAvIiIiDwAAAC8iIiIPAAD///////8A8CIiIiIiIg8vIiIiIiIi8i8i/y8iIv/yL/KZ+SIiDw8v8pn5IiL/AC/ymfkiIi8P8P+R+SIiIvIA8JH5////8gAA/w8AAAAPAAAAAAAAAAAAAAAAAAAAAA==",
         "mimeType": "image/x-mkcd-f4",
@@ -103,6 +88,106 @@
         "data": "hwQwADAAAACIiAAAiAAAiAgAgAiIAACICACACAAAiIhod4iAZwiAdoYAaIdnCIB2hgBohwCId4Z4dmeId4doZ2eId4d3h2hnZ4h3h4h2Z4d4Z3eGZ3d4Z3d4Z2dnd3hnd3hnZ2h3doeAd3hmd3Z4Z3d4dmd3dnhnd3h2Z2aHdwiAdodmdmZoZ2dodoZ2ZmhnZ2h2hmZ4ZwgAaGZoaGeIhoaIZ4hoZ4iGhmhniIZmhgAAgGaGiIiIiIiIiIiIiIiIiIiIiGiGiIiAaIaIZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZohmZod4ZmaIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZohohgiAaIaIZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZohmZod4ZmaIZmZmZmZmZmZmZmZmZmZmZmh3d4Zod3eGZmZmZmZmZmZmZmZmZmZmZoh2ZwiAdmeIZmZmZmZmZmZmZmZmZmZmZoiIiAAAiIiIZmZmZmZmZmZmZmZmZmZmZmh2hwAAeGeGZmZmZmZmZmZmZmZmZmZmZnhmdwiAd2aHZmZmZmZmZmZmZmZmZmZmZmh3doZoZ3eGZmZmZmZmZmZmZmZmZmZmZoh2d4d4d2eIZmZmZmZmZmZmZmZmZmZmZohohgiIiGiGiIiIiIiIiIiIiIiIiIiIiGhmCAAAaGZoiHaGaGiIdoaIdoZoaIh2hoZmhgCAdodmaGeGdnaGZmdoZ4Z2doZmZ2Z4ZwiAd3hmdmeHd3aHZ3d2Z4d3dodnd2aHdwh4Z3eGdnaHd3aHd3Z2dod3dod3dmh3dod4dmeIeHeIdnaGeHd4d4h2doZ4d4h2Z4dod4gAeIYAaGcIgHZ4hgBoZwiAdgiId4aIiAAAgAgAgIgAAIiACACAiAAAiAAAiIg=",
         "mimeType": "image/x-mkcd-f4",
         "displayName": "mapa_inventari"
+    },
+    "image22": {
+        "data": "hwQUABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "miImagen"
+    },
+    "image23": {
+        "data": "hwQOAAgAAADw////8FXk/gBP7g/wVOT08FTk9PBU5PTwVOT08ETk9PD////wROT+AF/lDwBP5Q8A8PUAAAAPAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bala_derecha"
+    },
+    "image24": {
+        "data": "hwQOAAgAAAAAAA8AAPD1AABP5Q8AX+UP8ETk/vD////wROT08FTk9PBU5PTwVOT08FTk9ABP7g/wVeT+8P///w==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bala_izquierda"
+    },
+    "image25": {
+        "data": "hwQIAA4AAAAAAP///w//AAD//kRE9P4A8O7+7u7u/gBfVfREROT0APBU9FRVRfUAAP/0RET09QAAAP///w//AAAAAAAAAAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bala_arriba"
+    },
+    "image26": {
+        "data": "hwQIAA4AAAAAAAAAAAAAAP/w////AAAAX09ERE//AABfVFVFT0UPAE9ORERPVfUA7+7u7u/uDwDvT0RE7/8AAP/w////AAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "bala_abajo"
+    },
+    "image17": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/w8AAAAAAABvDwAA8A8A8P4PAADw9g/vDwAAAABv9v4AAAAAAPBvDwAAAAAAb/b2AAAAAPBm9vYAAAAAb2YPbw8AAPBm9gDwDwAAb2YPAAAAAABv9gAAAAAAAP8PAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "espada_swing_derecha"
+    },
+    "image27": {
+        "data": "hwQQABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAPD2AAAAAAAAAAAAAPD2AAAAAAAAAAAAAPD2DwAAAAAA//////9v///wAADwZmZmZvb27u5vDwDwZmZmZvb27u5vDwAA//////9v///wAAAAAAAAAPD2DwAAAAAAAAAAAPD2AAAAAAAAAAAAAPD2AAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "espada_swing_arriba"
+    },
+    "image28": {
+        "data": "hwQQABUAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPAAAAAAAAAAAAAPD2AAAAAAAAAAAAAPD2AAAAAAAAAAAAAPD2DwAAAAAA//////9v///wAADwZmZmZvb27u5vDwDwZmZmZvb27u5vDwAA//////9v///wAAAAAAAAAPD2DwAAAAAAAAAAAPD2AAAAAAAAAAAAAPD2AAAAAAAAAAAAAAAPAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "espada_swing_abajo"
+    },
+    "image29": {
+        "data": "hwQQABAAAAAAAABVBQAAAAAAUJlZAAAAAAAAiAiQVQBQmQAAAICZBZWIAAAAAIgJiQgAAAAAgACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAACIkIAAAAAIBZlYgAAAAAmAVQiQgAAABZAACVCYCIAAAAAAAAlZkFAAAAAABQVQAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "escudo_visual"
+    },
+    "image19": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD///8AAAAAj/j/+A8AAPCI//+P/wAA8PiPj//4AADw//j5+P8AAPD/mJX4/wAA8P/4+fj/AADw+I+P//gAAPCP//+P/wAAAI/4//gPAAAA8P///wAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "escudo"
+    },
+    "image18": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAA8P8AAAAA8P9/dw8AAAB/9+d+DwAA8GZ3/n4PAADw5ufv9wAAAPDnd34PAAAA8Od39wAAAADw5hf3AAAAAPDmF/cAAAAA8OZ3DwAAAADw5vcAAAAAAPDm9wAAAAAA8Ob3AAAAAADw5vcAAAAAAAD/DwAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "pistola_derecha"
+    },
+    "image30": {
+        "data": "hwQQABAAAAAAAAD/DwAAAAAA8Ob3AAAAAADw5vcAAAAAAPDm9wAAAAAA8Ob3AAAAAADw5ncPAAAAAPDmF/cAAAAA8OYX9wAAAADw53f3AAAAAPDnd34PAAAA8Obn7/cAAADwZnf+fg8AAAB/9+d+DwAAAPD/f3cPAAAAAADw/wAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "pistola_izquierda"
+    },
+    "image31": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA/w8AAAAAAABvDwAA8A8A8P4PAADw9g/vDwAAAABv9v4AAAAAAPBvDwAAAAAAb/b2AAAAAPBm9vYAAAAAb2YPbw8AAPBm9gDwDwAAb2YPAAAAAABv9gAAAAAAAP8PAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "item_espada_suelo"
+    },
+    "image32": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAA8P8AAAAA8P9/dw8AAAB/9+d+DwAA8GZ3/n4PAADw5ufv9wAAAPDnd34PAAAA8Od39wAAAADw5hf3AAAAAPDmF/cAAAAA8OZ3DwAAAADw5vcAAAAAAPDm9wAAAAAA8Ob3AAAAAADw5vcAAAAAAAD/DwAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "item_pistola_suelo"
+    },
+    "image33": {
+        "data": "hwQQABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAPD///8AAAAAj/j/+A8AAPCI//+P/wAA8PiPj//4AADw//j5+P8AAPD/mJX4/wAA8P/4+fj/AADw+I+P//gAAPCP//+P/wAAAI/4//gPAAAA8P///wAAAAAAAAAAAAAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "item_escudo_suelo"
+    },
+    "image34": {
+        "data": "hwQQABAAAAAAAA8AAAAPAADw/gAA8P4AAC/iDwAv4g8A8CL+8CL+AAAAL+Iv4g8AAADwIiL+AAAAAAAv4g8AAAAAAPDyAAAAAAAAL+IPAAAAAPAiIv4AAAAAL+Iv4g8AAPAi/vAi/gAAL+IPAC/iDwDw/gAA8P4AAAAPAAAADwAAAAAAAAAAAA==",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "hud_arma_vacia"
+    },
+    "image35": {
+        "data": "hwQVABkAAAAAAADw/w8AAAAAAAAAAAAAAPD//////w8AAAAAAAAAAAD///////8PAAAAAAAAAAAA////EvL/AP8AAAAAAAAA8P8fERLyD/ARDwAAAAAAAPD/EREh8Q//EQ8AAAAAAAD/HyEfEREPz8z///8AAAAA/x/xHyER8f//z///DwAAAP8fERERIi8i/8///w8AAADwHxERESEhIhHB//8AAAAA8B8REREh8RIRwf8AAAAAAP8fERERISEiEcH//wAAAAD/HyEfESIvIv/P//8PAAAA/x/xHyER8f//z///DwAAAP//EREREf/PzP///wAAAADw//8RIfEP/xEPAAAAAAAAAP///xLy//ARDwAAAAAAAAD///8S8v8A/wAAAAAAAAAA8P////8PAAAAAAAAAAAAAAD//////wAAAAAAAAAAAAAAAP///wAAAAAAAAAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "jigsaw_puppet"
+    },
+    "image36": {
+        "data": "hwQQABIAAAAAAP//AAAAAAAAAAAAAJ+ZDwAAAAAAAAAAAPBm+QAAAAAAAAAAAABvlg8AAP8AAAAAAADwZvkA8PkAAAAAAADwZvkAb/kAAAAAAP9vZmb/lg8AAAAA8Jlp9mZm+QAAAAAAn2ZmH2+ZDwAAAADwafZv9mb/AAAAAACfZg/wafYAAAAAAACf9gDwafYAAAAAAACfDwAAn2YPAAAAAAD/AAAA8Gn2AAAAAAAAAAAAAJ+ZDwAAAAAAAAAAAPD/DwAAAAA=",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "sierra_trampa"
+    },
+    "image37": {
+        "data": "hwQIABAAAAAAAAAAAADw/wD/AAAAAI/48CMP///wj/g/Iv6ZmZ+P+C8i/mZmb4/48O4P///wj/gA/wAAAACP+AAAAAAAAPD/",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "palanca_on"
+    },
+    "image38": {
+        "data": "hwQOABAAAAAAAAAAAADw/wAAAAAAAI/4AAAAAADwj/gAAAAAAJ+P+AAAAADwaY/4AAAAAJ/2j/gAAADwaQ+P+AAA/5/2APD/APAj/w8AAAAAPyL+AAAAAAA/4v4AAAAAAPDiDwAAAAAAAP8AAAAAAAAAAAAAAAAA",
+        "mimeType": "image/x-mkcd-f4",
+        "displayName": "palanca_off"
     },
     "anim1": {
         "namespace": "myAnimations",
