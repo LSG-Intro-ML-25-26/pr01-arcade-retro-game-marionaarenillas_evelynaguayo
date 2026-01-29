@@ -36,6 +36,6 @@
 
 **Links Importantes:**
 
-* **Juega ahora:** [MakeCode Arcade](https://arcade.makecode.com/90931-68234-88097-02895)
+* **Juega ahora:** [MakeCode Arcade](https://arcade.makecode.com/23237-87406-32829-90820)
 * **Video demo:** [Ver demo](https://drive.google.com/drive/folders/1MHtjRM8AF4GRWaQioWVdxZslyyUjw8Qn?usp=drive_link)
 * **Presentacion Canva:** [Canva](https://www.canva.com/design/DAG_uz0rSrI/6aAdZXhweoScDcffJR4Bcw/view?utm_content=DAG_uz0rSrI&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hbfdc634f40)
