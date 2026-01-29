@@ -14,11 +14,7 @@ class SpriteKind:
     sierra = SpriteKind.create()
     palanca = SpriteKind.create()
     cursor = SpriteKind.create()
-"""
-
-Listas de coordenadas
-
-"""
+# Listas de coordenadas
 def configuracion_partida():
     global menu_configuracio, menu
     menu_configuracio = miniMenu.create_menu(miniMenu.create_menu_item("Tiempo de Partida"),
@@ -49,7 +45,27 @@ def mode_attack():
     for un_enemigo in sprites.all_of_kind(SpriteKind.enemic):
         un_enemigo.follow(player_sprite, velocidad_enemigo)
 
-def on_on_overlap(sprite_player, sprite_proj):
+def on_on_overlap(sprite2, otherSprite2):
+    global is_player_talking, npcs_saved, npcs_dead
+    if is_player_talking or not (doctor_npc):
+        return
+    if doctor_npc.kind() == SpriteKind.Complete or doctor_npc.kind() == SpriteKind.Dead:
+        return
+    if controller.A.is_pressed():
+        is_player_talking = True
+        resultado = minijuego_adivinanza_trampa()
+        if resultado:
+            doctor_npc.set_kind(SpriteKind.Complete)
+            info.change_score_by(150)
+            npcs_saved += 1
+        else:
+            doctor_npc.destroy()
+            npcs_dead += 1
+            info.change_score_by(-50)
+        is_player_talking = False
+sprites.on_overlap(SpriteKind.player, SpriteKind.NPC_Doctor, on_on_overlap)
+
+def on_on_overlap2(sprite_player, sprite_proj):
     sprite_proj.destroy()
     if dodge_roll or escudo_activo:
         return
@@ -59,7 +75,7 @@ def on_on_overlap(sprite_player, sprite_proj):
     scene.camera_shake(2, 100)
 sprites.on_overlap(SpriteKind.player,
     SpriteKind.ENEMIE_PROJECTILE,
-    on_on_overlap)
+    on_on_overlap2)
 
 def show_character_story():
     global game_state, skip_dialogo, bg_sprite3
@@ -94,7 +110,6 @@ def show_character_story():
     if bg_sprite3:
         bg_sprite3.destroy()
     show_jigsaw_message()
-
 def activar_escudo():
     global escudo_activo, escudo_tiempo_inicio, escudo_sprite
     if arma_equipada != "escudo" or not (player_sprite):
@@ -115,7 +130,7 @@ def activar_escudo():
         True)
     effects.star_field.start_screen_effect()
 
-def on_on_overlap2(sprite, otherSprite):
+def on_on_overlap3(sprite, otherSprite):
     global is_player_talking, npcs_saved, npcs_dead
     if is_player_talking or not (girl_npc):
         return
@@ -133,9 +148,9 @@ def on_on_overlap2(sprite, otherSprite):
             npcs_dead += 1
             info.change_score_by(-100)
         is_player_talking = False
-sprites.on_overlap(SpriteKind.player, SpriteKind.NPC_Girl, on_on_overlap2)
+sprites.on_overlap(SpriteKind.player, SpriteKind.NPC_Girl, on_on_overlap3)
 
-def on_on_overlap3(sprite_proj2, enemigo_sprite):
+def on_on_overlap4(sprite_proj2, enemigo_sprite):
     global enemy_status2
     sprite_proj2.destroy()
     enemy_status2 = statusbars.get_status_bar_attached_to(StatusBarKind.health, enemigo_sprite)
@@ -147,7 +162,7 @@ def on_on_overlap3(sprite_proj2, enemigo_sprite):
         if enemy_status2.value <= 0:
             sprites.destroy(enemigo_sprite, effects.disintegrate, 500)
             info.change_score_by(KILL_BONUS)
-sprites.on_overlap(SpriteKind.projectile, SpriteKind.enemic, on_on_overlap3)
+sprites.on_overlap(SpriteKind.projectile, SpriteKind.enemic, on_on_overlap4)
 
 def spawn_npcs_in_map():
     global doctor_npc, girl_npc, prisoner_npc
@@ -187,27 +202,6 @@ def spawn_npcs_in_map():
             SpriteKind.NPC_Prisoner)
         tiles.place_on_tile(prisoner_npc, tiles.get_tile_location(15, 7))
         crear_status_bar(prisoner_npc, 1, 2)
-
-def on_on_overlap4(sprite2, otherSprite2):
-    global is_player_talking, npcs_saved, npcs_dead
-    if is_player_talking or not (doctor_npc):
-        return
-    if doctor_npc.kind() == SpriteKind.Complete or doctor_npc.kind() == SpriteKind.Dead:
-        return
-    if controller.A.is_pressed():
-        is_player_talking = True
-        resultado = minijuego_adivinanza_trampa()
-        if resultado:
-            doctor_npc.set_kind(SpriteKind.Complete)
-            info.change_score_by(150)
-            npcs_saved += 1
-        else:
-            doctor_npc.destroy()
-            npcs_dead += 1
-            info.change_score_by(-50)
-        is_player_talking = False
-sprites.on_overlap(SpriteKind.player, SpriteKind.NPC_Doctor, on_on_overlap4)
-
 
 def on_down_pressed():
     global ultima_direccion_x, ultima_direccion_y
@@ -333,7 +327,6 @@ def spawner_enemics():
             200,
             True)
     crear_status_bar(enemic1, 3, 7)
-
 def show_saw_intro():
     global skip_dialogo, bg_sprite
     skip_dialogo = False
@@ -425,6 +418,26 @@ def crear_status_bar(sprite3: Sprite, max_vida: number, color2: number):
     status_bar.set_bar_border(1, 0)
     return status_bar
 
+def on_on_overlap5(sprite4, otherSprite3):
+    global is_player_talking, npcs_saved, npcs_dead
+    if is_player_talking or not (prisoner_npc):
+        return
+    if prisoner_npc.kind() == SpriteKind.Complete or prisoner_npc.kind() == SpriteKind.Dead:
+        return
+    if controller.A.is_pressed():
+        is_player_talking = True
+        resultado3 = minijuego_desactiva_trampas()
+        if resultado3:
+            prisoner_npc.set_kind(SpriteKind.Complete)
+            info.change_score_by(150)
+            npcs_saved += 1
+        else:
+            prisoner_npc.destroy()
+            npcs_dead += 1
+            info.change_score_by(-50)
+        is_player_talking = False
+sprites.on_overlap(SpriteKind.player, SpriteKind.NPC_Prisoner, on_on_overlap5)
+
 def mostrar_pregunta_tutorial():
     global menu_tutorial
     menu_tutorial = miniMenu.create_menu(miniMenu.create_menu_item("Ver Tutorial"),
@@ -463,7 +476,6 @@ def on_a_pressed():
     pause(500)
     dodge_roll = False
 controller.A.on_event(ControllerButtonEvent.PRESSED, on_a_pressed)
-
 
 def on_countdown_end():
     global bg_sprite
@@ -540,7 +552,7 @@ def minijuego_esquivar_sierras():
         game.show_long_text("Emma murio...", DialogLayout.BOTTOM)
         return False
 
-def on_on_overlap5(sprite_jugador, item):
+def on_on_overlap6(sprite_jugador, item):
     global tipo_arma, arma_equipada, imagen_arma2, arma_hud
     if not (controller.A.is_pressed()):
         return
@@ -567,27 +579,7 @@ def on_on_overlap5(sprite_jugador, item):
         arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
         arma_hud.set_position(20, 105)
     item.destroy()
-sprites.on_overlap(SpriteKind.player, SpriteKind.item_suelo, on_on_overlap5)
-
-def on_on_overlap6(sprite4, otherSprite3):
-    global is_player_talking, npcs_saved, npcs_dead
-    if is_player_talking or not (prisoner_npc):
-        return
-    if prisoner_npc.kind() == SpriteKind.Complete or prisoner_npc.kind() == SpriteKind.Dead:
-        return
-    if controller.A.is_pressed():
-        is_player_talking = True
-        resultado3 = minijuego_desactiva_trampas()
-        if resultado3:
-            prisoner_npc.set_kind(SpriteKind.Complete)
-            info.change_score_by(150)
-            npcs_saved += 1
-        else:
-            prisoner_npc.destroy()
-            npcs_dead += 1
-            info.change_score_by(-50)
-        is_player_talking = False
-sprites.on_overlap(SpriteKind.player, SpriteKind.NPC_Prisoner, on_on_overlap6)
+sprites.on_overlap(SpriteKind.player, SpriteKind.item_suelo, on_on_overlap6)
 
 # ========== GAMEPLAY ==========
 def start_gameplay():
@@ -600,13 +592,12 @@ def start_gameplay():
     sprites.destroy_all_sprites_of_kind(SpriteKind.food)
     info.set_life(5)
     arma_equipada = "pistola"
-
-    arma_hud = sprites.create(assets.image("""gun_right"""),
-        SpriteKind.food)
+    arma_hud = sprites.create(assets.image("""
+        gun_right
+        """), SpriteKind.food)
     arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
     arma_hud.set_position(20, 105)
     arma_hud.z = 100
-
     if selected_character == 0:
         player_sprite = sprites.create(assets.image("""
                 character_ander
@@ -769,7 +760,6 @@ def animar_random_walking(direccion: str):
                 """),
             200,
             True)
-
 def minijuego_adivinanza_trampa():
     global menu_adivinanza, respuesta_correcta, tiempo_inicio
     game.show_long_text("DOCTOR: 'Tengo una BOMBA! Ayudame!'", DialogLayout.BOTTOM)
@@ -874,7 +864,6 @@ def on_up_pressed():
             animar_random_walking("up")
 controller.up.on_event(ControllerButtonEvent.PRESSED, on_up_pressed)
 
-
 def cargar_coordenadas_mapa():
     global npcs_coordenadas, cofres_coordenadas, enemy_coordenadas, floor1_coordenadas, floor2_coordenadas
     npcs_coordenadas = tiles.get_tiles_by_type(sprites.dungeon.collectible_insignia)
@@ -882,7 +871,6 @@ def cargar_coordenadas_mapa():
     enemy_coordenadas = tiles.get_tiles_by_type(sprites.dungeon.collectible_blue_crystal)
     floor1_coordenadas = tiles.get_tiles_by_type(sprites.dungeon.floor_mixed)
     floor2_coordenadas = tiles.get_tiles_by_type(sprites.dungeon.floor_dark5)
-
 def show_main_menu():
     global game_state, skip_dialogo, bg_sprite, main_menu, menu
     game_state = GAME_STATE_MENU
@@ -946,14 +934,10 @@ def on_update_interval():
             """),
         200,
         True)
-    if len(floor1_coordenadas) > 0:
-        tiles.place_on_tile(moneda22,
-            floor1_coordenadas[randint(0, len(floor1_coordenadas) - 1)])
-    elif len(floor2_coordenadas) > 0:
-        tiles.place_on_tile(moneda22,
-            floor2_coordenadas[randint(0, len(floor2_coordenadas) - 1)])
-    else:
-        moneda22.set_position(randint(20, 140), randint(20, 100))
+    
+    tiles.place_on_random_tile(moneda22, sprites.dungeon.floor_dark5)  # ✅ CAMBIO: moneda2 → moneda22
+
+game.on_update_interval(5000, on_update_interval)
 
 def on_on_overlap7(player22, coin):
     global score
@@ -982,7 +966,6 @@ def mostrar_tutorial():
     if controller.B.is_pressed():
         return
     game.show_long_text("OBJETIVO: Salva 3 NPCs, sobrevive!", DialogLayout.BOTTOM)
-
 def show_character_select():
     global game_state, bg_sprite2, char_menu
     game_state = GAME_STATE_CHAR_SELECT
@@ -1054,7 +1037,6 @@ def desactivar_escudo():
             SpriteKind.food)
         arma_hud.set_flag(SpriteFlag.RELATIVE_TO_CAMERA, True)
         arma_hud.set_position(20, 105)
-
 def show_jigsaw_message():
     global game_state, skip_dialogo, bg_sprite, character_names, char_name2
     game_state = GAME_STATE_JIGSAW_MESSAGE
@@ -1313,13 +1295,8 @@ item_suelo2: Sprite = None
 menu_temps: miniMenu.MenuSprite = None
 ultima_direccion_y = 0
 prisoner_npc: Sprite = None
-doctor_npc: Sprite = None
 npcs_coordenadas: List[tiles.Location] = []
-enemy_status2: StatusBarSprite = None
-npcs_dead = 0
-npcs_saved = 0
 girl_npc: Sprite = None
-is_player_talking = False
 escudo_tiempo_inicio = 0
 arma_equipada = ""
 bg_sprite3: Sprite = None
@@ -1328,6 +1305,10 @@ skip_dialogo = False
 player_statusbar: StatusBarSprite = None
 escudo_activo = False
 dodge_roll = False
+npcs_dead = 0
+npcs_saved = 0
+doctor_npc: Sprite = None
+is_player_talking = False
 player_sprite: Sprite = None
 menu: miniMenu.MenuSprite = None
 menu_configuracio: miniMenu.MenuSprite = None
@@ -1351,15 +1332,14 @@ PRECIO_ESPADA = 0
 ultima_direccion_x = 0
 DURACION_ESCUDO = 0
 duracion_partida = 0
-escudo_sprite: Sprite = None
-bg_sprite: Sprite = None
-tiempo_decision = 0
-char_name = ""
-enemy_status = None
-max_intentos = 0
-
 moneda2 = None
-
+max_intentos = 0
+enemy_status = None
+char_name = ""
+tiempo_decision = 0
+bg_sprite: Sprite = None
+escudo_sprite: Sprite = None
+enemy_status2: StatusBarSprite = None
 duracion_partida = 180
 DURACION_ESCUDO = 20000
 ultima_direccion_x = 1
@@ -1387,7 +1367,6 @@ pantalla = "joc"
 mapaJoc = False
 cooldown_minimo_ataque = 400
 cooldown_minimo_dodge = 500
-
 scene.set_background_color(0)
 show_main_menu()
 
@@ -1466,6 +1445,8 @@ game.on_update(on_on_update)
 
 def on_forever():
     global mapaJoc
+    music.play(music.string_playable("E B C5 A B G A F ", 120),
+        music.PlaybackMode.LOOPING_IN_BACKGROUND)
     if mapaJoc:
         mapaJoc = False
         tiles.set_current_tilemap(tilemap("""

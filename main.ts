@@ -15,7 +15,7 @@ namespace SpriteKind {
     export const cursor = SpriteKind.create()
 }
 
-/** Listas de coordenadas */
+//  Listas de coordenadas
 function configuracion_partida() {
     
     menu_configuracio = miniMenu.createMenu(miniMenu.createMenuItem("Tiempo de Partida"), miniMenu.createMenuItem("Dificultad"), miniMenu.createMenuItem("<- Volver"))
@@ -48,7 +48,35 @@ function mode_attack() {
     }
 }
 
-sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function on_on_overlap(sprite_player: Sprite, sprite_proj: Sprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function on_on_overlap(sprite2: Sprite, otherSprite2: Sprite) {
+    let resultado: boolean;
+    
+    if (is_player_talking || !doctor_npc) {
+        return
+    }
+    
+    if (doctor_npc.kind() == SpriteKind.Complete || doctor_npc.kind() == SpriteKind.Dead) {
+        return
+    }
+    
+    if (controller.A.isPressed()) {
+        is_player_talking = true
+        resultado = minijuego_adivinanza_trampa()
+        if (resultado) {
+            doctor_npc.setKind(SpriteKind.Complete)
+            info.changeScoreBy(150)
+            npcs_saved += 1
+        } else {
+            doctor_npc.destroy()
+            npcs_dead += 1
+            info.changeScoreBy(-50)
+        }
+        
+        is_player_talking = false
+    }
+    
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.ENEMIE_PROJECTILE, function on_on_overlap2(sprite_player: Sprite, sprite_proj: Sprite) {
     sprite_proj.destroy()
     if (dodge_roll || escudo_activo) {
         return
@@ -126,7 +154,7 @@ function activar_escudo() {
     effects.starField.startScreenEffect()
 }
 
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function on_on_overlap2(sprite: Sprite, otherSprite: Sprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function on_on_overlap3(sprite: Sprite, otherSprite: Sprite) {
     let resultado2: boolean;
     
     if (is_player_talking || !girl_npc) {
@@ -154,7 +182,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Girl, function on_on_overlap
     }
     
 })
-sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemic, function on_on_overlap3(sprite_proj2: Sprite, enemigo_sprite: Sprite) {
+sprites.onOverlap(SpriteKind.Projectile, SpriteKind.enemic, function on_on_overlap4(sprite_proj2: Sprite, enemigo_sprite: Sprite) {
     let dano: number;
     
     sprite_proj2.destroy()
@@ -212,34 +240,6 @@ function spawn_npcs_in_map() {
     
 }
 
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Doctor, function on_on_overlap4(sprite2: Sprite, otherSprite2: Sprite) {
-    let resultado: boolean;
-    
-    if (is_player_talking || !doctor_npc) {
-        return
-    }
-    
-    if (doctor_npc.kind() == SpriteKind.Complete || doctor_npc.kind() == SpriteKind.Dead) {
-        return
-    }
-    
-    if (controller.A.isPressed()) {
-        is_player_talking = true
-        resultado = minijuego_adivinanza_trampa()
-        if (resultado) {
-            doctor_npc.setKind(SpriteKind.Complete)
-            info.changeScoreBy(150)
-            npcs_saved += 1
-        } else {
-            doctor_npc.destroy()
-            npcs_dead += 1
-            info.changeScoreBy(-50)
-        }
-        
-        is_player_talking = false
-    }
-    
-})
 controller.down.onEvent(ControllerButtonEvent.Pressed, function on_down_pressed() {
     
     ultima_direccion_x = 0
@@ -481,6 +481,34 @@ function crear_status_bar(sprite3: Sprite, max_vida: number, color2: number): St
     return status_bar
 }
 
+sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function on_on_overlap5(sprite4: Sprite, otherSprite3: Sprite) {
+    let resultado3: boolean;
+    
+    if (is_player_talking || !prisoner_npc) {
+        return
+    }
+    
+    if (prisoner_npc.kind() == SpriteKind.Complete || prisoner_npc.kind() == SpriteKind.Dead) {
+        return
+    }
+    
+    if (controller.A.isPressed()) {
+        is_player_talking = true
+        resultado3 = minijuego_desactiva_trampas()
+        if (resultado3) {
+            prisoner_npc.setKind(SpriteKind.Complete)
+            info.changeScoreBy(150)
+            npcs_saved += 1
+        } else {
+            prisoner_npc.destroy()
+            npcs_dead += 1
+            info.changeScoreBy(-50)
+        }
+        
+        is_player_talking = false
+    }
+    
+})
 function mostrar_pregunta_tutorial() {
     
     menu_tutorial = miniMenu.createMenu(miniMenu.createMenuItem("Ver Tutorial"), miniMenu.createMenuItem("Saltar y Jugar"), miniMenu.createMenuItem("<- Volver a Personajes"))
@@ -601,7 +629,7 @@ function minijuego_esquivar_sierras(): boolean {
     
 }
 
-sprites.onOverlap(SpriteKind.Player, SpriteKind.item_suelo, function on_on_overlap5(sprite_jugador: Sprite, item: Sprite) {
+sprites.onOverlap(SpriteKind.Player, SpriteKind.item_suelo, function on_on_overlap6(sprite_jugador: Sprite, item: Sprite) {
     
     if (!controller.A.isPressed()) {
         return
@@ -639,34 +667,6 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.item_suelo, function on_on_overl
     
     item.destroy()
 })
-sprites.onOverlap(SpriteKind.Player, SpriteKind.NPC_Prisoner, function on_on_overlap6(sprite4: Sprite, otherSprite3: Sprite) {
-    let resultado3: boolean;
-    
-    if (is_player_talking || !prisoner_npc) {
-        return
-    }
-    
-    if (prisoner_npc.kind() == SpriteKind.Complete || prisoner_npc.kind() == SpriteKind.Dead) {
-        return
-    }
-    
-    if (controller.A.isPressed()) {
-        is_player_talking = true
-        resultado3 = minijuego_desactiva_trampas()
-        if (resultado3) {
-            prisoner_npc.setKind(SpriteKind.Complete)
-            info.changeScoreBy(150)
-            npcs_saved += 1
-        } else {
-            prisoner_npc.destroy()
-            npcs_dead += 1
-            info.changeScoreBy(-50)
-        }
-        
-        is_player_talking = false
-    }
-    
-})
 //  ========== GAMEPLAY ==========
 function start_gameplay() {
     
@@ -678,7 +678,9 @@ function start_gameplay() {
     sprites.destroyAllSpritesOfKind(SpriteKind.Food)
     info.setLife(5)
     arma_equipada = "pistola"
-    arma_hud = sprites.create(assets.image`gun_right`, SpriteKind.Food)
+    arma_hud = sprites.create(assets.image`
+        gun_right
+        `, SpriteKind.Food)
     arma_hud.setFlag(SpriteFlag.RelativeToCamera, true)
     arma_hud.setPosition(20, 105)
     arma_hud.z = 100
@@ -953,7 +955,8 @@ function show_main_menu() {
     })
 }
 
-function on_update_interval() {
+//  ✅ CAMBIO: moneda2 → moneda22
+game.onUpdateInterval(5000, function on_update_interval() {
     
     if (game_state != GAME_STATE_PLAYING) {
         return
@@ -966,16 +969,8 @@ function on_update_interval() {
     animation.runImageAnimation(moneda22, assets.animation`
             item_coin_rotating
             `, 200, true)
-    if (floor1_coordenadas.length > 0) {
-        tiles.placeOnTile(moneda22, floor1_coordenadas[randint(0, floor1_coordenadas.length - 1)])
-    } else if (floor2_coordenadas.length > 0) {
-        tiles.placeOnTile(moneda22, floor2_coordenadas[randint(0, floor2_coordenadas.length - 1)])
-    } else {
-        moneda22.setPosition(randint(20, 140), randint(20, 100))
-    }
-    
-}
-
+    tiles.placeOnRandomTile(moneda22, sprites.dungeon.floorDark5)
+})
 sprites.onOverlap(SpriteKind.Player, SpriteKind.moneda, function on_on_overlap7(player22: Sprite, coin: Sprite) {
     
     score += MONEDA_VALOR
@@ -1365,13 +1360,8 @@ let item_suelo2 : Sprite = null
 let menu_temps : miniMenu.MenuSprite = null
 let ultima_direccion_y = 0
 let prisoner_npc : Sprite = null
-let doctor_npc : Sprite = null
 let npcs_coordenadas : tiles.Location[] = []
-let enemy_status2 : StatusBarSprite = null
-let npcs_dead = 0
-let npcs_saved = 0
 let girl_npc : Sprite = null
-let is_player_talking = false
 let escudo_tiempo_inicio = 0
 let arma_equipada = ""
 let bg_sprite3 : Sprite = null
@@ -1380,6 +1370,10 @@ let skip_dialogo = false
 let player_statusbar : StatusBarSprite = null
 let escudo_activo = false
 let dodge_roll = false
+let npcs_dead = 0
+let npcs_saved = 0
+let doctor_npc : Sprite = null
+let is_player_talking = false
 let player_sprite : Sprite = null
 let menu : miniMenu.MenuSprite = null
 let menu_configuracio : miniMenu.MenuSprite = null
@@ -1403,13 +1397,14 @@ let PRECIO_ESPADA = 0
 let ultima_direccion_x = 0
 let DURACION_ESCUDO = 0
 let duracion_partida = 0
-let escudo_sprite : Sprite = null
-let bg_sprite : Sprite = null
-let tiempo_decision = 0
-let char_name = ""
-let enemy_status = null
-let max_intentos = 0
 let moneda2 = null
+let max_intentos = 0
+let enemy_status = null
+let char_name = ""
+let tiempo_decision = 0
+let bg_sprite : Sprite = null
+let escudo_sprite : Sprite = null
+let enemy_status2 : StatusBarSprite = null
 duracion_partida = 180
 DURACION_ESCUDO = 20000
 ultima_direccion_x = 1
@@ -1528,6 +1523,7 @@ game.onUpdate(function on_on_update() {
 })
 forever(function on_forever() {
     
+    music.play(music.stringPlayable("E B C5 A B G A F ", 120), music.PlaybackMode.LoopingInBackground)
     if (mapaJoc) {
         mapaJoc = false
         tiles.setCurrentTilemap(tilemap`
